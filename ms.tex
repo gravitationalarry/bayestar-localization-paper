@@ -1,0 +1,45 @@
+\documentclass{iopart}
+\usepackage{aas_macros}
+\usepackage[colorlinks]{hyperref}
+\input{acronyms}
+
+\begin{document}
+
+\title[Rapid-response Bayesian sky localization]{Rapid-response Bayesian sky localization for electromagnetic follow-up of gravitational-wave candidates}
+\author{Leo Singer and Larry Price}
+\address{LIGO Laboratory, California Institute of Technology, Pasadena, CA 91125, USA}
+\ead{\mailto{leo.singer@ligo.org}, \mailto{larry.price@ligo.org}}
+
+\begin{abstract}
+Description of rapid Bayesian sky localization algorithm
+\end{abstract}
+
+\section{Measurement uncertainty}
+\cite{fairhurst:2009} estimated the uncertainty in the matched-filter measurement of the \ac{TOA} of a \ac{GW} signal by computing the scalar Fisher information.  We extend this result by computing the Fisher information matrix describing the uncertainties in the joint estimation of the signal amplitude and \ac{TOA}.
+
+When a \ac{CBC} occurs, a detector's strain observation may be described by a linear combination of two orthogonal \ac{GW} quadratures, $a(t)$ and $b(t)$, and additive, zero\nobreakdashes-mean, \acl{WSS}, Gaussian measurement noise $n(t)$, with power spectral density $S(f)$.  Introducing the unknown, real, quadrature amplitudes, $A$ and $B$, and the unknown \ac{TOA}, $t_0$, we can write
+%
+\begin{equation}\label{eq:xoft}
+	x(t) = A a(t - t_0) + B b(t - t_0) + n(t).
+\end{equation}
+%
+Transformation of \Eref{eq:xoft} to the frequency domain converts the time delay by $t_0$ to a complex phase,
+%
+\begin{equation}\label{eq:xoff}
+	\tilde{x}(f) = A \tilde{a}(f) + B \tilde{b}(f) + \tilde{n}(f).
+\end{equation}
+%
+
+
+\ack Source code for \ac{BAYESTAR} is available on the \acs{LIGO} \acl{DASWG} web site at \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/bayestar.html}.
+
+Some of the results in this paper have been derived using HEALPix \cite{healpix}.
+
+\acs{LIGO} was constructed by the California Institute of Technology and Massachusetts Institute of Technology with funding from the \ac{NSF} and operates under cooperative agreement PHY\nobreakdashes-0107417.  Some results were produced on the NEMO computing cluster operated by the Center for Gravitation and Cosmology at University of Wisconsin\nobreakdashes--Milwaukee under \ac{NSF} Grants PHY\nobreakdashes-0923409 and PHY\nobreakdashes-0600953.  This research is supported by the \ac{NSF} through a Graduate Research Fellowship to L.S.  This paper has \acs{LIGO} Document Number \acs{LIGO}\nobreakdashes-PXXXXXXX\nobreakdashes-vX.
+
+
+\section*{References}
+\bibliographystyle{iopart-num}
+\bibliography{apj-jour,telescope}
+
+\end{document}
