@@ -3,7 +3,7 @@ BIBTEX = env BSTINPUTS=:$(CURDIR)/../../packages/iopart-num: TEXINPUTS=:$(CURDIR
 
 all: ms.pdf
 
-PREREQS: ms.tex aas_macros.sty acronyms.tex apj-jour.bib telescope.bib
+PREREQS = ms.tex aas_macros.sty acronyms.tex apj-jour.bib telescope.bib
 
 ms.pdf: $(PREREQS)
 	$(TEX) -draftmode $(patsubst %.pdf,%,$@)
