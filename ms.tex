@@ -4,6 +4,12 @@
 \usepackage[colorlinks]{hyperref}
 \input{acronyms}
 
+% From http://www.f.kth.se/~ante/latex.php
+\setlength{\marginparwidth}{1.2in}
+\let\oldmarginpar\marginpar
+\renewcommand\marginpar[1]{\-\oldmarginpar[\raggedleft\footnotesize #1]%
+{\raggedright\footnotesize #1}}
+
 \begin{document}
 
 \title[Rapid-response Bayesian sky localization]{Rapid-response Bayesian sky localization for electromagnetic follow-up of gravitational-wave candidates}
@@ -16,7 +22,10 @@ Description of rapid Bayesian sky localization algorithm
 \end{abstract}
 
 \section{Measurement uncertainty}
-\cite{fairhurst:2009} estimated the uncertainty in the matched-filter measurement of the \ac{TOA} of a \ac{GW} signal by computing the scalar Fisher information.  We extend this result by computing the Fisher information matrix describing the uncertainties in the joint estimation of the signal amplitude and \ac{TOA}.
+
+\cite{fairhurst:2009} estimated the uncertainty in the matched-filter measurement of the \ac{TOA} of a \ac{GW} signal by computing the scalar Fisher information.  We extend this result by computing the Fisher information matrix describing the uncertainties in the joint estimation of the signal amplitude and \ac{TOA}.%
+%
+\marginpar{This might be too much mathematical detail.  All we need to do is show that the $\rho_A\rho_A$ and $\rho_B\rho_B$ terms are unity and that the off-diagonal terms vanish.  If possible, we should cite and use Fairhurst's expression for $\mathcal{I}_{t_0,t_0}$ without re-deriving it.}
 
 When a \ac{CBC} occurs, a detector's strain observation may be described by a linear combination of two orthogonal \ac{GW} quadratures, $a(t)$ and $b(t)$, and additive, zero\nobreakdashes-mean, \acl{WSS}, Gaussian measurement noise $n(t)$, with power spectral density $S(f)$.  Introducing the unknown, real, quadrature amplitudes, $A$ and $B$, and the unknown \ac{TOA}, $t_0$, we can write
 %
@@ -53,7 +62,7 @@ First, we write the likelihood of the data $\tilde{x}(f)$ given the parameters $
 %
 The normalization has been dropped because the Fisher matrix elements depend only on derivatives of the log\nobreakdashes-likelihood function and any factor that is independent of the parameters makes no contribution.%
 %
-\footnote{It would be cleaner to work in discrete time so that the Gaussian likelihood function can be correctly normalized.  Wide-sense stationary, continuous time processes don't really exist.}
+\marginpar{Consider using discrete time to avoid the fiction of an infinite-dimensional multivariate Gaussian process.}
 %
 From hereon, unless otherwise specified the limits of integration are always $(-\infty, \infty)$ and will be dropped.  Expanding the integrand, we can write the log\nobreakdashes-likelihood function up to an additive constant as
 %
@@ -96,8 +105,8 @@ The necessary partial derivatives are
 	\frac{\partial^2 \log \mathcal{L}}{\partial {t_0}^2} &=
 	2 \pi i A \int \frac{\left(\tilde{a}^*(f) \tilde{x}(f) e^{2 \pi i f t_0} - \tilde{a}(f) \tilde{x}^*(f) e^{-2 \pi i f t_0}\right)}{S(f)} f \mathrm{d}f \\
 	&+ 2 \pi i B \int \frac{\left(\tilde{b}^*(f) \tilde{x}(f) e^{2 \pi i f t_0} - \tilde{b}(f) \tilde{x}^*(f) e^{-2 \pi i f t_0}\right)}{S(f)} f \mathrm{d}f \\
-	&- (2 \pi t_0)^2 A \int \frac{\left(\tilde{a}^*(f) \tilde{x}(f) e^{2 \pi i f t_0} + \tilde{a}(f) \tilde{x}^*(f) e^{-2 \pi i f t_0}\right)}{S(f)} f^2 \mathrm{d}f \\
-	&- (2 \pi t_0)^2 B \int \frac{\left(\tilde{b}^*(f) \tilde{x}(f) e^{2 \pi i f t_0} + \tilde{b}(f) \tilde{x}^*(f) e^{-2 \pi i f t_0}\right)}{S(f)} f^2 \mathrm{d}f.
+	&- (2 \pi)^2 A \int \frac{\left(\tilde{a}^*(f) \tilde{x}(f) e^{2 \pi i f t_0} + \tilde{a}(f) \tilde{x}^*(f) e^{-2 \pi i f t_0}\right)}{S(f)} f^2 \mathrm{d}f \\
+	&- (2 \pi)^2 B \int \frac{\left(\tilde{b}^*(f) \tilde{x}(f) e^{2 \pi i f t_0} + \tilde{b}(f) \tilde{x}^*(f) e^{-2 \pi i f t_0}\right)}{S(f)} f^2 \mathrm{d}f.
 \end{eqnarray*}
 %
 Finally, taking the expectation values of the partial derivatives, we find
@@ -108,12 +117,16 @@ Finally, taking the expectation values of the partial derivatives, we find
 	\mathcal{I}_{t_0,t_0} &=
 	- 2 \pi i A^2 \int \frac{|\tilde{a}(f)|^2}{S(f)} f\mathrm{d}f
 	- 2 \pi i B^2 \int \frac{|\tilde{B}(f)|^2}{S(f)} f\mathrm{d}f \\
-	&+ (2 \pi t_0)^2 \left(A^2 \int \frac{|\tilde{a}(f)|^2}{S(f)} f^2\mathrm{d}f +
+	&+ (2 \pi)^2 \left(A^2 \int \frac{|\tilde{a}(f)|^2}{S(f)} f^2\mathrm{d}f +
 	B^2 \int \frac{|\tilde{b}(f)|^2}{S(f)} f\mathrm{d}f \right) \\
-	&+ (2\pi t_0)^2 2 A B \, \mathrm{Re} \int \frac{\tilde{a}^*(f)\tilde{b}(f)}{S(f)} f^2\mathrm{d}f.
+	&+ (2\pi)^2 2 A B \, \mathrm{Re} \int \frac{\tilde{a}^*(f)\tilde{b}(f)}{S(f)} f^2\mathrm{d}f.
 \end{eqnarray*}
 %
-The first two terms of $\mathcal{I}_{t_0,t_0}$ vanish because the integrands $|\tilde{a}(f)|^2 f / S(f)$ and $|\tilde{b}(f)|^2 f / S(f)$ are odd about $f = 0$.  We assume that $\tilde{a}(f)$ and $\tilde{b}(f)$ are orthogonal with respect to $\emph{any}$ real weight, including both $S(f)$ and $S(f) / f^2$, so the last term in $\mathcal{I}_{t_0,t_0}$ vanishes as well.  Further, we make the substituions
+The first two terms of $\mathcal{I}_{t_0,t_0}$ vanish because the integrands $|\tilde{a}(f)|^2 f / S(f)$ and $|\tilde{b}(f)|^2 f / S(f)$ are odd about $f = 0$.  We assume that $\tilde{a}(f)$ and $\tilde{b}(f)$ are orthogonal with respect to $\emph{any}$ real weight, including both $S(f)$ and $S(f) / f^2$, so the last term in $\mathcal{I}_{t_0,t_0}$ vanishes as well.  Further,%
+%
+\marginpar{This is an awkward place to make these substitutions.  Also, they are poorly motivated.  Here's what this substitution actually does: the matched\nobreakdashes-filter output has an expected value of $A \sigma = \rho_A$.}
+%
+we make the substituions
 %
 \begin{eqnarray*}
 	\rho_A &= A \sigma \\
@@ -127,15 +140,25 @@ Then, we have
 \begin{eqnarray*}
 	\mathcal{I}_{\rho_A,\rho_B} &= \mathcal{I}_{\rho_A,t_0} = \mathcal{I}_{\rho_B,t_0} = 0 \\
 	\mathcal{I}_{\rho_A,\rho_A} &= \mathcal{I}_{\rho_B,\rho_B} = 1 \\
-	\mathcal{I}_{t_0,t_0} &= (2 \pi t_0 f_\mathrm{rms})^2.
+	\mathcal{I}_{t_0,t_0} &= (2 \pi f_\mathrm{rms})^2 ({\rho_A}^2 + {\rho_B}^2).
 \end{eqnarray*}
 %
 The Cram\'{e}r-Rao inequality says that the inverse of the Fisher information matrix is a lower bound on the covariance of any unbiased estimator.  The Fisher matrix for this estimation problem has been shown to be diagonal, so we can write
 %
-\begin{eqnarray}
+\begin{eqnarray}\label{eq:cramer-rao}
 	\mathrm{var}\, (\hat{\rho}_B) &\geq {\mathcal{I}_{\rho_A,\rho_A}}^{-1} = 1 \\
 	\mathrm{var}\, (\hat{\rho}_B) &\geq {\mathcal{I}_{\rho_B,\rho_B}}^{-1} = 1 \\
-	\mathrm{var}\, (\hat{t}_0) &\geq {\mathcal{I}_{t_0,t_0}}^{-1} = (2 \pi t_0 f_\mathrm{rms})^{-2}.
+	\mathrm{var}\, (\hat{t}_0) &\geq {\mathcal{I}_{t_0,t_0}}^{-1} = (2 \pi f_\mathrm{rms} \sqrt{{\rho_A}^2 + {\rho_B}^2})^{-2}.
+\end{eqnarray}
+
+\section{Posterior distribution}
+
+Because the \ac{CRLB} in \Eref{eq:cramer-rao} is diagonal, joint estimators of $(\rho_A, \rho_B, t_0)$ may exist for which the error in the estimation of the individual parameters is uncoupled up to second order.  If the detector's noise is Gaussian, then the outputs of matched filters for $a(t)$ and $b(t)$ will themselves be Gaussian.  This encourages us to make the approximation that the errors in $(\rho_A, \rho_B, t_0)$ by a matched\nobreakdashes-filter estimator are independent and Gaussian with variance equal to the \ac{CRLB}.  A wrinkle is that $\mathcal{I}_{t_0,t_0}$ depends on the true values of $\rho_A$ and $\rho_B$.  If we make the further leap of evaluating the \ac{CRLB} \emph{at the value of the estimators}, we can write
+%
+\begin{eqnarray}
+\hat{\rho}_A - \rho_A \sim \mathcal{N}\, [0, 1] \\
+\hat{\rho}_B - \rho_B \sim \mathcal{N}\, [0, 1] \\
+\hat{t}_0 - t_0 \sim \mathcal{N} \left[0, \frac{1}{2 \pi f_\mathrm{rms} \sqrt{{\hat{\rho}_A}^2 + {\hat{\rho}_B}^2}}\right].
 \end{eqnarray}
 
 
