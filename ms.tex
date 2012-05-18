@@ -211,6 +211,65 @@ Because the \ac{CRLB} in \Eref{eq:cramer-rao} is diagonal, joint estimators of $
 \hat{t}_0 - t_0 \sim \mathcal{N} \left[0, \frac{1}{2 \pi f_\mathrm{rms} \sqrt{{\hat{\rho}_A}^2 + {\hat{\rho}_B}^2}}\right].
 \end{eqnarray}
 
+\section{Equations that need to be organized}
+
+\begin{equation}
+	u = \cos \iota
+\end{equation}
+
+\begin{equation}
+	\mathbf{G} =
+	\left(
+		\begin{array}{cccc}
+			F_+^1 D_1^1 & F_+^2 D_1^2 & \cdots & F_+^N D_1^N \\
+			F_\times^1 D_1^1 & F_\times^2 D_1^2 & \cdots & F_\times^N D_1^N
+		\end{array}
+	\right)
+\end{equation}
+
+\begin{equation}
+	\mathbf{H} = \mathbf{G}\mathbf{G}^\mathsf{T} =
+	\left(
+		\begin{array}{cc}
+			\sum \left(F_+^i D_1^i\right)^2 & \sum \left(F_+^i D_1^i\right)\left(F_\times^i D_1^i\right) \\
+			\sum \left(F_+^i D_1^i\right)\left(F_\times^i D_1^i\right) & \sum \left(F_\times^i D_1^i\right)^2
+		\end{array}
+	\right)
+\end{equation}
+
+\begin{equation}
+	\mathbf{R} =
+	\left(
+		\begin{array}{cc}
+			\cos \phi & \sin \phi \\
+			-\sin \phi & \cos \phi
+		\end{array}
+	\right)
+	\left(
+		\begin{array}{cc}
+			\frac{1}{2} (1 + u^2) & 0 \\
+			0 & u
+		\end{array}
+	\right)
+	\left(
+		\begin{array}{cc}
+			\cos \psi & \sin \psi \\
+			-\sin \psi & \cos \psi
+		\end{array}
+	\right) \mathbf{G}
+\end{equation}
+
+\begin{equation}
+	p = \Tr \mathbf{R}^\mathsf{T} \mathbf{R}
+	= \frac{1}{8} \left\{
+		\left(u^4 + 6 u^2 + 1\right) \left(H_{11} + H_{22}\right) + (1 - u^2)^2
+		\left[ \left( H_{11} - H_{22} \right) \cos 2\psi + 2 H_{12} \sin 2\psi \right]
+	\right\}
+\end{equation}
+
+\begin{equation}\fl
+	q = \sqrt{(ab - cd) (u + u^3) + \frac{1}{8} \left\{ (a^2 + b^2 + c^2 + d^2)(u^4 + 6u^2 + 1) + (1 - u^2)^2 \left[ (a^2 - b^2 - c^2 + d^2) \cos 2\psi + 2(ac + bd) \sin 2\psi \right] \right\}}
+\end{equation}
 
 \ack Source code for \ac{BAYESTAR} is available on the \acs{LIGO} \acl{DASWG} web site at \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/bayestar.html}.
 
