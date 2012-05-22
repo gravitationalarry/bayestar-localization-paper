@@ -147,9 +147,11 @@ After we apply these substitutions, and drop the $|\tilde{x}(f)|^2$ term that is
 The necessary partial derivatives are
 %
 \begin{eqnarray*}
-	\frac{\partial^2 \log \mathcal{L}}{\partial A \partial B} &=
-	\frac{\partial^2 \log \mathcal{L}}{\partial A \partial t_0} =
-	\frac{\partial^2 \log \mathcal{L}}{\partial B \partial t_0} = 0 \\
+	\frac{\partial^2 \log \mathcal{L}}{\partial A \partial B} &= 0 \\
+	\frac{\partial^2 \log \mathcal{L}}{\partial A \partial t_0} &=
+	2 \pi i \int \frac{\left(\tilde{a}^*(f) \tilde{x}(f) e^{2 \pi i f t_0} - \tilde{a}(f) \tilde{x}^*(f) e^{-2 \pi i f t_0}\right)}{S(f)} f \mathrm{d}f \\
+	\frac{\partial^2 \log \mathcal{L}}{\partial B \partial t_0} &=
+	2 \pi i \int \frac{\left(\tilde{b}^*(f) \tilde{x}(f) e^{2 \pi i f t_0} - \tilde{b}(f) \tilde{x}^*(f) e^{-2 \pi i f t_0}\right)}{S(f)} f \mathrm{d}f \\
 	\frac{\partial^2 \log \mathcal{L}}{\partial A^2} &=
 	\frac{\partial^2 \log \mathcal{L}}{\partial B^2} = - \sigma^2 \\
 	\frac{\partial^2 \log \mathcal{L}}{\partial {t_0}^2} &=
@@ -172,7 +174,7 @@ Finally, taking the expectation values of the partial derivatives, we find
 	&+ (2\pi)^2 2 A B \, \mathrm{Re} \int \frac{\tilde{a}^*(f)\tilde{b}(f)}{S(f)} f^2\mathrm{d}f.
 \end{eqnarray*}
 %
-The first two terms of $\mathcal{I}_{t_0,t_0}$ vanish because the integrands $|\tilde{a}(f)|^2 f / S(f)$ and $|\tilde{b}(f)|^2 f / S(f)$ are odd about $f = 0$.  We assume that $\tilde{a}(f)$ and $\tilde{b}(f)$ are orthogonal with respect to $\emph{any}$ real weight, including both $S(f)$ and $S(f) / f^2$, so the last term in $\mathcal{I}_{t_0,t_0}$ vanishes as well.  Further,%
+$\mathcal{I}_{A,t_0}$, $\mathcal{I}_{B,t_0}$, and the first two terms of $\mathcal{I}_{t_0,t_0}$ vanish because the integrands $|\tilde{a}(f)|^2 f / S(f)$ and $|\tilde{b}(f)|^2 f / S(f)$ are odd about $f = 0$.  We assume that $\tilde{a}(f)$ and $\tilde{b}(f)$ are orthogonal with respect to $\emph{any}$ real weight, including both $S(f)$ and $S(f) / f^2$, so the last term in $\mathcal{I}_{t_0,t_0}$ vanishes as well.  Further,%
 %
 \marginpar{This is an awkward place to make these substitutions.  Also, they are poorly motivated.  Here's what this substitution actually does: the matched\nobreakdashes-filter output has an expected value of $A \sigma = \rho_A$.}
 %
