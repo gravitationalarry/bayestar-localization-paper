@@ -78,11 +78,9 @@ Timely \acl{EM} follow\nobreakdashes-up of \acl{CBC} events detected by \acl{aLI
 
 \section{New section, add a new name to this}
 
-A CBC will emit a GW. What we detect will be the data, $x(t)$ which is a function of time. This data will be a combination of the signal emitted from the CBC< $h(t)$, and the noise our detector picks up in addition to the signal, $n(t)$. We assume we have additive, zero mean, wide source stationary, Gaussian measurement noise $n(t)$. This means that noise is only added to what passes through the channel, the mean of this noise is zero, the noise does not vary in time, and the noise is drawn from a Gaussian distribution. 
+We expect to detect GW from CBCs. What we detect will be the data, $x(t)$ which is a function of time. This data will be a combination of the signal emitted from the CBC,  $h(t)$, and the noise our detector picks up in addition to the signal, $n(t)$. We assume we have additive, zero mean, wide-sense stationary, Gaussian measurement noise $n(t)$. This means that noise only consists of something being added to what passes through the channel, the mean is zero, the noise only depends on differences in time, and it is drawn from a Gaussian distribution. 
 
-Our goal here is to first determine the likelihood.
-
-Our detector data is given by $x(t)$. This can be described in the frequency domain as $\tilde{x}(f) = \tilde{h}(f) + \tilde{n}(f)$ where $\tilde{h}(f)$ is our signal and $\tilde{n}(f)$ is the noise. We have noise, $E[n(t_1)n(t_2)]$ which depends only on $t_1 - t_2$. The Fourier transform of the noise gives us this: $E[\tilde{n}(f)^*\tilde{n}(f)] = \delta (f_1 - f_2) s(f_1)$ where $s(f)$ is the power spectral density for the noise. The power spectral density gives us information about the energy of the present frequencies. The delta function is only non-zero when the input is zero, so in this case we will only get a nonzero value for $\delta (f_1 - f_2) s(f_1)$ when $f_1 = f_2$. 
+Our goal here is to first determine the likelihood. We will consider the data from our detector, given by $x(t)$. This can be described in the frequency domain as $\tilde{x}(f) = \tilde{h}(f) + \tilde{n}(f)$ where $\tilde{h}(f)$ is our signal and $\tilde{n}(f)$ is the noise. Since our noise is wide-sense stationary, $E[n(t_1)n(t_2)]$ depends only on $t_1 - t_2$. The Fourier transform gives us: $E[\tilde{n}(f)^*\tilde{n}(f)] = \delta (f_1 - f_2) s(f_1)$ where $s(f)$ is the power spectral density for the noise. The power spectral density gives us information about the energy of the present frequencies. The delta function is only non-zero when the input is zero, so in this case we will only get a nonzero value for $\delta (f_1 - f_2) s(f_1)$ when $f_1 = f_2$. 
 
 To determine the power spectral density (PSD) for the real signal $y(t)$ we first take the Fourier transform of our real signal to get:
 
@@ -96,13 +94,13 @@ Then we get the two sided PSD from the definition of PSD.
 	R_y(f) = |\tilde{y}(f)|^2
 \end{equation}
 
-Then we get the single sided PSD with a conversion,
+Then we get the single sided PSD by multiplying by 2. We can rewrite this in the following way since we are taking the Fourier transform of a real function.
 
 \begin{equation}
 	S_y(f) = |\tilde{y}(f)|^2 + |\tilde{y}(-f)|^2
 \end{equation}
 
-We can decompose our signal into two orthogonal bases with
+This gives us an equation for our PSD in terms of real signal, which is the signal we measure. We can decompose our signal into two orthogonal bases with
 
 \begin{equation}
 	\tilde{h}(f) = a\tilde{h}_0(f) + b\tilde{h}_{\pi/2}(f)
@@ -114,12 +112,12 @@ Defining
 	\tilde{h}_0(-f) & = & i \tilde{h}_{\pi/2}(-f) \mbox{ for } f < 0
 \end{eqnarray}
 
-This ends up resulting in
+Plugging our new definitions into our definition for $\tilde{h}(f)$ and factoring gives us:
 \begin{equation}
 	\tilde{h}(f) = (a + bi)\tilde{h}_0(f)
 \end{equation}
 
-Next we'll set $\tilde{u}(f) = \tilde{h}_0(f)$. 
+Now we'll set $\tilde{u}(f) = \tilde{h}_0(f)$. 
 
 We can rewrite our signal in polar form to get the following.
 \begin{eqnarray}
@@ -129,7 +127,6 @@ We can rewrite our signal in polar form to get the following.
 \end{eqnarray}
 
 This gives us a definition of $\tilde{h}(f)$ to be used in our likelihood and allows us to update our definition of $\tilde{x}(f)$
-
 \begin{eqnarray}
 	\tilde{x}(f) & = & Ce^{i(\phi - 2\pi ft_0)}\tilde{u}(f) + \tilde{n}(f) \mbox{ for } f > 0 \\
 	\tilde{x}(f) & = & \tilde{x}^*(f) \mbox{ for } f < 0
@@ -163,11 +160,11 @@ Introducing a change of variables from $t$ to $t' = t - t_0$ gives us
 
 This means that a time delay introduced a phase shift in frequency. 
 
-Now we can develop the Fisher information matrix. This will tell us how our variables affect each other. The Fisher information matrix is defined as 
+Now we can develop the Fisher information matrix. This will tell us how our variables affect each other and provide information of their covariance. The Fisher information matrix is defined as 
 \begin{equation}
 \mathcal{I}_{ij} \equiv E[-\frac{\partial^2 \ln L}{\partial \theta_i \partial \theta_j}]
 \end{equation}
- for $L(\theta_1, \theta_2, ...)$.
+ for likelihood $L(\theta_1, \theta_2, ...)$.
 
 So if we take our likelihood we'll end up with this,
 \begin{eqnarray}
@@ -182,7 +179,7 @@ Apply this to the definition of the Fisher information matrix,
 	& = & \int^\infty _0 Re[(\frac{\partial \tilde{h}}{\partial \theta_i})^* \frac{\partial \tilde{h}}{\partial \theta _j}]\frac{df}{s(f)}
 \end{eqnarray}
 
-Putting this into a matrix and defining $M_k = \int_0^\infty \tilde{u}(f)^* u(f) f\frac{df}{s(f)}$ and $N_k = \frac{M_k}{M_0}$ gives us
+So we only need the real part of the product of our derivatives. Putting this into a matrix and defining $M_k = \int_0^\infty \tilde{u}(f)^* u(f) f^k\frac{df}{s(f)}$ and $N_k = \frac{M_k}{M_0}$ gives us
 \[
 \mathcal{I} =
 \left( {\begin{array}{ccc}
@@ -192,9 +189,7 @@ Putting this into a matrix and defining $M_k = \int_0^\infty \tilde{u}(f)^* u(f)
  \end{array} } \right)
 \]
 
-Now we will perform three changes of variables to diagonalize this matrix.
-
-The first change of variables is from $C$ to $\rho = \sqrt{M_0}C$. 
+Now we will perform four changes of variables. The first change of variables is from $C$ to $\rho = \sqrt{M_0}C$. This change is intended to make the variance of the absolute value of the amplitude equal to one. 
 \[
 \mathcal{I} =
 \left( {\begin{array}{ccc}
@@ -204,7 +199,7 @@ The first change of variables is from $C$ to $\rho = \sqrt{M_0}C$.
  \end{array} } \right)
 \]
 
-The second from $t$ to $\phi_t = t2\pi \sqrt{N_2}$ gives us
+The second from $t$ to $\phi_t = t2\pi \sqrt{N_2}$ is meant to get rid of $t_0$,
 \[
 \mathcal{I} =
 \left( {\begin{array}{ccc}
@@ -214,7 +209,7 @@ The second from $t$ to $\phi_t = t2\pi \sqrt{N_2}$ gives us
  \end{array} } \right)
 \]
 
-The third introduces two new variables, $\phi_s = \frac{1}{\sqrt{2}}(\phi + \phi_t)$ and $\phi_d = \frac{1}{\sqrt{2}}(\phi - \phi_t)$. This results in this matrix,
+The third introduces two new variables, $\phi_s = \frac{1}{\sqrt{2}}(\phi + \phi_t)$ and $\phi_d = \frac{1}{\sqrt{2}}(\phi - \phi_t)$. This change of variables diagonalizes the matrix.
 \[
 \mathcal{I} =
 \left( {\begin{array}{ccc}
@@ -224,7 +219,7 @@ The third introduces two new variables, $\phi_s = \frac{1}{\sqrt{2}}(\phi + \phi
  \end{array} } \right)
 \]
 
-Now we'll do a final change of variables to make the phases have the same variance. We let $\alpha_s = \phi_s \sqrt{1 - \frac{N_1}{\sqrt{N_2}}}$ and $\alpha_d = \phi_d \sqrt{1 - \frac{N_1}{\sqrt{N_2}}}$ which gives us the matrix
+Now we'll do a final change of variables to make the phase parameters have the same variance. We let $\alpha_s = \phi_s \sqrt{1 - \frac{N_1}{\sqrt{N_2}}}$ and $\alpha_d = \phi_d \sqrt{1 - \frac{N_1}{\sqrt{N_2}}}$ which gives us the matrix
 \[
 \mathcal{I} =
 \left( {\begin{array}{ccc}
