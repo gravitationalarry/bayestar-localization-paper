@@ -1,9 +1,9 @@
-TEX = env TEXINPUTS=:$(CURDIR)/../../packages/iopart:$(CURDIR)/../../packages/iopart-num: pdflatex -file-line-error -halt-on-error
-BIBTEX = env BIBINPUTS=:$(CURDIR)/../../packages/astronat/apj: BSTINPUTS=:$(CURDIR)/../../packages/iopart-num: TEXINPUTS=:$(CURDIR)/../../packages/iopart:$(CURDIR)/../../packages/iopart-num: bibtex
+TEX = env TEXINPUTS=:$(CURDIR)/iopart: pdflatex -file-line-error -halt-on-error
+BIBTEX = env BIBINPUTS=:$(CURDIR)/astronat/apj: TEXINPUTS=:$(CURDIR)/iopart: bibtex
 
 all: ms.pdf
 
-PREREQS = ms.tex aas_macros.sty acronyms.tex telescope.bib
+PREREQS = ms.tex bib/aas_macros.sty ligo-acronyms/acronyms.tex bib/telescope.bib
 
 ms.pdf: $(PREREQS)
 	$(TEX) -draftmode $(patsubst %.pdf,%,$@)
