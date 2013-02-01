@@ -7,3 +7,6 @@
 [submodule "astronat"]
 	path = astronat
 	url = https://github.com/gravitationalarry/astronat.git
+[submodule "bib"]
+	path = bib
+	url = https://github.com/gravitationalarry/bib.git
