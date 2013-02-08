@@ -13,9 +13,9 @@
 \begin{document}
 
 \title[Rapid-response Bayesian sky localization]{Rapid-response Bayesian sky localization for electromagnetic follow-up of gravitational-wave candidates}
-\author{Leo Singer and Larry Price}
+\author{Leo Singer and Larry R. Price}
 \address{LIGO Laboratory, California Institute of Technology, Pasadena, CA 91125, USA}
-\ead{\mailto{leo.singer@ligo.org}, \mailto{larry.price@ligo.org}}
+\ead{\mailto{leo.singer@ligo.org}, \mailto{larryp@caltech.edu}}
 
 \begin{abstract}
 Timely \acl{EM} follow\nobreakdashes-up of \acl{CBC} events detected by \acl{aLIGO} requires rapidly inferring the sky location from the \ac{GW} observations.  Calculation of the posterior distribution of the sky location and intrinsic source parameters given the \ac{GW} strain takes hours with state\nobreakdashes-of\nobreakdashes-the\nobreakdashes-art \ac{MCMC} parameter estimation codes.  By taking as the measurement not the \ac{GW} strain itself but the amplitude and \acl{TOA} of the putative signal at each detector, and by fixing the intrinsic source parameters, we have constructed a non-\ac{MCMC}, fully deterministic Bayesian parameter estimation algorithm that takes just seconds to produce sky maps of posterior probability.%
@@ -117,6 +117,8 @@ The normalization has been dropped because the Fisher matrix elements depend onl
 %
 where $\Re$ denotes the real part and $^*$ the complex conjugate. This form is more useful because it involves only first derivatives, and of the signal $\tilde h (\omega)$ rather than the entire observation $\tilde x (\omega)$.
 
+
+\marginpar{LP: these derivatives are trivial and so is putting them into fisher. Perhaps we should lose the derivatives and re-write Fisher so that the integral appears only once?  Better yet, write out the equation for the noise moments and then use that.}
 With \eref{eq:gaussian-fisher-matrix} in hand, we return to our particular signal model, \Eref{eq:signal-model}. The necessary partial derivatives are
 %
 \begin{eqnarray*}
