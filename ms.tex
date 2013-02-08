@@ -74,6 +74,8 @@ Timely \acl{EM} follow\nobreakdashes-up of \acl{CBC} events detected by \acl{aLI
 
 \section{Measurement uncertainty}
 
+\marginpar{Bad to start a paragraph with a citation number. Perhaps switch to natbib and use a \texttt{citet}-style reference. Keep this derivation as short as possible. Refer more directly to \cite{fairhurst:2009}. Tighten up notation as much as possible while still giving a concise description of the Cram\`er-Rao bound.}%
+%
 \cite{fairhurst:2009} estimated the uncertainty in the matched-filter measurement of the \ac{TOA} of a \ac{GW} signal by computing the scalar Fisher information.  We extend this result by computing the Fisher information matrix describing the uncertainties in the joint estimation of the signal amplitude and \ac{TOA}.
 
 When a \ac{CBC} occurs, a detector's strain observation may be described by a linear combination of two orthogonal \ac{GW} quadratures and additive, zero\nobreakdashes-mean, \acl{WSS}, Gaussian measurement noise $n(t)$, with one-sided power spectral density $S(f)$. In the frequency domain, the detector's observation $\tilde x (\omega)$ is given by
@@ -154,6 +156,8 @@ Then, we have
 
 \section{Posterior distribution}
 
+\marginpar{This material still has the original, wrong Fishher matrix. Needs to be rewritten.}%
+%
 Because the \ac{CRLB} in \Eref{eq:cramer-rao} is diagonal, joint estimators of $(\rho_A, \rho_B, t_0)$ may exist for which the error in the estimation of the individual parameters is uncoupled up to second order.  If the detector's noise is Gaussian, then the outputs of matched filters for $a(t)$ and $b(t)$ will themselves be Gaussian.  This encourages us to make the approximation that the errors in $(\rho_A, \rho_B, t_0)$ by a matched\nobreakdashes-filter estimator are independent and Gaussian with variance equal to the \ac{CRLB}.  A wrinkle is that $\mathcal{I}_{t_0,t_0}$ depends on the true values of $\rho_A$ and $\rho_B$.  If we make the further leap of evaluating the \ac{CRLB} \emph{at the value of the estimators}, we can write
 %
 \begin{eqnarray}
@@ -163,7 +167,8 @@ Because the \ac{CRLB} in \Eref{eq:cramer-rao} is diagonal, joint estimators of $
 \end{eqnarray}
 
 
-
+\marginpar{This part is correct, but uses the old notation for the frequency moments. Convert to the new notation. Also, add physical interpretation to each change of variables.}%
+%
 Now we will perform four changes of variables. The first change of variables is from $C$ to $\rho = \sqrt{M_0}C$. This change is intended to make the variance of the absolute value of the amplitude equal to one. 
 \[
 \mathcal{I} =
