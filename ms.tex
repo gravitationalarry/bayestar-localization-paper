@@ -170,6 +170,8 @@ where a hat $\hat{\phantom{\rho}}$ denotes the estimate of a parameter and ${\om
     \std \left(\hat{\tau} - \tau \right) \geq \sqrt{\left(\mathcal{I}^{-1}\right)_{\tau\tau}} = \frac{\rho}{\omega_\mathrm{rms}}.
 \end{equation}
 
+\marginpar{Plot covariance ellipses and estimator samples for each change of variables; that would be a nice visual here.}%
+%
 Furthermore, the Fisher matrix in \Eref{eq:fisher-matrix} is block diagonal, which implies that estimation errors in the signal amplitude $\rho$ are uncorrelated with the phase $\gamma$ and time $\tau$. A sequence of two changes of variables lends some physical interpretation to the nature of the coupled estimation errors in $\gamma$ and $\tau$.
 
 First, we put the phase and time on the same footing by measuring the time in units of $1 / 2 \pi \sqrt{\overline{\omega^2}}$ with a change of variables from $\tau$ to $\gamma_\tau = 2 \pi \sqrt{\overline{\omega^2}} \tau$:
@@ -196,15 +198,16 @@ The second change of variables, from $\gamma$ and $\gamma_\tau$ to $\gamma_\pm =
 %
 Thus, in the appopriate time units, the \textit{sum and difference} of the phase and time of the signal are measured independently.
 
+\subsection{Noise model for point parameters}
 
-\marginpar{This material still has the original, wrong Fishher matrix. Needs to be rewritten.}%
+\marginpar{Talk here about likelihood structure---the `gaussian on a cylinder' concept, why we would want to project out the phase error.}%
 %
-Because the \ac{CRLB} in \Eref{eq:cramer-rao} is diagonal, joint estimators of $(\rho_A, \rho_B, t_0)$ may exist for which the error in the estimation of the individual parameters is uncoupled up to second order. If the detector's noise is Gaussian, then the outputs of matched filters for $a(t)$ and $b(t)$ will themselves be Gaussian. This encourages us to make the approximation that the errors in $(\rho_A, \rho_B, t_0)$ by a matched\nobreakdashes-filter estimator are independent and Gaussian with variance equal to the \ac{CRLB}. A wrinkle is that $\mathcal{I}_{t_0,t_0}$ depends on the true values of $\rho_A$ and $\rho_B$. If we make the further leap of evaluating the \ac{CRLB} \emph{at the value of the estimators}, we can write
+A wrinkle is that $\mathcal{I}_{\tau\tau}$ depends on the true values of $\rho_A$ and $\rho_B$. If we make the further leap of evaluating the \ac{CRLB} \emph{at the value of the estimators}, we can write
 %
 \begin{eqnarray}
-\hat{\rho}_A - \rho_A \sim \mathcal{N}\, [0, 1] \\
-\hat{\rho}_B - \rho_B \sim \mathcal{N}\, [0, 1] \\
-\hat{t}_0 - t_0 \sim \mathcal{N} \left[0, \frac{1}{2 \pi f_\mathrm{rms} \sqrt{{\hat{\rho}_A}^2 + {\hat{\rho}_B}^2}}\right].
+    \hat{\rho} - \rho \sim \mathcal{N}\, [0, 1] \\
+    \hat{\gamma} - \gamma \sim \mathcal{N}\, \left[0, \overline{\omega^2} / {\omega_\mathrm{rms}}^2\right] \\
+    \hat{\tau} - \tau \sim \mathcal{N} \left[0, 1 / {\omega_\mathrm{rms}}^2\right].
 \end{eqnarray}
 
 
