@@ -117,26 +117,6 @@ The normalization has been dropped because the Fisher matrix elements depend onl
 %
 where $\Re$ denotes the real part and $^*$ the complex conjugate. This form is more useful because it involves only first derivatives, and of the signal $\tilde h (\omega)$ rather than the entire observation $\tilde x (\omega)$.
 
-
-\marginpar{LP: these derivatives are trivial and so is putting them into fisher. Perhaps we should lose the derivatives and re-write Fisher so that the integral appears only once?  Better yet, write out the equation for the noise moments and then use that.}
-With \eref{eq:gaussian-fisher-matrix} in hand, we return to our particular signal model, \Eref{eq:signal-model}. The necessary partial derivatives are
-%
-\begin{eqnarray*}
-    \frac{\partial \tilde h}{\partial \rho} &= e^{\imath (\gamma - \omega \tau)} \tilde u (\omega) \\
-    \frac{\partial \tilde h}{\partial \gamma} &= \imath \, \rho \, e^{\imath (\gamma - \omega \tau)} \tilde u (\omega) \\
-    \frac{\partial \tilde h}{\partial \tau} &= -\imath \, \omega \, \rho \, e^{\imath (\gamma - \omega \tau)} \tilde u (\omega).
-\end{eqnarray*}
-%
-The Fisher matrix elements are
-%
-\begin{eqnarray*}
-    \mathcal{I}_{\rho\rho} &= \int_0^\infty \frac{|\tilde u (\omega)|^2}{S(\omega)} \, \mathrm{d}\omega \\
-	\mathcal{I}_{\gamma\gamma} &= \rho^2 \int_0^\infty \frac{|\tilde u (\omega)|^2}{S(\omega)} \, \mathrm{d}\omega \\
-	\mathcal{I}_{\tau\tau} &= \rho^2 \int_0^\infty \frac{|\tilde u (\omega)|^2}{S(\omega)} \omega^2 \, \mathrm{d}\omega \\
-	\mathcal{I}_{\gamma\tau} &= -\rho^2 \int_0^\infty \frac{|\tilde u (\omega)|^2}{S(\omega)} \omega \, \mathrm{d}\omega = \mathcal{I}_{\tau\gamma} \\
-	\mathcal{I}_{\rho\gamma} &= \mathcal{I}_{\gamma\rho} = \mathcal{I}_{\rho\tau} = \mathcal{I}_{\tau\rho} = 0.
-\end{eqnarray*}
-%
 If the waveform $\tilde u (\omega)$ is normalized such that $\mathcal{I}_{\rho\rho} = 1$, we can introduce the \textit{\ac{SNR}-weighted moments of angular frequency},
 %
 \begin{equation}\label{eq:angular-frequency-moments}
