@@ -12,6 +12,7 @@
 {\raggedright\footnotesize #1}}
 
 \DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\std}{std}
 
 \begin{document}
 
@@ -154,10 +155,22 @@ The \ac{CRLB} says that, element by element,
             \hat{\tau} - \tau
         \end{array}
         \right)
-    } \geq \mathcal{I}^{-1}
+    } \geq \mathcal{I}^{-1} = \left(
+        \begin{array}{ccc}
+            1 & 0 & 0 \\
+            0 & \rho^2 \overline{\omega^2}/{\omega_\mathrm{rms}}^2 & \rho^2 \overline{\omega}/{\omega_\mathrm{rms}}^2 \\
+            0 & \rho^2 \overline{\omega}/{\omega_\mathrm{rms}}^2 & \rho^2/{\omega_\mathrm{rms}}^2
+        \end{array}
+    \right)
 \end{equation}
 %
-where a hat $\hat{\phantom{\rho}}$ denotes the estimate of a parameter. The Fisher matrix in \Eref{eq:fisher-matrix} is block diagonal, which implies that estimation errors in the signal amplitude $\rho$ are uncorrelated with the phase $\gamma$ and time $\tau$. A sequence of two changes of variables lends some physical interpretation to the nature of the coupled estimation errors in $\gamma$ and $\tau$.
+where a hat $\hat{\phantom{\rho}}$ denotes the estimate of a parameter and ${\omega_\mathrm{rms}}^2 = \overline{\omega^2} - \overline{\omega}^2$. Reading off the $\tau \tau$ element of the covariance matrix reproduces the timing accuracy in Equation~(24) of \cite{fairhurst:2009},
+%
+\begin{equation}\label{eq:timing-crlb}
+    \std \left(\hat{\tau} - \tau \right) \geq \sqrt{\left(\mathcal{I}^{-1}\right)_{\tau\tau}} = \frac{\rho}{\omega_\mathrm{rms}}.
+\end{equation}
+
+Furthermore, the Fisher matrix in \Eref{eq:fisher-matrix} is block diagonal, which implies that estimation errors in the signal amplitude $\rho$ are uncorrelated with the phase $\gamma$ and time $\tau$. A sequence of two changes of variables lends some physical interpretation to the nature of the coupled estimation errors in $\gamma$ and $\tau$.
 
 First, we put the phase and time on the same footing by measuring the time in units of $1 / 2 \pi \sqrt{\overline{\omega^2}}$ with a change of variables from $\tau$ to $\gamma_\tau = 2 \pi \sqrt{\overline{\omega^2}} \tau$:
 %
