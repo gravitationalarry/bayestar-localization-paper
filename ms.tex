@@ -74,9 +74,7 @@ Timely \acl{EM} follow\nobreakdashes-up of \acl{CBC} events detected by \acl{aLI
 
 \section{Measurement uncertainty}
 
-\marginpar{Bad to start a paragraph with a citation number. Perhaps switch to natbib and use a \texttt{citet}-style reference. Keep this derivation as short as possible. Refer more directly to \cite{fairhurst:2009}. Tighten up notation as much as possible while still giving a concise description of the Cram\`er-Rao bound.}%
-%
-\cite{fairhurst:2009} estimated the uncertainty in the matched-filter measurement of the \ac{TOA} of a \ac{GW} signal by computing the scalar Fisher information. We extend this result by computing the Fisher information matrix describing the uncertainties in the joint estimation of the signal amplitude and \ac{TOA}.
+The \ac{CRLB} is a useful analytical tool for predicting with what error an unknown parameter or parameters can be estimated from noisy observations. When an unbiased estimator exists, the \ac{CRLB} bound says that the covariance of the estimation error is bounded below by the Fisher information matrix. The \ac{CRLB} has been widely applied in \ac{GW} astronomy, for instance by \cite{fairhurst:2009} to predict the sky localization accuracy that is achievable with \ac{GW} observations. Here, we review the Fisher matrix calculation in \cite{fairhurst:2009} but add some physical interpretation to the particular structure of the covariance matrix.
 
 In the frequency domain, the strain $\tilde x (\omega)$ observed by a detector is a linear combination of two orthogonal \ac{GW} quadratures and additive noise,
 %
