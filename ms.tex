@@ -210,10 +210,38 @@ A wrinkle is that $\mathcal{I}_{\tau\tau}$ depends on the true values of $\rho_A
     \hat{\tau} - \tau \sim \mathcal{N} \left[0, 1 / {\omega_\mathrm{rms}}^2\right].
 \end{eqnarray}
 
+\section{Method}
 
-
-
-
+If we assume that the time and amplitude estimation errors are uncorrelated, then we can separate the likelihood into one factor that depends only on time and one that depends only on amplitude:
+%
+\begin{eqnarray*}
+    \mathcal{L}(
+        \hat{\tau}_1, \hat{\tau}_2, &\dots, \hat{\tau}_N,
+        \hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N;
+        \mathbf{n}, t_\oplus, D_\mathrm{L}, \iota, \psi, \phi_c) \\
+    &= \mathcal{L}_\mathrm{TOA}(
+        \hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N; \mathbf{n}, t_\oplus) \\
+        &\times
+        \mathcal{L}_\mathrm{SNR}(\hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N;
+         \mathbf{n}, D_\mathrm{L}, \iota, \psi, \phi_c
+    ).
+\end{eqnarray*}
+%
+The \ac{TOA}-only factor depends only on the \ac{TOA} estimates $\hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N$, the unknown sky location $\mathbf{n}$ (or equivalently, the right ascension $\alpha$, declination $\delta$, and sidereal time), and the absolute \ac{TOA} at an arbitrary reference point (herein, the geocenter), $t_\oplus$.
+%
+\begin{equation}
+    \mathcal{L}_\mathrm{TOA} \propto \exp \left[
+        -\frac{1}{2} \sum_{i=1}^N \frac{\left(\hat{\tau}_i + \mathbf{n} \cdot \mathbf{r}_i / c - t_\oplus \right)^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}
+    \right]
+\end{equation}
+%
+The \ac{SNR}-only factor depends only on the \ac{SNR} estimates $\hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N$, but it depends on the unknown sky location, luminosity distance $D_\mathrm{L}$, inclination $\mathrm{\iota}$, polarization angle $\psi$, and coalescence phase $\phi_c$.
+%
+\begin{equation}
+    \mathcal{L}_\mathrm{SNR} \propto \exp \left[
+        -\frac{1}{2} \sum_{i=1}^N \left(\hat{\rho}_i - \rho_i(\mathbf{n}, D_\mathrm{L}, \iota, \psi, \phi_c) \right)^2
+    \right]
+\end{equation}
 
 \ack Source code for \ac{BAYESTAR} is available on the \acs{LIGO} \acl{DASWG} web site at \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/bayestar.html}.
 
