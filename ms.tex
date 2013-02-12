@@ -1,4 +1,5 @@
 \documentclass{iopart}
+\usepackage{amsopn}
 \usepackage{iopams}
 \usepackage{bib/aas_macros}
 \usepackage[colorlinks]{hyperref}
@@ -9,6 +10,8 @@
 \let\oldmarginpar\marginpar
 \renewcommand\marginpar[1]{\-\oldmarginpar[\raggedleft\footnotesize #1]%
 {\raggedright\footnotesize #1}}
+
+\DeclareMathOperator{\cov}{cov}
 
 \begin{document}
 
@@ -76,6 +79,8 @@ Timely \acl{EM} follow\nobreakdashes-up of \acl{CBC} events detected by \acl{aLI
 
 The \ac{CRLB} is a useful analytical tool for predicting with what error an unknown parameter or parameters can be estimated from noisy observations. When an unbiased estimator exists, the \ac{CRLB} bound says that the covariance of the estimation error is bounded below by the Fisher information matrix. The \ac{CRLB} has been widely applied in \ac{GW} astronomy, for instance by \cite{fairhurst:2009} to predict the sky localization accuracy that is achievable with \ac{GW} observations. Here, we review the Fisher matrix calculation in \cite{fairhurst:2009} but add some physical interpretation to the particular structure of the covariance matrix.
 
+\subsection{Fisher matrix}
+
 In the frequency domain, the strain $\tilde x (\omega)$ observed by a detector is a linear combination of two orthogonal \ac{GW} quadratures and additive noise,
 %
 \begin{equation}\label{eq:signal-model}
@@ -127,16 +132,57 @@ This form is more useful because it involves only first derivatives, and of the 
 %
 the Fisher matrix for the signal model in \Eref{eq:signal-model} is
 %
-\begin{eqnarray*}
+\begin{equation}\label{eq:fisher-matrix}
 	\mathcal{I} = \bordermatrix{
         ~ & \rho & \gamma & \tau \cr
         \rho & 1 & 0 & 0 \cr
         \gamma & 0 & \rho^2 & -\rho^2 \overline{\omega} \cr
         \tau & 0 & -\rho^2 \overline{\omega} & \rho^2 \overline{\omega^2}
     }.
-\end{eqnarray*}
+\end{equation}
 
-\section{Posterior distribution}
+\subsection{\acl{CRLB} and physical interpretation}
+
+The \ac{CRLB} says that, element by element,
+%
+\begin{equation}
+    \cov{
+        \left(
+        \begin{array}{c}
+            \hat{\rho} - \rho \\
+            \hat{\gamma} - \gamma \\
+            \hat{\tau} - \tau
+        \end{array}
+        \right)
+    } \geq \mathcal{I}^{-1}
+\end{equation}
+%
+where a hat $\hat{\phantom{\rho}}$ denotes the estimate of a parameter. The Fisher matrix in \Eref{eq:fisher-matrix} is block diagonal, which implies that estimation errors in the signal amplitude $\rho$ are uncorrelated with the phase $\gamma$ and time $\tau$. A sequence of two changes of variables lends some physical interpretation to the nature of the coupled estimation errors in $\gamma$ and $\tau$.
+
+First, we put the phase and time on the same footing by measuring the time in units of $1 / 2 \pi \sqrt{\overline{\omega^2}}$ with a change of variables from $\tau$ to $\gamma_\tau = 2 \pi \sqrt{\overline{\omega^2}} \tau$:
+%
+\begin{equation}
+    \mathcal{I}' = \bordermatrix{
+        ~ & \rho & \gamma & \gamma_\tau \cr
+        \rho & 1 & 0 & 0 \cr
+        \gamma & 0 & \rho^2 & -\rho^2\frac{\overline{\omega}}{\sqrt{\overline{\omega^2}}} \cr
+        \gamma_\tau & 0 & -\rho^2\frac{\overline{\omega}}{\sqrt{\overline{\omega^2}}} & \rho^2
+    }.
+\end{equation}
+
+The second change of variables, from $\gamma$ and $gamma_\tau$ to $\gamma_\pm = \frac{1}{\sqrt{2}}(\gamma \pm \gamma_\tau)$, diagonalizes the Fisher matrix:
+%
+\begin{equation}
+    \mathcal{I}'' = \bordermatrix{
+        ~ & \rho & \gamma_+ & \gamma_- \cr
+        \rho & 1 & 0 & 0 \cr
+        \gamma_+ & 0 & \left(1 - \frac{\overline{\omega}}{\sqrt{\overline{\omega^2}}}\right)\rho^2 & 0 \cr
+        \gamma_- & 0 & 0 & \left(1 + \frac{\overline{\omega}}{\sqrt{\overline{\omega^2}}}\right)\rho^2
+    }.
+\end{equation}
+%
+Thus, in the appopriate time units, the \textit{sum and difference} of the phase and time of the signal are measured independently.
+
 
 \marginpar{This material still has the original, wrong Fishher matrix. Needs to be rewritten.}%
 %
@@ -149,47 +195,7 @@ Because the \ac{CRLB} in \Eref{eq:cramer-rao} is diagonal, joint estimators of $
 \end{eqnarray}
 
 
-\marginpar{This part is correct, but uses the old notation for the frequency moments. Convert to the new notation. Also, add physical interpretation to each change of variables.}%
-%
-Now we will perform four changes of variables. The first change of variables is from $C$ to $\rho = \sqrt{M_0}C$. This change is intended to make the variance of the absolute value of the amplitude equal to one. 
-\[
-\mathcal{I} =
-\left( {\begin{array}{ccc}
- 1 & 0 & 0 \\
- 0 & \rho^2 & -2\pi\rho^2 N_1 \\
- 0 & -2\pi\rho^2 N_1 & 4\pi^2 \rho^2 N_2
- \end{array} } \right)
-\]
 
-The second from $t$ to $\phi_t = t2\pi \sqrt{N_2}$ is meant to get rid of $t_0$,
-\[
-\mathcal{I} =
-\left( {\begin{array}{ccc}
- 1 & 0 & 0 \\
- 0 & \rho^2 & -\rho^2\frac{N_1}{\sqrt{N_2}} \\
- 0 & -\rho^2\frac{N_1}{\sqrt{N_2}} & \rho^2
- \end{array} } \right)
-\]
-
-The third introduces two new variables, $\phi_s = \frac{1}{\sqrt{2}}(\phi + \phi_t)$ and $\phi_d = \frac{1}{\sqrt{2}}(\phi - \phi_t)$. This change of variables diagonalizes the matrix.
-\[
-\mathcal{I} =
-\left( {\begin{array}{ccc}
- 1 & 0 & 0 \\
- 0 & (1 - \frac{N_1}{\sqrt{N_2}})\rho^2 & 0 \\
- 0 & 0 & (1 + \frac{N_1}{\sqrt{N_2}})\rho^2
- \end{array} } \right)
-\]
-
-Now we'll do a final change of variables to make the phase parameters have the same variance. We let $\alpha_s = \phi_s \sqrt{1 - \frac{N_1}{\sqrt{N_2}}}$ and $\alpha_d = \phi_d \sqrt{1 - \frac{N_1}{\sqrt{N_2}}}$ which gives us the matrix
-\[
-\mathcal{I} =
-\left( {\begin{array}{ccc}
- 1 & 0 & 0 \\
- 0 & \rho^2 & 0 \\
- 0 & 0 & \rho^2
- \end{array} } \right)
-\]
 
 
 
