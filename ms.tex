@@ -78,15 +78,23 @@ Timely \acl{EM} follow\nobreakdashes-up of \acl{CBC} events detected by \acl{aLI
 %
 \cite{fairhurst:2009} estimated the uncertainty in the matched-filter measurement of the \ac{TOA} of a \ac{GW} signal by computing the scalar Fisher information. We extend this result by computing the Fisher information matrix describing the uncertainties in the joint estimation of the signal amplitude and \ac{TOA}.
 
-When a \ac{CBC} occurs, a detector's strain observation may be described by a linear combination of two orthogonal \ac{GW} quadratures and additive, zero\nobreakdashes-mean, \acl{WSS}, Gaussian measurement noise $n(t)$, with one-sided power spectral density $S(f)$. In the frequency domain, the detector's observation $\tilde x (\omega)$ is given by
+In the frequency domain, the strain $\tilde x (\omega)$ observed by a detector is a linear combination of two orthogonal \ac{GW} quadratures and additive noise,
 %
 \begin{equation}\label{eq:signal-model}
-	\tilde x (\omega) = \tilde h (\omega, \rho, \gamma, \tau) + \tilde n (\omega) = \rho e^{\imath (\gamma - \omega \tau)} \tilde u (\omega) + \tilde n (\omega).
+	\tilde x (\omega) = \tilde h (\omega, \rho, \gamma, \tau) + \tilde n (\omega) = \rho e^{\imath (\gamma - \omega \tau)} \tilde u (\omega) + \tilde n (\omega),
 \end{equation}
 %
-where $\tilde h (\omega)$ is the signal content, $\tilde n (\omega)$ is the detector's noise, $\tilde u (\omega)$ is the frequency-domain post-Newtonian inspiral signal, $\rho$ is the signal's amplitude, $\gamma$ is a phase angle the encodes the relative strength of the two \ac{GW} quadratures, and $\tau$ is the time of arrival relative to an arbitrary time base.
+where $\tilde h (\omega)$ is the signal content, $\tilde n (\omega)$ is the detector's \ac{WSS} Gaussian noise with \ac{PSD} $S(\omega)$, $\tilde u (\omega)$ is the frequency-domain post-Newtonian inspiral signal, $\rho$ is the signal's amplitude, $\gamma$ is a phase angle the encodes the relative strength of two \ac{GW} quadratures, and $\tau$ is the time of arrival relative to an arbitrary time base. The likelihood, or the probability of obtaining the observation $\tilde x(\omega)$ conditioned on the value of the parameter vector $\boldsymbol\theta = (\rho, \gamma, \tau)$, is Gaussian, with the log-likelihood proportional to:
+%
+\begin{equation}\label{eq:gaussian-likelihood}
+	\mathcal{L}(\tilde x; \boldsymbol\theta) = p(\tilde x | \boldsymbol\theta)
+		\propto \exp \left[
+		- \frac{1}{2} \int_0^\infty \frac{\left|\tilde x (\omega)
+			- \tilde h (\omega; \boldsymbol\theta) \right|^2}{S(\omega)} \, \mathrm{d}\omega
+	\right].
+\end{equation}
 
-The Fisher information matrix for a measurement $\tilde x$ described by the unknown parameter vector $\boldsymbol{\theta}$ may be written as
+The Fisher information matrix for a measurement $\tilde x$ described by the unknown parameter vector $\boldsymbol{\theta}$ is
 %
 \begin{equation}\label{eq:general-fisher-matrix}
 	\mathcal{I}_{jk} = \mathrm{E} \, \left[
@@ -96,23 +104,13 @@ The Fisher information matrix for a measurement $\tilde x$ described by the unkn
 	\right].
 \end{equation}
 %
-This equation involves double derivatives, but substantial simplification is possible when the likelihood is Gaussian. First, we write the likelihood of the data $\tilde x (\omega)$ given the parameter vector $\boldsymbol\theta = (\rho, \gamma, \tau)$:
-%
-\begin{equation}\label{eq:gaussian-likelihood}
-	\mathcal{L}(\tilde x; \boldsymbol\theta) = p(\tilde x | \boldsymbol\theta)
-		\propto \exp \left[
-		- \frac{1}{2} \int_0^\infty \frac{\left|\tilde x (\omega)
-			- \tilde h (\omega; \boldsymbol\theta) \right|^2}{S(\omega)} \, \mathrm{d}\omega
-	\right].
-\end{equation}
-%
-The normalization has been dropped because the Fisher matrix elements depend only on derivatives of the log\nobreakdashes-likelihood function and any factor that is independent of the parameters makes no contribution. Now, substituting \eref{eq:gaussian-likelihood} into \eref{eq:general-fisher-matrix} gives us
+This equation involves double derivatives, but substantial simplification is possible when---as in this case---the likelihood is Gaussian:
 %
 \begin{equation}\label{eq:gaussian-fisher-matrix}
 	\mathcal{I}_{jk} = \int_0^\infty \Re \left[
         \left(\frac{\partial \tilde h}{\partial \theta_j}\right)^*
         \left(\frac{\partial \tilde h}{\partial \theta_k}\right)
-	\right] \frac{1}{S(\omega)} \, \mathrm{d}\omega.
+	\right] \frac{1}{S(\omega)} \, \mathrm{d}\omega,
 \end{equation}
 %
 where $\Re$ denotes the real part and $^*$ the complex conjugate. This form is more useful because it involves only first derivatives, and of the signal $\tilde h (\omega)$ rather than the entire observation $\tilde x (\omega)$.
