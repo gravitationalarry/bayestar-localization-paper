@@ -81,10 +81,16 @@ Timely \acl{EM} follow\nobreakdashes-up of \acl{CBC} events detected by \acl{aLI
 In the frequency domain, the strain $\tilde x (\omega)$ observed by a detector is a linear combination of two orthogonal \ac{GW} quadratures and additive noise,
 %
 \begin{equation}\label{eq:signal-model}
-	\tilde x (\omega) = \tilde h (\omega, \rho, \gamma, \tau) + \tilde n (\omega) = \rho e^{\imath (\gamma - \omega \tau)} \tilde u (\omega) + \tilde n (\omega),
+	\tilde x (\omega) = \tilde h (\omega, \rho, \gamma, \tau) + \tilde n (\omega) = \frac{\rho}{\sigma} e^{\imath (\gamma - \omega \tau)} \tilde u (\omega) + \tilde n (\omega),
 \end{equation}
 %
-where $\tilde h (\omega)$ is the signal content, $\tilde n (\omega)$ is the detector's \ac{WSS} Gaussian noise with \ac{PSD} $S(\omega)$, $\tilde u (\omega)$ is the frequency-domain post-Newtonian inspiral signal, $\rho$ is the signal's amplitude, $\gamma$ is a phase angle the encodes the relative strength of two \ac{GW} quadratures, and $\tau$ is the time of arrival relative to an arbitrary time base. The likelihood, or the probability of obtaining the observation $\tilde x(\omega)$ conditioned on the value of the parameter vector $\boldsymbol\theta = (\rho, \gamma, \tau)$, is Gaussian, with the log-likelihood proportional to:
+where $\tilde h (\omega)$ is the signal content, $\tilde n (\omega)$ is the detector's \ac{WSS} Gaussian noise with \ac{PSD} $S(\omega)$, $\tilde u (\omega)$ is the frequency-domain post-Newtonian inspiral signal, $\rho$ is the signal's amplitude, $\gamma$ is a phase angle the encodes the relative strength of two \ac{GW} quadratures, and $\tau$ is the time of arrival relative to an arbitrary time base. The quantity $\sigma$ is a normalization constant defined as the \ac{SNR} of the \ac{GW} source at a fiducial distance, here taken to be 1~Mpc,
+%
+\begin{equation}\label{eq:sigma}
+    \sigma^2 = \int_0^\infty \frac{\left| \tilde u (\omega)\right|^2}{S(\omega)} \, \mathrm{d}\omega.
+\end{equation}
+%
+The likelihood, or the probability of obtaining the observation $\tilde x(\omega)$ conditioned on the value of the parameter vector $\boldsymbol\theta = (\rho, \gamma, \tau)$, is Gaussian, with the log-likelihood proportional to:
 %
 \begin{equation}\label{eq:gaussian-likelihood}
 	\mathcal{L}(\tilde x; \boldsymbol\theta) = p(\tilde x | \boldsymbol\theta)
@@ -110,20 +116,18 @@ This equation involves double derivatives, but substantial simplification is pos
 	\mathcal{I}_{jk} = \int_0^\infty \Re \left[
         \left(\frac{\partial \tilde h}{\partial \theta_j}\right)^*
         \left(\frac{\partial \tilde h}{\partial \theta_k}\right)
-	\right] \frac{1}{S(\omega)} \, \mathrm{d}\omega,
+	\right] \frac{1}{S(\omega)} \, \mathrm{d}\omega.
 \end{equation}
 %
-where $\Re$ denotes the real part and $^*$ the complex conjugate. This form is more useful because it involves only first derivatives, and of the signal $\tilde h (\omega)$ rather than the entire observation $\tilde x (\omega)$.
-
-If the waveform $\tilde u (\omega)$ is normalized such that $\mathcal{I}_{\rho\rho} = 1$, we can introduce the \textit{\ac{SNR}-weighted moments of angular frequency},
+This form is more useful because it involves only first derivatives, and of the signal $\tilde h (\omega)$ rather than the entire observation $\tilde x (\omega)$. In terms of the $k$th \ac{SNR}-weighted moment of angular frequency,
 %
 \begin{equation}\label{eq:angular-frequency-moments}
     \overline{\omega^k} =
         \left[ \int_0^\infty \frac{|\tilde u (\omega)|^2}{S(\omega)} \omega^k \, \mathrm{d}\omega \right]
-        \left[ \int_0^\infty \frac{|\tilde u (\omega)|^2}{S(\omega)} \, \mathrm{d}\omega \right]^{-1}
+        \left[ \int_0^\infty \frac{|\tilde u (\omega)|^2}{S(\omega)} \, \mathrm{d}\omega \right]^{-1},
 \end{equation}
 %
-Then, we have
+the Fisher matrix for the signal model in \Eref{eq:signal-model} is
 %
 \begin{eqnarray*}
 	\mathcal{I} = \bordermatrix{
