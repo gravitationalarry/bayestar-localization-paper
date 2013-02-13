@@ -271,12 +271,17 @@ where
     \left(\sum_{i=1}^N \frac{{\tilde{\tau}_i}^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)\left(\sum_{i=1}^N \frac{1}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)^{-1}.
 \end{equation}
 
+The marginalization over $D_\mathrm{L}$, $\cos \iota$, and $psi$ must be done numerically. The outermost integration is over $\cos \iota$ and $\psi$, and is done with Newton-Cotes by evaluating $\mathcal{L}_\mathrm{SNR}$ on a regular lattice in $\cos \iota$ and $\psi$. This integration scheme is first order in $\cos \iota$ and second order in $\psi$.
+
+The innermost integration is over $D_\mathrm{L}$ and is performed using adaptive Gaussian quadrature, but with a twist that speeds up convergence.
+
 \begin{figure}
     \caption{\label{fig:radial_integrand}Illustration of initial subdivisions for radial integration scheme.}
     \begin{center}
         \includegraphics{radial_integrand}
     \end{center}
 \end{figure}
+
 
 \ack Source code for \ac{BAYESTAR} is available on the \acs{LIGO} \acl{DASWG} web site at \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/bayestar.html}.
 
