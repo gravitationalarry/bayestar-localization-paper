@@ -89,13 +89,13 @@ In the frequency domain, the strain $\tilde x (\omega)$ observed by a detector i
 	\tilde x (\omega) = \tilde h (\omega, \rho, \gamma, \tau) + \tilde n (\omega) = \frac{\rho}{\sigma} e^{\imath (\gamma - \omega \tau)} \tilde u (\omega) + \tilde n (\omega),
 \end{equation}
 %
-where $\tilde h (\omega)$ is the signal content, $\tilde n (\omega)$ is the detector's \ac{WSS} Gaussian noise with \ac{PSD} $S(\omega)$, $\tilde u (\omega)$ is the frequency-domain post-Newtonian inspiral signal, $\rho$ is the signal's amplitude, $\gamma$ is a phase angle the encodes the relative strength of two \ac{GW} quadratures, and $\tau$ is the time of arrival relative to an arbitrary time base. The quantity $\sigma$ is a normalization constant defined as the \ac{SNR} of the \ac{GW} source at a fiducial distance, here taken to be 1~Mpc,
+where $\tilde h (\omega)$ is the signal content, $\tilde n (\omega)$ is the detector's \ac{WSS} Gaussian noise with \ac{PSD} $S(\omega)$, $\tilde u (\omega)$ is the frequency-domain post-Newtonian inspiral signal, $\rho$ is the signal's amplitude, $\gamma$ is a phase angle the encodes the relative strength of two \ac{GW} quadratures, and $\tau$ is the time of arrival relative to an arbitrary time base. The quantity $\sigma$ is a normalization constant defined as the \ac{SNR} of the \ac{GW} source at a fiducial distance, here taken to be $D_\mathrm{fiducial} = 1$~Mpc,
 %
 \begin{equation}\label{eq:sigma}
     \sigma^2 = \int_0^\infty \frac{\left| \tilde u (\omega)\right|^2}{S(\omega)} \, \mathrm{d}\omega.
 \end{equation}
 %
-The likelihood, or the probability of obtaining the observation $\tilde x(\omega)$ conditioned on the value of the parameter vector $\boldsymbol\theta = (\rho, \gamma, \tau)$, is Gaussian, with the log-likelihood proportional to:
+The distance at which an optimally oriented \ac{GW} source would produce \ac{SNR}=1 is defined as $D_1 = D_\mathrm{fiducial} / \sigma$. The likelihood, or the probability of obtaining the observation $\tilde x(\omega)$ conditioned on the value of the parameter vector $\boldsymbol\theta = (\rho, \gamma, \tau)$, is Gaussian, with the log-likelihood proportional to:
 %
 \begin{equation}\label{eq:gaussian-likelihood}
 	\mathcal{L}(\tilde x; \boldsymbol\theta) = p(\tilde x | \boldsymbol\theta)
@@ -249,6 +249,20 @@ The \ac{SNR}-only factor depends only on the \ac{SNR} estimates $\hat{\rho}_1, \
         -\frac{1}{2} \sum_{i=1}^N \left(\hat{\rho}_i - \rho_i(\mathbf{n}, D_\mathrm{L}, \iota, \psi, \phi_c) \right)^2
     \right]
 \end{equation}
+%
+It is easily shown that
+%
+\begin{eqnarray*}
+    {\rho_i}^2 &=
+        \frac{1}{8} \left(\frac{D_{1,i}}{D_\mathrm{L}}\right)^2 \left[
+            ( {F_{+,i}}^2 + {F_{\times,i}}^2 \right)
+            \left(1 + 6 x^2 + x^4 \right) \\
+            &+ \left(1 - x^2 \right) \left( {F_{+,i}}^2 - {F_{\times,i}}^2 \right) \cos {2\psi}
+            + 2 \left( {F_{+,i}} {F_{\times,i}} ) \sin {2\psi}
+        \right],
+\end{eqnarray*}
+%
+where $F_{+,i}$ and $F_{\times,i}$ are the `$+$' and `$\times$' antenna factors of detector $i$, themselves functions of sky location $\mathbf{n}$.
 
 \subsection{Prior}
 
