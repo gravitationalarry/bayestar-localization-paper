@@ -221,12 +221,12 @@ If we assume that the time and amplitude estimation errors are uncorrelated, the
     \mathcal{L}(
         \hat{\tau}_1, \hat{\tau}_2, &\dots, \hat{\tau}_N,
         \hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N;
-        \mathbf{n}, t_\oplus, D_\mathrm{L}, \iota, \psi, \phi_c) \\
+        \mathbf{n}, t_\oplus, D_\mathrm{L}, x, \psi) \\
     &= \mathcal{L}_\mathrm{TOA}(
         \hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N; \mathbf{n}, t_\oplus) \\
         &\times
         \mathcal{L}_\mathrm{SNR}(\hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N;
-         \mathbf{n}, D_\mathrm{L}, \iota, \psi, \phi_c
+         \mathbf{n}, D_\mathrm{L}, x, \psi
     ).
 \end{eqnarray*}
 %
@@ -242,11 +242,11 @@ The \ac{TOA}-only factor depends only on the \ac{TOA} estimates $\hat{\tau}_1, \
     \right]
 \end{equation}
 %
-The \ac{SNR}-only factor depends only on the \ac{SNR} estimates $\hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N$, but it depends on the unknown sky location, luminosity distance $D_\mathrm{L}$, inclination $\mathrm{\iota}$, polarization angle $\psi$, and coalescence phase $\phi_c$.
+The \ac{SNR}-only factor depends only on the \ac{SNR} estimates $\hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N$, but it depends on the unknown sky location, luminosity distance $D_\mathrm{L}$, cosine-inclination $x = \cos \iota$, and polarization angle $\psi$.
 %
 \begin{equation}
     \mathcal{L}_\mathrm{SNR} \propto \exp \left[
-        -\frac{1}{2} \sum_{i=1}^N \left(\hat{\rho}_i - \rho_i(\mathbf{n}, D_\mathrm{L}, \iota, \psi, \phi_c) \right)^2
+        -\frac{1}{2} \sum_{i=1}^N \left(\hat{\rho}_i - \rho_i(\mathbf{n}, D_\mathrm{L}, x, \psi) \right)^2
     \right]
 \end{equation}
 %
@@ -266,7 +266,7 @@ where $F_{+,i}$ and $F_{\times,i}$ are the `$+$' and `$\times$' antenna factors 
 
 \subsection{Prior}
 
-Prior is uniform in $\mathbf{n}$, $t_\oplus$, $\cos \iota$, $\psi$, and $\phi_c$. For distance, can choose either a prior that is uniform in $\log D_\mathrm{L}$ or uniform in volume.
+Prior is uniform in $\mathbf{n}$, $t_\oplus$, x, and $\psi$. For distance, can choose either a prior that is uniform in $\log D_\mathrm{L}$ or uniform in volume.
 
 \subsection{Marginalization}
 
@@ -285,7 +285,7 @@ where
     \left(\sum_{i=1}^N \frac{{\tilde{\tau}_i}^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)\left(\sum_{i=1}^N \frac{1}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)^{-1}.
 \end{equation}
 
-The marginalization over $D_\mathrm{L}$, $\cos \iota$, and $psi$ must be done numerically. The outermost integration is over $\cos \iota$ and $\psi$, and is done with Newton-Cotes by evaluating $\mathcal{L}_\mathrm{SNR}$ on a regular lattice in $\cos \iota$ and $\psi$. This integration scheme is first order in $\cos \iota$ and second order in $\psi$.
+The marginalization over $D_\mathrm{L}$, $x$, and $psi$ must be done numerically. The outermost integration is over x and $\psi$, and is done with Newton-Cotes by evaluating $\mathcal{L}_\mathrm{SNR}$ on a regular lattice in $x$ and $\psi$. This integration scheme is first order in $x$ and second order in $\psi$.
 
 The innermost integration is over $D_\mathrm{L}$ and is performed using adaptive Gaussian quadrature, but with a twist that speeds up convergence.
 
