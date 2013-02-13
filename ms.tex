@@ -1,6 +1,7 @@
 \documentclass{iopart}
 \usepackage{amsopn}
 \usepackage{iopams}
+\usepackage{graphicx}
 \usepackage{bib/aas_macros}
 \usepackage[colorlinks]{hyperref}
 \input{ligo-acronyms/acronyms}
@@ -270,6 +271,12 @@ where
     \left(\sum_{i=1}^N \frac{{\tilde{\tau}_i}^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)\left(\sum_{i=1}^N \frac{1}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)^{-1}.
 \end{equation}
 
+\begin{figure}
+    \caption{\label{fig:radial_integrand}Illustration of initial subdivisions for radial integration scheme.}
+    \begin{center}
+        \includegraphics{radial_integrand}
+    \end{center}
+\end{figure}
 
 \ack Source code for \ac{BAYESTAR} is available on the \acs{LIGO} \acl{DASWG} web site at \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/bayestar.html}.
 

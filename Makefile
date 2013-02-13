@@ -3,7 +3,7 @@ BIBTEX = env BIBINPUTS=:$(CURDIR)/astronat/apj: TEXINPUTS=:$(CURDIR)/iopart: bib
 
 all: ms.pdf
 
-PREREQS = ms.tex bib/aas_macros.sty ligo-acronyms/acronyms.tex bib/telescope.bib
+PREREQS = ms.tex bib/aas_macros.sty ligo-acronyms/acronyms.tex bib/telescope.bib radial_integrand.pdf
 
 ms.pdf: $(PREREQS)
 	$(TEX) -draftmode $(patsubst %.pdf,%,$@)
@@ -11,5 +11,8 @@ ms.pdf: $(PREREQS)
 	$(TEX) -draftmode $(patsubst %.pdf,%,$@)
 	$(TEX) $(patsubst %.pdf,%,$@)
 
+radial_integrand.pdf: radial_integrand.py
+	python $< $@
+
 clean:
-	rm -f ms.{aux,log,out,bbl,blg,pdf}
+	rm -f ms.{aux,log,out,bbl,blg,pdf} radial_integrand.pdf
