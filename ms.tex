@@ -212,6 +212,8 @@ A wrinkle is that $\mathcal{I}_{\tau\tau}$ depends on the true values of $\rho_A
 
 \section{Method}
 
+\subsection{Likelihood}
+
 If we assume that the time and amplitude estimation errors are uncorrelated, then we can separate the likelihood into one factor that depends only on time and one that depends only on amplitude:
 %
 \begin{eqnarray*}
@@ -227,10 +229,14 @@ If we assume that the time and amplitude estimation errors are uncorrelated, the
     ).
 \end{eqnarray*}
 %
-The \ac{TOA}-only factor depends only on the \ac{TOA} estimates $\hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N$, the unknown sky location $\mathbf{n}$ (or equivalently, the right ascension $\alpha$, declination $\delta$, and sidereal time), and the absolute \ac{TOA} at an arbitrary reference point (herein, the geocenter), $t_\oplus$.
+The \ac{TOA}-only factor depends only on the \ac{TOA} estimates $\hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N$, the unknown sky location $\mathbf{n}$ (or equivalently, the right ascension $\alpha$, declination $\delta$, and sidereal time), and the absolute \ac{TOA} at an arbitrary reference point (herein, the geocenter), $t_\oplus$, the fixed geographical locations of the detectors, $\mathbf{r}_i$, and the speed of light $c$.
 %
 \begin{equation}
-    \mathcal{L}_\mathrm{TOA} \propto \exp \left[
+    \mathcal{L}_\mathrm{TOA} \propto
+    \exp \left[
+            -\frac{1}{2} \sum_{i=1}^N \frac{\left(\hat{\tau}_i - \tau_i\right)^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}
+        \right]
+    = \exp \left[
         -\frac{1}{2} \sum_{i=1}^N \frac{\left(\hat{\tau}_i + \mathbf{n} \cdot \mathbf{r}_i / c - t_\oplus \right)^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}
     \right]
 \end{equation}
@@ -242,6 +248,28 @@ The \ac{SNR}-only factor depends only on the \ac{SNR} estimates $\hat{\rho}_1, \
         -\frac{1}{2} \sum_{i=1}^N \left(\hat{\rho}_i - \rho_i(\mathbf{n}, D_\mathrm{L}, \iota, \psi, \phi_c) \right)^2
     \right]
 \end{equation}
+
+\subsection{Prior}
+
+Prior is uniform in $\mathbf{n}$, $t_\oplus$, $\cos \iota$, $\psi$, and $\phi_c$. For distance, can choose either a prior that is uniform in $\log D_\mathrm{L}$ or uniform in volume.
+
+\subsection{Marginalization}
+
+The overall arrival time $t_\oplus$ can be marginalized out analytically, giving the \ac{TOA}-only marginal posterior
+%
+\begin{equation}
+    p(\mathbf{n} | \hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N) \propto \exp\left[
+        -\frac{1}{2} \sum_{i=1}^N \frac{\left( \tilde{\tau}_i - \langle \tilde{\tau} \rangle \right)^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}
+    \right]
+\end{equation}
+%
+where
+%
+\begin{equation}
+    \langle \tilde{\tau} \rangle =
+    \left(\sum_{i=1}^N \frac{{\tilde{\tau}_i}^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)\left(\sum_{i=1}^N \frac{1}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)^{-1}.
+\end{equation}
+
 
 \ack Source code for \ac{BAYESTAR} is available on the \acs{LIGO} \acl{DASWG} web site at \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/bayestar.html}.
 
