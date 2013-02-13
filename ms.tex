@@ -83,25 +83,25 @@ The \ac{CRLB} is a useful analytical tool for predicting with what error an unkn
 
 \subsection{Fisher matrix}
 
-In the frequency domain, the strain $\tilde x (\omega)$ observed by a detector is a linear combination of two orthogonal \ac{GW} quadratures and additive noise,
+In the frequency domain, the strain $X (\omega)$ observed by a detector is a linear combination of two orthogonal \ac{GW} quadratures and additive noise,
 %
 \begin{equation}\label{eq:signal-model}
-	\tilde x (\omega) = \tilde h (\omega, \rho, \gamma, \tau) + \tilde n (\omega) = \frac{\rho}{\sigma} e^{\imath (\gamma - \omega \tau)} \tilde u (\omega) + \tilde n (\omega),
+	X (\omega) = H (\omega, \rho, \gamma, \tau) + N (\omega) = \frac{\rho}{\sigma} e^{\imath (\gamma - \omega \tau)} U (\omega) + N (\omega),
 \end{equation}
 %
-where $\tilde h (\omega)$ is the signal content, $\tilde n (\omega)$ is the detector's \ac{WSS} Gaussian noise with \ac{PSD} $S(\omega)$, $\tilde u (\omega)$ is the frequency-domain post-Newtonian inspiral signal, $\rho$ is the signal's amplitude, $\gamma$ is a phase angle the encodes the relative strength of two \ac{GW} quadratures, and $\tau$ is the time of arrival relative to an arbitrary time base. The quantity $\sigma$ is a normalization constant defined as the \ac{SNR} of the \ac{GW} source at a fiducial distance, here taken to be $D_\mathrm{fiducial} = 1$~Mpc,
+where $H (\omega)$ is the signal content, $N (\omega)$ is the detector's \ac{WSS} Gaussian noise with \ac{PSD} $S(\omega)$, $U (\omega)$ is the frequency-domain post-Newtonian inspiral signal, $\rho$ is the signal's amplitude, $\gamma$ is a phase angle the encodes the relative strength of two \ac{GW} quadratures, and $\tau$ is the time of arrival relative to an arbitrary time base. The quantity $\sigma$ is a normalization constant defined as the \ac{SNR} of the \ac{GW} source at a fiducial distance, here taken to be $D_\mathrm{fiducial} = 1$~Mpc,
 %
 \begin{equation}\label{eq:sigma}
-    \sigma^2 = \int_0^\infty \frac{\left| \tilde u (\omega)\right|^2}{S(\omega)} \, \mathrm{d}\omega.
+    \sigma^2 = \int_0^\infty \frac{\left| U (\omega)\right|^2}{S(\omega)} \, \mathrm{d}\omega.
 \end{equation}
 %
-The distance at which an optimally oriented \ac{GW} source would produce \ac{SNR}=1 is defined as $D_1 = D_\mathrm{fiducial} / \sigma$. The likelihood, or the probability of obtaining the observation $\tilde x(\omega)$ conditioned on the value of the parameter vector $\boldsymbol\theta = (\rho, \gamma, \tau)$, is Gaussian, with the log-likelihood proportional to:
+The distance at which an optimally oriented \ac{GW} source would produce \ac{SNR}=1 is defined as $D_1 = D_\mathrm{fiducial} / \sigma$. The likelihood, or the probability of obtaining the observation $X(\omega)$ conditioned on the value of the parameter vector $\boldsymbol\theta = (\rho, \gamma, \tau)$, is Gaussian, with the log-likelihood proportional to:
 %
 \begin{equation}\label{eq:gaussian-likelihood}
-	\mathcal{L}(\tilde x; \boldsymbol\theta) = p(\tilde x | \boldsymbol\theta)
+	\mathcal{L}(X; \boldsymbol\theta) = p(X | \boldsymbol\theta)
 		\propto \exp \left[
-		- \frac{1}{2} \int_0^\infty \frac{\left|\tilde x (\omega)
-			- \tilde h (\omega; \boldsymbol\theta) \right|^2}{S(\omega)} \, \mathrm{d}\omega
+		- \frac{1}{2} \int_0^\infty \frac{\left|X (\omega)
+			- H(\omega; \boldsymbol\theta) \right|^2}{S(\omega)} \, \mathrm{d}\omega
 	\right].
 \end{equation}
 
@@ -110,7 +110,7 @@ The Fisher information matrix for a measurement $\tilde x$ described by the unkn
 \begin{equation}\label{eq:general-fisher-matrix}
 	\mathcal{I}_{jk} = \mathrm{E} \, \left[
 		-\frac{\partial^2 \log
-			\mathcal{L}(\tilde x ; \boldsymbol\theta)}
+			\mathcal{L}(X ; \boldsymbol\theta)}
 			{\partial \theta_j \theta_k}
 	\right].
 \end{equation}
@@ -119,8 +119,8 @@ This equation involves double derivatives, but substantial simplification is pos
 %
 \begin{equation}\label{eq:gaussian-fisher-matrix}
 	\mathcal{I}_{jk} = \int_0^\infty \Re \left[
-        \left(\frac{\partial \tilde h}{\partial \theta_j}\right)^*
-        \left(\frac{\partial \tilde h}{\partial \theta_k}\right)
+        \left(\frac{\partial H}{\partial \theta_j}\right)^*
+        \left(\frac{\partial H}{\partial \theta_k}\right)
 	\right] \frac{1}{S(\omega)} \, \mathrm{d}\omega.
 \end{equation}
 %
@@ -128,8 +128,8 @@ This form is more useful because it involves only first derivatives, and of the 
 %
 \begin{equation}\label{eq:angular-frequency-moments}
     \overline{\omega^k} =
-        \left[ \int_0^\infty \frac{|\tilde u (\omega)|^2}{S(\omega)} \omega^k \, \mathrm{d}\omega \right]
-        \left[ \int_0^\infty \frac{|\tilde u (\omega)|^2}{S(\omega)} \, \mathrm{d}\omega \right]^{-1},
+        \left[ \int_0^\infty \frac{|U (\omega)|^2}{S(\omega)} \omega^k \, \mathrm{d}\omega \right]
+        \left[ \int_0^\infty \frac{|U (\omega)|^2}{S(\omega)} \, \mathrm{d}\omega \right]^{-1},
 \end{equation}
 %
 the Fisher matrix for the signal model in \Eref{eq:signal-model} is
