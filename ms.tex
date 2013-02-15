@@ -147,7 +147,7 @@ the Fisher matrix for the signal model in \Eref{eq:signal-model} is
 
 The \ac{CRLB} says that, element by element,
 %
-\begin{equation}
+\begin{equation}\label{eq:covariance-matrix}
     \cov{
         \left(
         \begin{array}{c}
@@ -201,15 +201,51 @@ Thus, in the appopriate time units, the \textit{sum and difference} of the phase
 
 \subsection{Noise model for point parameters}
 
-\marginpar{Talk here about likelihood structure---the `gaussian on a cylinder' concept, why we would want to project out the phase error.}%
+The likelihood in \Eref{eq:gaussian-likelihood} is the quantity that is maximized by the matched\nobreakdashes-filter estimator. However, just because we have the covariance matrix defined by \Eref{eq:covariance-matrix} does not mean that the distribution of estimator errors is multivariate Gaussian. Nonetheless, it is straightforward to qualitatively describe the distribution.
+
+If we were to suppress the time parameter $\tau$, then we could reduce the likelihood to the form
 %
-A wrinkle is that $\mathcal{I}_{\tau\tau}$ depends on the true value of $\rho$. If we make the further leap of evaluating the \ac{CRLB} \emph{at the value of the estimators}, we can write
+\begin{equation}
+    \mathcal{L}(z; \rho, \gamma) \propto \exp \left[ -\frac{1}{2} \left|z - e^{\imath \gamma} \rho \right|^2 \right]
+\end{equation}
+%
+for a complex scalar measurement $z$. This likelihood also describes the distribution of the length $\rho$ and angle $\gamma$ of a vector whose Cartesian components are perturbed with normally distributed errors. For this problem, $\rho$ and $\gamma$ are uncorrelated, $\rho^2$ being noncentrally $\chi^2$\nobreakdashes-disributed with two degrees of freedom and $\gamma$ being von~Mises\nobreakdashes-distributed.
+%
+\marginpar{Picture here?}
+
+\marginpar{What about if we suppress $\gamma$ or $\rho$? Do those cases teach us anything?}
+%
+We know that the matched\nobreakdashes-filter estimator's distribution, given a particular true value of $\rho$, $\gamma$, and $\tau$, must go to zero at $\hat{\rho}=0$ and must be periodic in $\gamma$ but not $\tau$. From just these properties, the estimator's distribution should be an approximate Gaussian, but wrapped diagonally around a cylinder where the radius represents $\hat{\rho}$, the angle around the cylinder represents $\hat{\gamma}$, and the distance up or down the cylinder represents $\hat{\tau}$.
+
+There are many ways to realize distribution function with these properties, but they tend to be difficult to work with.
+%
+\marginpar{Give some examples.}
+%
+An alternative is to just discard the one periodic parameter, $\gamma$, entirely. We do not know the exact distribution of the remaining parameters $\rho$ and $\tau$, but we are less liable to make egregious errors by assuming that they are Gaussian than if we assumed that the estimation errors in $\gamma$ were Gaussian. Projecting out $\gamma$ gives us the covariance matrix
+%
+\begin{equation}
+    \cov \left(
+        \begin{array}{c}
+            \hat{\rho} - \rho \\
+            \hat{\tau} - \tau
+        \end{array}
+    \right) =
+    \left(
+        \begin{array}{cc}
+            1 & 0 \\
+            0 & \rho^2/{\omega_\mathrm{rms}}^2
+        \end{array}
+    \right).
+\end{equation}
+
+A wrinkle is that this covariance matrix still depends on the true, unknown value of $\rho$. If we make the further leap of evaluating the \ac{CRLB} \emph{at the value of the estimators}, we can then write the distribution of the estimator error as
 %
 \begin{eqnarray}
     \hat{\rho} - \rho \sim \mathcal{N}\, [0, 1] \\
-    \hat{\gamma} - \gamma \sim \mathcal{N}\, \left[0, \overline{\omega^2} / {\omega_\mathrm{rms}}^2\right] \\
-    \hat{\tau} - \tau \sim \mathcal{N} \left[0, 1 / {\omega_\mathrm{rms}}^2\right].
+    \hat{\tau} - \tau \sim \mathcal{N} \left[0, \hat{\rho}^2 / {\omega_\mathrm{rms}}^2\right],
 \end{eqnarray}
+%
+valid at moderate to high \ac{SNR}.
 
 \section{Method}
 
