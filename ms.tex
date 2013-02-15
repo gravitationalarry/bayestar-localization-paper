@@ -78,9 +78,11 @@ Timely \acl{EM} follow\nobreakdashes-up of \acl{CBC} events detected by \acl{aLI
 
 \section{Introduction}
 
-Ground-based gravitational-wave interferometers are entering the advanced detector era, positioning themselves to make profound discoveries about the universe.  The advanced LIGO and Vigo detectors will be part of a worldwide network that also includes KAGRA and hopefully LIGO-India.  Coalescing neutron star binaries are among the most likely sources, with event rates of $~ 50/\mathrm{yr}$ (check that number!).  In addition to the ....(do we want to review emission mechanisms?)
+Ground-based gravitational-wave interferometers are entering the advanced detector era, positioning themselves to make profound discoveries about the universe.  The advanced LIGO and Vigo detectors will be part of a worldwide network that also includes KAGRA and hopefully LIGO-India.  Coalescing neutron star binaries are among the most likely sources, with event rates of $~ 50/\mathrm{yr}$ (check that number!).  In addition to being an efficient source of gravitational waves, the neutron star may be tidally shredded before merging, providing fuel for an electromagnetic counterpart.  The short-lived accretion flow may power a collimated relativistic jet, resulting in a short gamma-ray burst and an X-ray afterglow if it is aligned with the line of sight. An optical afterglow may follow minutes to hours later as the jet plows into the interstellar medium. As surrounding neutron-rich ejecta decay radioactively, an optical 'kilonova' may be visible after ~1 day. Finally, as the ejecta plow into the interstellar medium, a faint radio afterglow will occur on a timescale of years.
 
-In this paper we present a method of rapid sky localization that makes use of Bayesian methods.  It differs from 
+There is therefore a strong case for performing electromagnetic followups of these sources of gravitational waves.  Indeed, the final science run of the intitial LIGO and Virgo instruments saw the first joint search for gravitational waves from compact binaries and their electromagnetic counterparts....
+
+In this paper we present a method of rapid sky localization that makes use of Bayesian methods.  It differs from...
 
 \section{Measurement uncertainty}
 
@@ -152,7 +154,7 @@ the Fisher matrix for the signal model in \Eref{eq:signal-model} is
 
 The \ac{CRLB} says that, element by element,
 %
-\begin{equation}\label{eq:covariance-matrix}
+\begin{equation}
     \cov{
         \left(
         \begin{array}{c}
@@ -206,51 +208,15 @@ Thus, in the appopriate time units, the \textit{sum and difference} of the phase
 
 \subsection{Noise model for point parameters}
 
-The likelihood in \Eref{eq:gaussian-likelihood} is the quantity that is maximized by the matched\nobreakdashes-filter estimator. However, just because we have the covariance matrix defined by \Eref{eq:covariance-matrix} does not mean that the distribution of estimator errors is multivariate Gaussian. Nonetheless, it is straightforward to qualitatively describe the distribution.
-
-If we were to suppress the time parameter $\tau$, then we could reduce the likelihood to the form
+\marginpar{Talk here about likelihood structure---the `gaussian on a cylinder' concept, why we would want to project out the phase error.}%
 %
-\begin{equation}
-    \mathcal{L}(z; \rho, \gamma) \propto \exp \left[ -\frac{1}{2} \left|z - e^{\imath \gamma} \rho \right|^2 \right]
-\end{equation}
-%
-for a complex scalar measurement $z$. This likelihood also describes the distribution of the length $\rho$ and angle $\gamma$ of a vector whose Cartesian components are perturbed with normally distributed errors. For this problem, $\rho$ and $\gamma$ are uncorrelated, $\rho^2$ being noncentrally $\chi^2$\nobreakdashes-disributed with two degrees of freedom and $\gamma$ being von~Mises\nobreakdashes-distributed.
-%
-\marginpar{Picture here?}
-
-\marginpar{What about if we suppress $\gamma$ or $\rho$? Do those cases teach us anything?}
-%
-We know that the matched\nobreakdashes-filter estimator's distribution, given a particular true value of $\rho$, $\gamma$, and $\tau$, must go to zero at $\hat{\rho}=0$ and must be periodic in $\gamma$ but not $\tau$. From just these properties, the estimator's distribution should be an approximate Gaussian, but wrapped diagonally around a cylinder where the radius represents $\hat{\rho}$, the angle around the cylinder represents $\hat{\gamma}$, and the distance up or down the cylinder represents $\hat{\tau}$.
-
-There are many ways to realize distribution function with these properties, but they tend to be difficult to work with.
-%
-\marginpar{Give some examples.}
-%
-An alternative is to just discard the one periodic parameter, $\gamma$, entirely. We do not know the exact distribution of the remaining parameters $\rho$ and $\tau$, but we are less liable to make egregious errors by assuming that they are Gaussian than if we assumed that the estimation errors in $\gamma$ were Gaussian. Projecting out $\gamma$ gives us the covariance matrix
-%
-\begin{equation}
-    \cov \left(
-        \begin{array}{c}
-            \hat{\rho} - \rho \\
-            \hat{\tau} - \tau
-        \end{array}
-    \right) =
-    \left(
-        \begin{array}{cc}
-            1 & 0 \\
-            0 & \rho^2/{\omega_\mathrm{rms}}^2
-        \end{array}
-    \right).
-\end{equation}
-
-A wrinkle is that this covariance matrix still depends on the true, unknown value of $\rho$. If we make the further leap of evaluating the \ac{CRLB} \emph{at the value of the estimators}, we can then write the distribution of the estimator error as
+A wrinkle is that $\mathcal{I}_{\tau\tau}$ depends on the true values of $\rho_A$ and $\rho_B$. If we make the further leap of evaluating the \ac{CRLB} \emph{at the value of the estimators}, we can write
 %
 \begin{eqnarray}
     \hat{\rho} - \rho \sim \mathcal{N}\, [0, 1] \\
-    \hat{\tau} - \tau \sim \mathcal{N} \left[0, \hat{\rho}^2 / {\omega_\mathrm{rms}}^2\right],
+    \hat{\gamma} - \gamma \sim \mathcal{N}\, \left[0, \overline{\omega^2} / {\omega_\mathrm{rms}}^2\right] \\
+    \hat{\tau} - \tau \sim \mathcal{N} \left[0, 1 / {\omega_\mathrm{rms}}^2\right].
 \end{eqnarray}
-%
-valid at moderate to high \ac{SNR}.
 
 \section{Method}
 
@@ -330,7 +296,7 @@ where
     \left(\sum_{i=1}^N \frac{{\tilde{\tau}_i}^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)\left(\sum_{i=1}^N \frac{1}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)^{-1}.
 \end{equation}
 
-The marginalization over $D_\mathrm{L}$, $x$, and $\psi$ must be done numerically. The outermost integration is over x and $\psi$, and is done with Newton--Cotes by evaluating $\mathcal{L}_\mathrm{SNR}$ on a regular lattice in $x$ and $\psi$. This integration scheme is first order in $x$ and second order in $\psi$.
+The marginalization over $D_\mathrm{L}$, $x$, and $psi$ must be done numerically. The outermost integration is over x and $\psi$, and is done with Newton-Cotes by evaluating $\mathcal{L}_\mathrm{SNR}$ on a regular lattice in $x$ and $\psi$. This integration scheme is first order in $x$ and second order in $\psi$.
 
 \marginpar{Explain initial integration breakpoints and how they are calculated. Cite \texttt{gsl\_integrate\_qagp}.}%
 %
