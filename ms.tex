@@ -79,23 +79,23 @@ Timely \acl{EM} follow\nobreakdashes-up of \acl{CBC} events detected by \acl{aLI
 
 \section{Introduction}
 
-Ground-based gravitational-wave interferometers are entering the advanced detector era, positioning themselves to make profound discoveries about the universe.  The advanced LIGO and Vigo detectors will be part of a worldwide network that also includes KAGRA and hopefully LIGO-India.  Coalescing neutron star binaries are among the most likely sources, with event rates of $~ 50/\mathrm{yr}$ (check that number!).  In addition to being an efficient source of gravitational waves, the neutron star may be tidally shredded before merging, providing fuel for an electromagnetic counterpart.  The short-lived accretion flow may power a collimated relativistic jet, resulting in a short gamma-ray burst and an X-ray afterglow if it is aligned with the line of sight. An optical afterglow may follow minutes to hours later as the jet plows into the interstellar medium. As surrounding neutron-rich ejecta decay radioactively, an optical `kilonova' may be visible after $~$1 day. Finally, as the ejecta plow into the interstellar medium, a faint radio afterglow will occur on a timescale of years.
+Ground-based gravitational-wave interferometers are entering the advanced detector era, positioning themselves to make profound discoveries about the universe. The advanced LIGO and Vigo detectors will be part of a worldwide network that also includes KAGRA and hopefully LIGO-India. Coalescing neutron star binaries are among the most likely sources, with event rates of $~ 50/\mathrm{yr}$ (check that number!). In addition to being an efficient source of gravitational waves, the neutron star may be tidally shredded before merging, providing fuel for an electromagnetic counterpart. The short-lived accretion flow may power a collimated relativistic jet, resulting in a short gamma-ray burst and an X-ray afterglow if it is aligned with the line of sight. An optical afterglow may follow minutes to hours later as the jet plows into the interstellar medium. As surrounding neutron-rich ejecta decay radioactively, an optical `kilonova' may be visible after $~$1 day. Finally, as the ejecta plow into the interstellar medium, a faint radio afterglow will occur on a timescale of years.
 
-There is therefore a strong case for performing electromagnetic followups of these sources of gravitational waves.  Indeed, the final science run of the intitial LIGO and Virgo instruments saw the first joint search for gravitational waves from compact binaries and their electromagnetic counterparts....
+There is therefore a strong case for performing electromagnetic followups of these sources of gravitational waves. Indeed, the final science run of the intitial LIGO and Virgo instruments saw the first joint search for gravitational waves from compact binaries and their electromagnetic counterparts....
 
-In this paper we present a method of rapid sky localization that makes use of Bayesian methods.  It differs from...
+In this paper we present a method of rapid sky localization that makes use of Bayesian methods. It differs from...
 
 \section{Setup}
 
-The quantity of interest for any type of parameter estimation is the so-called {\it posterior} distribution, $p(\boldsymbol\theta|d)$, that describes the probability of obtaining the parameters, $\boldsymbol\theta$, given the data, $d$.  It is given by Bayes' theorem
+The quantity of interest for any type of parameter estimation is the so-called {\it posterior} distribution, $p(\boldsymbol\theta|d)$, that describes the probability of obtaining the parameters, $\boldsymbol\theta$, given the data, $d$. It is given by Bayes' theorem
 \begin{equation}\label{bayes}
 p(\boldsymbol\theta|d) = \frac{p(\boldsymbol\theta)p(d|\boldsymbol\theta)}{p(d)},
 \end{equation}
-where $p(\boldsymbol\theta)$ is the {\it prior} distribution describing previous knowledge of the paramters, $\boldsymbol\theta$, $p(d|\boldsymbol\theta)$ is the {\it likelihood} of obtaining the data, $d$, for the parameters, $\boldsymbol\theta$, and $p(d)$ is known as the {\it evidence}.  Procedures for computing the posterior typically rely on Markov chain Monte Carlo methods or nested sampling (something else?).  In this manuscript we present an alternative approach, taylored specifically to providing low-latency estimates of the sky location of and distance to the source.
+where $p(\boldsymbol\theta)$ is the {\it prior} distribution describing previous knowledge of the paramters, $\boldsymbol\theta$, $p(d|\boldsymbol\theta)$ is the {\it likelihood} of obtaining the data, $d$, for the parameters, $\boldsymbol\theta$, and $p(d)$ is known as the {\it evidence}. Procedures for computing the posterior typically rely on Markov chain Monte Carlo methods or nested sampling (something else?). In this manuscript we present an alternative approach, taylored specifically to providing low-latency estimates of the sky location of and distance to the source.
 
-In the full signal model the paramters, $\boldsymbol\theta$, are given by a 15-dimensional vector of quantities.  Of those, the quantities of interest are the right ascenion and declination, $(\alpha,\delta)$, and luminosity distance, $D_L$.  The remaining quantites, or {\it nuisance parameters} for the full signal model are:
+In the full signal model the paramters, $\boldsymbol\theta$, are given by a 15-dimensional vector of quantities. Of those, the quantities of interest are the right ascenion and declination, $(\alpha,\delta)$, and luminosity distance, $D_L$. The remaining quantites, or {\it nuisance parameters} for the full signal model are:
 \begin{itemize}
-\item The chirp mass.  If $m_1$ and $m_2$ are the masses of the individual components then $\mathcal{M}=(m_1m_2)^{3/5}/(m_1+m_2)^{1/5}$.
+\item The chirp mass. If $m_1$ and $m_2$ are the masses of the individual components then $\mathcal{M}=(m_1m_2)^{3/5}/(m_1+m_2)^{1/5}$.
 \item The symmetric mass ratio, $\eta=(m_1m_2)/(m_1+m_2)^2$.
 \item The 3-dimensional spin vectors of each components, $\mathbf{S}_1,\mathbf{S}_2$.
 \item An arrival time, $\tau_\oplus$, taken here to be the time of arrival at the geocenter.
@@ -103,13 +103,13 @@ In the full signal model the paramters, $\boldsymbol\theta$, are given by a 15-d
 \item The polarization angle, $\psi$.
 \item The coalescence phase, $\phi_c$.
 \end{itemize}
-In this work we restrict ourselves to non-spinng sources, where $\mathbf{S}_1=\mathbf{S}_2=0$.  Removing nuisance parameters requires either replacing them with their measured values or marginalizing over them.  The chirp mass is typically well measured by the detection pipeline, so we use the maximum likelihood value, $\hat{\mathcal{M}}$, for it.  We marginalize over the other variables using a uniform prior, i.e.
+In this work we restrict ourselves to non-spinng sources, where $\mathbf{S}_1=\mathbf{S}_2=0$. Removing nuisance parameters requires either replacing them with their measured values or marginalizing over them. The chirp mass is typically well measured by the detection pipeline, so we use the maximum likelihood value, $\hat{\mathcal{M}}$, for it. We marginalize over the other variables using a uniform prior, i.e.
 \begin{equation}
 p(\alpha,\delta,D_L|d) = \int\, d\tau_\oplus p_U(\tau_\oplus) d\phi_c p_U(\phi_c) d\phi p_U(\psi)  d\cos(\iota) p_U(\cos(\iota)) p(\alpha,\delta,D_L,\tau_\oplus,\phi_c,\psi,\cos(\iota)|d),
 \end{equation}
 where $p_U(x)$ denotes a uniform distribution in $x$.
 
-For typical parameter estimation studies, the data, $d$, is taken to be the strain time series in each detector, $h_I(t)$, where $I$ indexes the detectors.  Our interest here, however, is in obtaining accurate sky location results as quickly as possible.  To that end, we instead base our posteriors on the maximum likelihood estimates of the signal-to-noise ratio (SNR), $\hat{\rho}_I$, the time-of-arrival (TOA), $\hat{\tau}_I$, and coalescence phase, $\hat{\phi}_I$, measured in each detector by the detection pipeline.  Thus the sky location posterior can be computed without any re-filterning of the data.
+For typical parameter estimation studies, the data, $d$, is taken to be the strain time series in each detector, $h_I(t)$, where $I$ indexes the detectors. Our interest here, however, is in obtaining accurate sky location results as quickly as possible. To that end, we instead base our posteriors on the maximum likelihood estimates of the signal-to-noise ratio (SNR), $\hat{\rho}_I$, the time-of-arrival (TOA), $\hat{\tau}_I$, and coalescence phase, $\hat{\phi}_I$, measured in each detector by the detection pipeline. Thus the sky location posterior can be computed without any re-filterning of the data.
 
 \section{Measurement uncertainty}
 
