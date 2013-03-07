@@ -110,17 +110,15 @@ where $H (\omega; \boldsymbol\theta)$ is the \ac{GW} signal, given a parameter v
 	\right].
 \end{equation}
 
-A \ac{CBC} source is described by a 15\nobreakdashes-dimensional%
+A \ac{CBC} source is specified by a vector of extrinsic parameters describing its position and orientation and intrinsic parameters describing the physical properties of the binary components:
 %
-\marginpar{Check the number of parameters.}
-%
-parameter vector,
 \begin{equation}
     \boldsymbol\theta = \begin{array}{l@{}l}
             \left[
             \begin{array}{c}
                 \alpha \\
                 \delta \\
+                D_\mathrm{L} \\
                 t_\oplus \\
                 \iota \\
                 \psi \\
@@ -137,6 +135,7 @@ parameter vector,
                 \begin{array}{p{4cm}}
                     right ascension \\
                     declination \\
+                    luminosity distance \\
                     arrival time at geocenter \\
                     inclination angle \\
                     polarization angle \\
@@ -155,6 +154,10 @@ parameter vector,
             \end{array}
         \end{array}
 \end{equation}
+%
+\marginpar{Citations needed. Do we want to mention these omitted parameters?}%
+%
+Binary eccentricity is omitted as an intrinisc parameter because \acp{GW} circularize the orbit long before the inspiral enters \ac{LIGO}'s frequency range of $\sim$10\nobreakdashes--1000~kHz. Tidal deformabilities of the components are omitted because tidal effects have a negligible effect in the inspiral phase.
 
 In this work we restrict ourselves to nonspinning sources, where $\mathbf{S}_1=\mathbf{S}_2=0$. Removing nuisance parameters requires either replacing them with their measured values or marginalizing over them. The chirp mass is typically well measured by the detection pipeline, so we use the maximum likelihood value, $\hat{\mathcal{M}}$, for it. We marginalize over the other variables using a uniform prior, i.e.
 \begin{equation}
