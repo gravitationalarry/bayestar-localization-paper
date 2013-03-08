@@ -161,9 +161,9 @@ A \ac{CBC} source is specified by a vector of extrinsic parameters describing it
 %
 \marginpar{Citations needed. Do we want to mention these omitted parameters?}%
 %
-Binary eccentricity is omitted as an intrinisc parameter because \acp{GW} circularize the orbit long before the inspiral enters \ac{LIGO}'s frequency range of $\sim$10\nobreakdashes--1000~kHz. Tidal deformabilities of the components are omitted because tidal effects have a negligible effect in the inspiral phase.
+Binary eccentricity is omitted as an intrinisc parameter because \acp{GW} circularize the orbit long before the inspiral enters \ac{LIGO}'s frequency range of $\sim$10\nobreakdashes--1000~kHz. Tidal deformabilities of the components are omitted because tidal effects have a negligible effect in the inspiral phase. In \ac{GW} detection efforts, especially those focused on \ac{NSNS} systems, the component spins $\mathbf{S}_1$ and $\mathbf{S}_2$ are often assumed to be aligned with the system's total angular momentum and condensed to a single scalar parameter $\chi$, or even neglected entirely, $\mathbf{S}_1 = \mathbf{S}_2 = 0$. Without loss of generality, in this work we will consider only zero spin.
 
-In this work we restrict ourselves to nonspinning sources, where $\mathbf{S}_1=\mathbf{S}_2=0$. Removing nuisance parameters requires either replacing them with their measured values or marginalizing over them. The chirp mass is typically well measured by the detection pipeline, so we use the maximum likelihood value, $\hat{\mathcal{M}}$, for it. We marginalize over the other variables using a uniform prior, i.e.
+Removing nuisance parameters requires either replacing them with their measured values or marginalizing over them. The chirp mass is typically well measured by the detection pipeline, so we use the maximum likelihood value, $\hat{\mathcal{M}}$, for it. We marginalize over the other variables using a uniform prior, i.e.
 \begin{equation}
 p(\alpha,\delta,D_L|d) = \int\, d\tau_\oplus p_U(\tau_\oplus) d\phi_c p_U(\phi_c) d\phi p_U(\psi)  d\cos(\iota) p_U(\cos(\iota)) p(\alpha,\delta,D_L,\tau_\oplus,\phi_c,\psi,\cos(\iota)|d),
 \end{equation}
@@ -176,22 +176,6 @@ The quantity of interest for any type of parameter estimation is the so-called {
 p(\boldsymbol\theta|d) = \frac{p(\boldsymbol\theta)p(d|\boldsymbol\theta)}{p(d)},
 \end{equation}
 where $p(\boldsymbol\theta)$ is the {\it prior} distribution describing previous knowledge of the paramters, $\boldsymbol\theta$, $p(d|\boldsymbol\theta)$ is the {\it likelihood} of obtaining the data, $d$, for the parameters, $\boldsymbol\theta$, and $p(d)$ is known as the {\it evidence}. Procedures for computing the posterior typically rely on Markov chain Monte Carlo methods or nested sampling (something else?). In this manuscript we present an alternative approach, taylored specifically to providing low-latency estimates of the sky location of and distance to the source.
-
-In the full signal model the paramters, $\boldsymbol\theta$, are given by a 15-dimensional vector of quantities. Of those, the quantities of interest are the right ascenion and declination, $(\alpha,\delta)$, and luminosity distance, $D_L$. The remaining quantites, or {\it nuisance parameters} for the full signal model are:
-\begin{itemize}
-\item The chirp mass. If $m_1$ and $m_2$ are the masses of the individual components then $\mathcal{M}=(m_1m_2)^{3/5}/(m_1+m_2)^{1/5}$.
-\item The symmetric mass ratio, $\eta=(m_1m_2)/(m_1+m_2)^2$.
-\item The 3-dimensional spin vectors of each components, $\mathbf{S}_1,\mathbf{S}_2$.
-\item An arrival time, $\tau_\oplus$, taken here to be the time of arrival at the geocenter.
-\item The inclination angle, $\iota$.
-\item The polarization angle, $\psi$.
-\item The coalescence phase, $\phi_c$.
-\end{itemize}
-In this work we restrict ourselves to non-spinng sources, where $\mathbf{S}_1=\mathbf{S}_2=0$. Removing nuisance parameters requires either replacing them with their measured values or marginalizing over them. The chirp mass is typically well measured by the detection pipeline, so we use the maximum likelihood value, $\hat{\mathcal{M}}$, for it. We marginalize over the other variables using a uniform prior, i.e.
-\begin{equation}
-p(\alpha,\delta,D_L|d) = \int\, d\tau_\oplus p_U(\tau_\oplus) d\phi_c p_U(\phi_c) d\phi p_U(\psi)  d\cos(\iota) p_U(\cos(\iota)) p(\alpha,\delta,D_L,\tau_\oplus,\phi_c,\psi,\cos(\iota)|d),
-\end{equation}
-where $p_U(x)$ denotes a uniform distribution in $x$.
 
 For typical parameter estimation studies, the data, $d$, is taken to be the strain time series in each detector, $h_I(t)$, where $I$ indexes the detectors. Our interest here, however, is in obtaining accurate sky location results as quickly as possible. To that end, we instead base our posteriors on the maximum likelihood estimates of the signal-to-noise ratio (SNR), $\hat{\rho}_I$, the time-of-arrival (TOA), $\hat{\tau}_I$, and coalescence phase, $\hat{\phi}_I$, measured in each detector by the detection pipeline. Thus the sky location posterior can be computed without any re-filterning of the data.
 
