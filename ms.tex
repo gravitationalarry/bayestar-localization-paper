@@ -98,19 +98,21 @@ In this paper we present a rapid and accurate method of sky localization that ma
 
 \section{Setup}
 
-A laser interferometer senses \acp{GW} by transducing differential changes in arm length to a digitized photocurrent time series. In the angular frequency domain, a single detector's observation $X(\omega)$ is
+A laser interferometer senses \acp{GW} by transducing differential changes in arm length to a digitized photocurrent time series. In the angular frequency domain, a single detector's observation $X_i(\omega)$ is
 %
 \begin{equation}\label{eq:signal-model}
-	X (\omega) = H (\omega; \boldsymbol\theta) + N (\omega),
+	X_i (\omega) = H_i (\omega; \boldsymbol\theta) + N_i (\omega),
 \end{equation}
 %
-where $H (\omega; \boldsymbol\theta)$ is the \ac{GW} signal, given a parameter vector $\boldsymbol\theta$ that describes the \ac{GW} source, and $N (\omega)$ is the detector's \ac{WSS} Gaussian noise with \ac{PSD} $S(\omega)$. The likelihood, or the probability of obtaining the observation $X(\omega)$ conditioned on the value of $\boldsymbol\theta$, is Gaussian, with the log\nobreakdashes-likelihood proportional to:
+where $H_i (\omega; \boldsymbol\theta)$ is the \ac{GW} signal receied by detector $i$, given a parameter vector $\boldsymbol\theta$ that describes the \ac{GW} source, and $N_i (\omega)$ is that detector's \ac{WSS} Gaussian noise with \ac{PSD} $S_i(\omega)$. We shall denote the combined observation from a network of detectors as $\mathbf X (\omega) \equiv \{X_i (\omega)\}_i$.
+
+The likelihood, or the probability of obtaining the observation $\mathbf X$ conditioned on the value of $\boldsymbol\theta$, is Gaussian, with the log\nobreakdashes-likelihood proportional to:
 %
 \begin{equation}\label{eq:gaussian-likelihood}
-	\mathcal{L}(X; \boldsymbol\theta) = p(X | \boldsymbol\theta)
+	\mathcal{L}(\mathbf X; \boldsymbol\theta) = \prod_i p(X_i | \boldsymbol\theta)
 		\propto \exp \left[
-		- \frac{1}{2} \int_0^\infty \frac{\left|X (\omega)
-			- H(\omega; \boldsymbol\theta) \right|^2}{S(\omega)} \, \mathrm{d}\omega
+		- \frac{1}{2} \sum_i \int_0^\infty \frac{\left|X_i (\omega)
+			- H_i(\omega; \boldsymbol\theta) \right|^2}{S_i(\omega)} \, \mathrm{d}\omega
 	\right].
 \end{equation}
 
@@ -146,7 +148,7 @@ A \ac{CBC} source is specified by a vector of extrinsic parameters describing it
                     coalescence phase \\
                     \hdashline[1pt/1pt]
                 \end{array}
-                \quad \right\} \textnormal{extrinsic} \\
+                \quad \right\} \textnormal{extrinsic parameters}, \boldsymbol\theta_\mathrm{ex} \\
                 \left.
                 \begin{array}{p{4cm}}
                     first component's mass \\
@@ -154,26 +156,56 @@ A \ac{CBC} source is specified by a vector of extrinsic parameters describing it
                     first component's spin \\
                     second component's spin
                 \end{array}
-                \quad \right\} \textnormal{intrinsic}
+                \quad \right\} \textnormal{intrinsic parameters}, \boldsymbol\theta_\mathrm{in}
             \end{array}
         \end{array}
 \end{equation}
 %
 Binary eccentricity is omitted as an intrinisc parameter because tidal interaction of the progenitor stars~\cite{0004-637X-572-1-407} and later \ac{GW} emission~\cite{PhysRev.136.B1224} circularize the orbit long before the inspiral enters \ac{LIGO}'s frequency range of $\sim$10\nobreakdashes--1000~kHz. Tidal deformabilities of the \acp{NS} are omitted because the effect of tides on the inspiral would only be detectable by an Einstein Telescope-class \ac{GW} observatory~\cite{PhysRevD.81.123016}. Furthermore, in \ac{GW} detection efforts, especially those focused on \ac{NSNS} systems, the component spins $\mathbf{S}_1$ and $\mathbf{S}_2$ are often assumed to be aligned with the system's total angular momentum and condensed to a single scalar parameter $\chi$, or even neglected entirely, $\mathbf{S}_1 = \mathbf{S}_2 = 0$. In this work we will consider only zero spin.
 
-Removing nuisance parameters requires either replacing them with their measured values or marginalizing over them. The chirp mass is typically well measured by the detection pipeline, so we use the maximum likelihood value, $\hat{\mathcal{M}}$, for it. We marginalize over the other variables using a uniform prior, i.e.
+Assuming circular orbits and no spin precession, we can write the \ac{GW} signal in each detector as a linear combination of two basis waveforms $H_0$ and $H_{\pi/2}$, such that the coefficients depend only on the extrinsic parameters $\boldsymbol\theta_\mathrm{ex}$ and the basis waveforms depend only on the intrinsic parameters $\boldsymbol\theta_\mathrm{in}$,
+%
+\begin{eqnarray}
+	H_i(\omega; \boldsymbol\theta) &=& e^{-i\omega t_\oplus}\frac{D_{1,i}}{D_\mathrm{L}}
+	\left(\begin{array}{cc}
+		F_{+,i}(h_i, \delta) \\
+		F_{\times,i}(h_i, \delta)
+	\end{array}\right)^\intercal
+	\left(\begin{array}{cc}
+		\cos{2\psi} & -\sin{2\psi} \\
+		\sin{2\psi} & \cos{2\psi}
+	\end{array}\right) \\ &\cdot&
+	\left(\begin{array}{cc}
+		\frac{1}{2}\left(1+\cos^2{\iota}\right) & 0 \\
+		0 & \cos{\iota}
+	\end{array}\right)
+	\left(\begin{array}{cc}
+		\cos{2\phi_c} & -\sin{2\phi_c} \\
+		\sin{2\phi_c} & \cos{2\phi_c}
+	\end{array}\right) \\ &\cdot&
+	\left(\begin{array}{cc}
+		H_0(\omega; \boldsymbol\theta_\mathrm{in}) \\
+		H_{\pi/2}(\omega; \boldsymbol\theta_\mathrm{in})
+	\end{array}\right).
+\end{eqnarray}
+%
+This linear combination matches the conventions used in \cite{PhysRevD.83.084002}, and is the frequency-domain equivalent of their Equation~(2.8). The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless antenna factors, and depend on detector $i$'s orientation and the declination and local hour angle $h_i$ of the source, and are derived in~\cite{PhysRevD.63.042003}.
+
+In the Bayesian framework, the parameters are inferred from the data by forming the posterior distribution, $p(\boldsymbol\theta|\mathbf X)$, which describes the probability of the parameters given the observations. Bayes' rule relates the likelihood $p(\mathbf X|\boldsymbol\theta)$ to the posterior $p(\boldsymbol\theta|\mathbf X)$,
+%
+\begin{equation}\label{bayes}
+p(\boldsymbol\theta|\mathbf X) = \frac{p(\mathbf X|\boldsymbol\theta) p(\boldsymbol\theta)}{p(\mathbf X)},
+\end{equation}
+%
+introducing the prior distribution $p(\boldsymbol\theta)$ which encapsulates previous information about the paramters (for example, arising from earlier observations or from known physical bounds on the parameters), and the evidence $p(\mathbf X)$ which can be thought of as a normalization factor or as describing the parsimoniousness of the model.
+
+Removing nuisance parameters requires either replacing them with their measured values or marginalizing over them. The chirp mass is typically well measured by the detection pipeline, so we use the maximum likelihood value, $\hat{\mathcal{M}}$, for it. We marginalize over the other variables using a uniform prior, i.e.,
+%
 \begin{equation}
 p(\alpha,\delta,D_L|d) = \int\, d\tau_\oplus p_U(\tau_\oplus) d\phi_c p_U(\phi_c) d\phi p_U(\psi)  d\cos(\iota) p_U(\cos(\iota)) p(\alpha,\delta,D_L,\tau_\oplus,\phi_c,\psi,\cos(\iota)|d),
 \end{equation}
+%
 where $p_U(x)$ denotes a uniform distribution in $x$.
-
-
-
-The quantity of interest for any type of parameter estimation is the so-called {\it posterior} distribution, $p(\boldsymbol\theta|d)$, that describes the probability of obtaining the parameters, $\boldsymbol\theta$, given the data, $d$. It is given by Bayes' theorem
-\begin{equation}\label{bayes}
-p(\boldsymbol\theta|d) = \frac{p(\boldsymbol\theta)p(d|\boldsymbol\theta)}{p(d)},
-\end{equation}
-where $p(\boldsymbol\theta)$ is the {\it prior} distribution describing previous knowledge of the paramters, $\boldsymbol\theta$, $p(d|\boldsymbol\theta)$ is the {\it likelihood} of obtaining the data, $d$, for the parameters, $\boldsymbol\theta$, and $p(d)$ is known as the {\it evidence}. Procedures for computing the posterior typically rely on Markov chain Monte Carlo methods or nested sampling (something else?). In this manuscript we present an alternative approach, taylored specifically to providing low-latency estimates of the sky location of and distance to the source.
 
 For typical parameter estimation studies, the data, $d$, is taken to be the strain time series in each detector, $h_I(t)$, where $I$ indexes the detectors. Our interest here, however, is in obtaining accurate sky location results as quickly as possible. To that end, we instead base our posteriors on the maximum likelihood estimates of the signal-to-noise ratio (SNR), $\hat{\rho}_I$, the time-of-arrival (TOA), $\hat{\tau}_I$, and coalescence phase, $\hat{\phi}_I$, measured in each detector by the detection pipeline. Thus the sky location posterior can be computed without any re-filterning of the data.
 
