@@ -163,10 +163,10 @@ A \ac{CBC} source is specified by a vector of extrinsic parameters describing it
 %
 Binary eccentricity is omitted as an intrinisc parameter because tidal interaction of the progenitor stars~\cite{0004-637X-572-1-407} and later \ac{GW} emission~\cite{PhysRev.136.B1224} circularize the orbit long before the inspiral enters \ac{LIGO}'s frequency range of $\sim$10\nobreakdashes--1000~kHz. Tidal deformabilities of the \acp{NS} are omitted because the effect of tides on the inspiral would only be detectable by an Einstein Telescope-class \ac{GW} observatory~\cite{PhysRevD.81.123016}. Furthermore, in \ac{GW} detection efforts, especially those focused on \ac{NSNS} systems, the component spins $\mathbf{S}_1$ and $\mathbf{S}_2$ are often assumed to be aligned with the system's total angular momentum and condensed to a single scalar parameter $\chi$, or even neglected entirely, $\mathbf{S}_1 = \mathbf{S}_2 = 0$. In this work we will consider only zero spin.
 
-Assuming circular orbits and no spin precession, we can write the \ac{GW} signal in each detector as a linear combination of two basis waveforms $H_0$ and $H_{\pi/2}$, such that the coefficients depend only on the extrinsic parameters $\boldsymbol\theta_\mathrm{ex}$ and the basis waveforms depend only on the intrinsic parameters $\boldsymbol\theta_\mathrm{in}$,
+Assuming circular orbits and no spin precession, we can write the \ac{GW} signal in each detector as a linear combination of two basis waveforms $H_0$ and $H_{\pi/2}$. For nonprecessing systems, $H_0$ and $H_{\pi/2}$ are approximately ``in quadrature'' in the same sense as the sine and cosine functions, being nearly orthogonal and out of phase by ${\pi/2}$ at all frequencies. In other words, $H_{\pi/2}(\omega) = i H_0(\omega)$ for all $\omega$. This linear combination isolates all dependence on the extrinsic parameters $\boldsymbol\theta_\mathrm{ex}$ into the coefficients and all dependence on the intrinsic parameters $\boldsymbol\theta_\mathrm{in}$ into the basis waveform,
 %
 \begin{eqnarray}
-	H_i(\omega; \boldsymbol\theta) &=& e^{-i\omega t_\oplus}\frac{D_{1,i}}{D_\mathrm{L}}
+	\fl H_i(\omega; \boldsymbol\theta) &=& e^{-i\omega t_\oplus}\frac{D_{1,i}}{D_\mathrm{L}}
 	\left(\begin{array}{cc}
 		F_{+,i}(h_i, \delta) \\
 		F_{\times,i}(h_i, \delta)
@@ -174,22 +174,22 @@ Assuming circular orbits and no spin precession, we can write the \ac{GW} signal
 	\left(\begin{array}{cc}
 		\cos{2\psi} & -\sin{2\psi} \\
 		\sin{2\psi} & \cos{2\psi}
-	\end{array}\right) \\ &\cdot&
+	\end{array}\right)
 	\left(\begin{array}{cc}
 		\frac{1}{2}\left(1+\cos^2{\iota}\right) & 0 \\
 		0 & \cos{\iota}
-	\end{array}\right)
+	\end{array}\right) \nonumber\\\fl &\cdot&
 	\left(\begin{array}{cc}
 		\cos{2\phi_c} & -\sin{2\phi_c} \\
 		\sin{2\phi_c} & \cos{2\phi_c}
-	\end{array}\right) \\ &\cdot&
+	\end{array}\right)
 	\left(\begin{array}{cc}
-		H_0(\omega; \boldsymbol\theta_\mathrm{in}) \\
-		H_{\pi/2}(\omega; \boldsymbol\theta_\mathrm{in})
-	\end{array}\right).
+		1 \\
+		\imath
+	\end{array}\right) H_0(\omega; \boldsymbol\theta_\mathrm{in}).
 \end{eqnarray}
 %
-This linear combination matches the conventions used in \cite{PhysRevD.83.084002}, and is the frequency-domain equivalent of their Equation~(2.8). The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector antenna factors, and depend on the orientation of detector $i$ as well as the declination and local hour angle $h_i$ of the source, and are derived in~\cite{PhysRevD.63.042003}. The quantity $D_{1,i}$ is a fiducial horizon distance for detector $i$, and will be explained further below.
+This linear combination matches the conventions used in \cite{PhysRevD.83.084002}, and is the frequency-domain equivalent of their Equation~(2.8). The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector antenna factors, and depend on the orientation of detector $i$ as well as the declination and local hour angle $h_i$ of the source, and are derived in~\cite{PhysRevD.63.042003}. The quantity $D_{1,i}$ is a fiducial horizon distance for detector $i$.
 
 In the Bayesian framework, the parameters are inferred from the data by forming the posterior distribution, $p(\boldsymbol\theta|\mathbf X)$, which describes the probability of the parameters given the observations. Bayes' rule relates the likelihood $p(\mathbf X|\boldsymbol\theta)$ to the posterior $p(\boldsymbol\theta|\mathbf X)$,
 %
