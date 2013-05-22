@@ -167,7 +167,7 @@ Binary eccentricity is omitted as an intrinisc parameter because tidal interacti
 
 Assuming circular orbits and no spin precession, we can write the \ac{GW} signal in each detector as a linear combination of two basis waveforms $H_0$ and $H_{\pi/2}$. For nonprecessing systems, $H_0$ and $H_{\pi/2}$ are approximately ``in quadrature'' in the same sense as the sine and cosine functions, being nearly orthogonal and out of phase by ${\pi/2}$ at all frequencies. In other words, $H_{\pi/2}(\omega) = i H_0(\omega)$ for all $\omega$. This linear combination isolates all dependence on the extrinsic parameters $\boldsymbol\theta_\mathrm{ex}$ into the coefficients and all dependence on the intrinsic parameters $\boldsymbol\theta_\mathrm{in}$ into the basis waveform,
 %
-\begin{eqnarray}
+\begin{eqnarray}\label{eq:full-signal-model}
 	\fl H_i(\omega; \boldsymbol\theta) &=& e^{-i\omega t_\oplus}\frac{D_{1,i}}{D_\mathrm{L}}
 	\left(\begin{array}{cc}
 		F_{+,i}(h_i, \delta) \\
@@ -197,18 +197,18 @@ This linear combination matches the conventions used in \cite{PhysRevD.83.084002
 D_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|H_0(\omega; \mathbf \theta)\right|^2}{S_i(\omega)} \,\mathrm{d}\omega.
 \end{equation}
 %
-More succinctly, we can write the signal received by detector $i$ in terms of an amplitude $\rho_i$, a phase $\gamma_i$, and a time delay $\tau_i$,
+More succinctly, we can write the signal received by detector $i$ in terms of direct observables, the amplitude $\rho_i$, phase $\gamma_i$, and time delay $\tau_i$ on arrival at detector $i$,
 %
 \begin{equation}\label{eq:signal-model}
 	H_i (\omega; \boldsymbol\theta) = \frac{\rho_i}{\sigma_i} e^{i (\gamma_i - \omega \tau_i)} H_0(\omega; \boldsymbol\theta_\mathrm{in}).
 \end{equation}
 
-Detection of \acp{GW} from \ac{CBC} events consists of convolving the \dots explain matched filtering here \dots
-
+The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from \Eref{eq:gaussian-likelihood} with the above signal model. This takes the form of a bank of matched filters, or template waveforms that are continually convolved with the incoming data stream. The matched filter or maximum likelihood estimates are given by
+%
 \begin{eqnarray}
 \hat{\boldsymbol\theta}_i, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{{H_0}^*(\omega; \boldsymbol\theta_\mathrm{in}) X_i(\omega) e^{-i \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
 \hat\rho_i &=& \frac{1}{\sigma_i} \left| \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right| \\
-\hat\gamma_i &=& \arg \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega
+\hat\gamma_i &=& \arg \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega.
 \end{eqnarray}
 
 In the Bayesian framework, the parameters are inferred from the data by forming the posterior distribution, $p(\boldsymbol\theta|\mathbf X)$, which describes the probability of the parameters given the observations. Bayes' rule relates the likelihood $p(\mathbf X|\boldsymbol\theta)$ to the posterior $p(\boldsymbol\theta|\mathbf X)$,
