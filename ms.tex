@@ -91,7 +91,7 @@ In addition to being an efficient source of \acp{GW}, the \ac{NS} may be tidally
 
 There is therefore a strong case for performing electromagnetic followups of these sources of \acp{GW}. Indeed, the final science run of the intitial LIGO and Virgo instruments saw the first joint search for \acp{GW} from compact binaries and their electromagnetic counterparts \cite{abadie2012first}.  As we prepare for the next generation of these searches there is a need for determining the location of the source as precisely as possible in as little time as possible.
 
-In this paper we present a rapid and accurate method of sky localization that makes use of Bayesian methods. It differs from existing techniques is several important ways.  In the first place, we fix the intrinsic parameters to their maximum likelihood estimates, as provided by the detection pipeline.  This reduces the dimensionality of the parameter we need to search. In addition, the technique takes as its input the maximum likelihood estiamtes of the extrinsic parameters, instead of the $h(t)$ time series. This makes the likelihood itself much faster to evaluate. Finally, instead of of using \ac{MCMC} or some similar method for statistical sampling, we make use of a deterministic quadrature scheme. We call this technique \ac{BAYESTAR}%
+In this paper we present a rapid and accurate method of sky localization that makes use of Bayesian methods. It differs from existing techniques is several important ways.  In the first place, we fix the intrinsic parameters to their \ac{ML} estimates, as provided by the detection pipeline.  This reduces the dimensionality of the parameter we need to search. In addition, the technique takes as its input the \ac{ML} estimates of the extrinsic parameters, instead of the $h(t)$ time series. This makes the likelihood itself much faster to evaluate. Finally, instead of of using \ac{MCMC} or some similar method for statistical sampling, we make use of a deterministic quadrature scheme. We call this technique \ac{BAYESTAR}%
 %
 \footnote{A pun on the Cylon battleships in the American television series Battlestar Galactica. The defining characteristic of the Cylons is that they repeatedly defeat humanity by using their superhuman information\nobreakdashes-gathering ability to coordinate overwhelming forces. The name also suggests that, like the Cylons, \acp{GW} detectors may some day rise against us humans.}%
 %
@@ -197,7 +197,7 @@ This linear combination matches the conventions used in \cite{PhysRevD.83.084002
 D_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|H_0(\omega; \mathbf \theta)\right|^2}{S_i(\omega)} \,\mathrm{d}\omega.
 \end{equation}
 
-\subsection{Detection, and matched filter bank as a maximum likelihood estimator}
+\subsection{Detection, and matched filter bank as a \ac{MLE}}
 
 More succinctly, we can write the signal received by detector $i$ in terms of direct observables, the amplitude $\rho_i$, phase $\gamma_i$, and time delay $\tau_i$ on arrival at detector $i$,
 %
@@ -205,7 +205,7 @@ More succinctly, we can write the signal received by detector $i$ in terms of di
 	H_i (\omega; \boldsymbol\theta) = \frac{\rho_i}{\sigma_i} e^{i (\gamma_i - \omega \tau_i)} H_0(\omega; \boldsymbol\theta_\mathrm{in}).
 \end{equation}
 
-The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from \Eref{eq:gaussian-likelihood} with the above signal model. This takes the form of a bank of matched filters, or template waveforms that are continually convolved with the incoming data stream. The matched filter or maximum likelihood estimates are given by
+The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from \Eref{eq:gaussian-likelihood} with the above signal model. This takes the form of a bank of matched filters, or template waveforms that are continually convolved with the incoming data stream. The matched filter or \ac{ML} estimates are given by
 %
 \begin{eqnarray}
 \hat{\boldsymbol\theta}_i, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{{H_0}^*(\omega; \boldsymbol\theta_\mathrm{in}) X_i(\omega) e^{-i \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
@@ -223,7 +223,7 @@ p(\boldsymbol\theta|\mathbf X) = \frac{p(\mathbf X|\boldsymbol\theta) p(\boldsym
 %
 introducing the prior distribution $p(\boldsymbol\theta)$ which encapsulates previous information about the paramters (for example, arising from earlier observations or from known physical bounds on the parameters), and the evidence $p(\mathbf X)$ which can be thought of as a normalization factor or as describing the parsimoniousness of the model.
 
-Removing nuisance parameters requires either replacing them with their measured values or marginalizing over them. The chirp mass is typically well measured by the detection pipeline, so we use the maximum likelihood value, $\hat{\mathcal{M}}$, for it. We marginalize over the other variables using a uniform prior, i.e.,
+Removing nuisance parameters requires either replacing them with their measured values or marginalizing over them. The chirp mass is typically well measured by the detection pipeline, so we use the \ac{ML} value, $\hat{\mathcal{M}}$, for it. We marginalize over the other variables using a uniform prior, i.e.,
 %
 \begin{equation}
 p(\alpha,\delta,D_L|d) = \int\, d\tau_\oplus p_U(\tau_\oplus) d\phi_c p_U(\phi_c) d\phi p_U(\psi)  d\cos(\iota) p_U(\cos(\iota)) p(\alpha,\delta,D_L,\tau_\oplus,\phi_c,\psi,\cos(\iota)|d),
@@ -231,7 +231,7 @@ p(\alpha,\delta,D_L|d) = \int\, d\tau_\oplus p_U(\tau_\oplus) d\phi_c p_U(\phi_c
 %
 where $p_U(x)$ denotes a uniform distribution in $x$.
 
-For typical parameter estimation studies, the data, $d$, is taken to be the strain time series in each detector, $h_I(t)$, where $I$ indexes the detectors. Our interest here, however, is in obtaining accurate sky location results as quickly as possible. To that end, we instead base our posteriors on the maximum likelihood estimates of the signal-to-noise ratio (SNR), $\hat{\rho}_I$, the time-of-arrival (TOA), $\hat{\tau}_I$, and coalescence phase, $\hat{\phi}_I$, measured in each detector by the detection pipeline. Thus the sky location posterior can be computed without any re-filterning of the data.
+For typical parameter estimation studies, the data, $d$, is taken to be the strain time series in each detector, $h_I(t)$, where $I$ indexes the detectors. Our interest here, however, is in obtaining accurate sky location results as quickly as possible. To that end, we instead base our posteriors on the \ac{ML} estimates of the signal-to-noise ratio (SNR), $\hat{\rho}_I$, the time-of-arrival (TOA), $\hat{\tau}_I$, and coalescence phase, $\hat{\phi}_I$, measured in each detector by the detection pipeline. Thus the sky location posterior can be computed without any re-filterning of the data.
 
 \section{Measurement uncertainty}
 
