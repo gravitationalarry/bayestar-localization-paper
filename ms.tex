@@ -103,18 +103,18 @@ In this paper we present a rapid and accurate method of sky localization that ma
 A laser interferometer senses \acp{GW} by transducing differential changes in arm length to a digitized photocurrent time series. In the angular frequency domain, a single detector's observation $X_i(\omega)$ is
 %
 \begin{equation}\label{eq:signal-model}
-	X_i (\omega) = H_i (\omega; \boldsymbol\theta) + N_i (\omega),
+	x_i (\omega) = h_i (\omega; \boldsymbol\theta) + n_i (\omega),
 \end{equation}
 %
-where $H_i (\omega; \boldsymbol\theta)$ is the \ac{GW} signal receied by detector $i$, given a parameter vector $\boldsymbol\theta$ that describes the \ac{GW} source, and $N_i (\omega)$ is that detector's \ac{WSS} Gaussian noise with \ac{PSD} $S_i(\omega)$. We shall denote the combined observation from a network of detectors as $\mathbf X (\omega) \equiv \{X_i (\omega)\}_i$.
+where $h_i (\omega; \boldsymbol\theta)$ is the \ac{GW} signal receied by detector $i$, given a parameter vector $\boldsymbol\theta$ that describes the \ac{GW} source, and $n_i (\omega)$ is that detector's \ac{WSS} Gaussian noise with \ac{PSD} $S_i(\omega)$. We shall denote the combined observation from a network of detectors as $\mathbf x (\omega) \equiv \{x_i (\omega)\}_i$.
 
-The likelihood, or the probability of obtaining the observation $\mathbf X$ conditioned on the value of $\boldsymbol\theta$, is Gaussian, with the log\nobreakdashes-likelihood proportional to:
+The likelihood, or the probability of obtaining the observation $\mathbf x$ conditioned on the value of $\boldsymbol\theta$, is Gaussian, with the log\nobreakdashes-likelihood proportional to:
 %
 \begin{equation}\label{eq:gaussian-likelihood}
-	\mathcal{L}(\mathbf X; \boldsymbol\theta) = \prod_i p(X_i | \boldsymbol\theta)
+	\mathcal{L}(\mathbf x; \boldsymbol\theta) = \prod_i p(x_i | \boldsymbol\theta)
 		\propto \exp \left[
-		- \frac{1}{2} \sum_i \int_0^\infty \frac{\left|X_i (\omega)
-			- H_i(\omega; \boldsymbol\theta) \right|^2}{S_i(\omega)} \, \mathrm{d}\omega
+		- \frac{1}{2} \sum_i \int_0^\infty \frac{\left|x_i (\omega)
+			- h_i(\omega; \boldsymbol\theta) \right|^2}{S_i(\omega)} \, \mathrm{d}\omega
 	\right].
 \end{equation}
 
@@ -165,10 +165,10 @@ A \ac{CBC} source is specified by a vector of extrinsic parameters describing it
 %
 Binary eccentricity is omitted as an intrinisc parameter because tidal interaction of the progenitor stars~\cite{0004-637X-572-1-407} and later \ac{GW} emission~\cite{PhysRev.136.B1224} circularize the orbit long before the inspiral enters \ac{LIGO}'s frequency range of $\sim$10\nobreakdashes--1000~kHz. Tidal deformabilities of the \acp{NS} are omitted because the effect of tides on the inspiral would only be detectable by an Einstein Telescope-class \ac{GW} observatory~\cite{PhysRevD.81.123016}. Furthermore, in \ac{GW} detection efforts, especially those focused on \ac{NSNS} systems, the component spins $\mathbf{S}_1$ and $\mathbf{S}_2$ are often assumed to be aligned with the system's total angular momentum and condensed to a single scalar parameter $\chi$, or even neglected entirely, $\mathbf{S}_1 = \mathbf{S}_2 = 0$. In this work we will consider only zero spin.
 
-Assuming circular orbits and no spin precession, we can write the \ac{GW} signal in each detector as a linear combination of two basis waveforms $H_0$ and $H_{\pi/2}$. For nonprecessing systems, $H_0$ and $H_{\pi/2}$ are approximately ``in quadrature'' in the same sense as the sine and cosine functions, being nearly orthogonal and out of phase by ${\pi/2}$ at all frequencies. In other words, $H_{\pi/2}(\omega) = i H_0(\omega)$ for all $\omega$. This linear combination isolates all dependence on the extrinsic parameters $\boldsymbol\theta_\mathrm{ex}$ into the coefficients and all dependence on the intrinsic parameters $\boldsymbol\theta_\mathrm{in}$ into the basis waveform,
+Assuming circular orbits and no spin precession, we can write the \ac{GW} signal in each detector as a linear combination of two basis waveforms $h_0$ and $h_{\pi/2}$. For nonprecessing systems, $h_0$ and $h_{\pi/2}$ are approximately ``in quadrature'' in the same sense as the sine and cosine functions, being nearly orthogonal and out of phase by ${\pi/2}$ at all frequencies. In other words, $h_{\pi/2}(\omega) = i h_0(\omega)$ for all $\omega$. This linear combination isolates all dependence on the extrinsic parameters $\boldsymbol\theta_\mathrm{ex}$ into the coefficients and all dependence on the intrinsic parameters $\boldsymbol\theta_\mathrm{in}$ into the basis waveform,
 %
 \begin{eqnarray}\label{eq:full-signal-model}
-	\fl H_i(\omega; \boldsymbol\theta) &=& e^{-i\omega t_\oplus}\frac{D_{1,i}}{D_\mathrm{L}}
+	\fl h_i(\omega; \boldsymbol\theta) &=& e^{-i\omega t_\oplus}\frac{D_{1,i}}{D_\mathrm{L}}
 	\left(\begin{array}{cc}
 		F_{+,i}(h_i, \delta) \\
 		F_{\times,i}(h_i, \delta)
@@ -188,13 +188,13 @@ Assuming circular orbits and no spin precession, we can write the \ac{GW} signal
 	\left(\begin{array}{cc}
 		1 \\
 		i
-	\end{array}\right) H_0(\omega; \boldsymbol\theta_\mathrm{in}).
+	\end{array}\right) h_0(\omega; \boldsymbol\theta_\mathrm{in}).
 \end{eqnarray}
 %
 This linear combination matches the conventions used in \cite{PhysRevD.83.084002}, and is the frequency-domain equivalent of their Equation~(2.8). The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector antenna factors, and depend on the orientation of detector $i$ as well as the declination and local hour angle $h_i$ of the source, and are derived in~\cite{PhysRevD.63.042003}. The quantity $D_{1,i}$ is a fiducial horizon distance for detector $i$,
 %
 \begin{equation}\label{eq:horizon}
-D_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|H_0(\omega; \mathbf \theta)\right|^2}{S_i(\omega)} \,\mathrm{d}\omega.
+D_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|h_0(\omega; \mathbf \theta)\right|^2}{S_i(\omega)} \,\mathrm{d}\omega.
 \end{equation}
 
 \subsection{Detection, and matched filter bank as a \ac{MLE}}
@@ -202,33 +202,33 @@ D_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|H_0(\ome
 More succinctly, we can write the signal received by detector $i$ in terms of direct observables, the amplitude $\rho_i$, phase $\gamma_i$, and time delay $\tau_i$ on arrival at detector $i$,
 %
 \begin{equation}\label{eq:signal-model}
-	H_i (\omega; \boldsymbol\theta) = \frac{\rho_i}{\sigma_i} e^{i (\gamma_i - \omega \tau_i)} H_0(\omega; \boldsymbol\theta_\mathrm{in}).
+	h_i (\omega; \boldsymbol\theta) = \frac{\rho_i}{\sigma_i} e^{i (\gamma_i - \omega \tau_i)} h_0(\omega; \boldsymbol\theta_\mathrm{in}).
 \end{equation}
 
 The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from \Eref{eq:gaussian-likelihood} with the above signal model. This takes the form of a bank of matched filters, or template waveforms that are continually convolved with the incoming data stream. The matched filter or \ac{ML} estimates are given by
 %
 \begin{eqnarray}
-\hat{\boldsymbol\theta}_i, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{{H_0}^*(\omega; \boldsymbol\theta_\mathrm{in}) X_i(\omega) e^{-i \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
-\hat\rho_i &=& \frac{1}{\sigma_i} \left| \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right| \\
-\hat\gamma_i &=& \arg \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega.
+\hat{\boldsymbol\theta}_i, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{{h_0}^*(\omega; \boldsymbol\theta_\mathrm{in}) x_i(\omega) e^{-i \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
+\hat\rho_i &=& \frac{1}{\sigma_i} \left| \int_0^\infty \frac{{h_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) x_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right| \\
+\hat\gamma_i &=& \arg \int_0^\infty \frac{{h_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) x_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega.
 \end{eqnarray}
 
 \subsection{Bayesian probability and parameter estimation}
 
-In the Bayesian framework, the parameters are inferred from the data by forming the posterior distribution, $p(\boldsymbol\theta|\mathbf X)$, which describes the probability of the parameters given the observations. Bayes' rule relates the likelihood $p(\mathbf X|\boldsymbol\theta)$ to the posterior $p(\boldsymbol\theta|\mathbf X)$,
+In the Bayesian framework, the parameters are inferred from the data by forming the posterior distribution, $p(\boldsymbol\theta|\mathbf x)$, which describes the probability of the parameters given the observations. Bayes' rule relates the likelihood $p(\mathbf x|\boldsymbol\theta)$ to the posterior $p(\boldsymbol\theta|\mathbf x)$,
 %
 \begin{equation}\label{bayes}
-p(\boldsymbol\theta|\mathbf X) = \frac{p(\mathbf X|\boldsymbol\theta) p(\boldsymbol\theta)}{p(\mathbf X)},
+p(\boldsymbol\theta|\mathbf x) = \frac{p(\mathbf x|\boldsymbol\theta) p(\boldsymbol\theta)}{p(\mathbf x)},
 \end{equation}
 %
-introducing the prior distribution $p(\boldsymbol\theta)$ which encapsulates previous information about the paramters (for example, arising from earlier observations or from known physical bounds on the parameters), and the evidence $p(\mathbf X)$ which can be thought of as a normalization factor or as describing the parsimoniousness of the model.
+introducing the prior distribution $p(\boldsymbol\theta)$ which encapsulates previous information about the paramters (for example, arising from earlier observations or from known physical bounds on the parameters), and the evidence $p(\mathbf x)$ which can be thought of as a normalization factor or as describing the parsimoniousness of the model.
 
 The choice of prior is open to one's astrophysical preconceptions, but during \ac{S6} when \ac{LIGO}'s Bayesian \ac{CBC} parameter estimation pipelines were pioneered, the prior was taken to be isotropic in sky location and binary orientation, and uniform in volume, arrival time, and the component masses~\cite{2013arXiv1304.1775T}. Put briefly, the prior was uniform in all of $(\alpha, \sin\delta, {D_\mathrm{L}}^3, t_\oplus, \cos\iota, \psi, \phi_c, m_1, m_2)$.
 
 In Bayesian inference, although it is often easy to write down the likelihood or even the full posterior in closed form, usually one is interested in only a subset $\boldsymbol\beta$ of all of the model's parameters, the others $\boldsymbol\lambda$ being nuisance parameters. In this case, we integrate away the nuisance parameters, forming the marginal posterior
 %
 \begin{equation}\label{eq:marginal-posterior}
-	p(\boldsymbol\beta|\mathbf X) = \int \frac{p(\mathbf X|\boldsymbol\beta,\boldsymbol\lambda) p(\boldsymbol\beta,\boldsymbol\lambda)}{p(\mathbf X)} \,\mathrm{d}\boldsymbol\lambda
+	p(\boldsymbol\beta|\mathbf x) = \int \frac{p(\mathbf x|\boldsymbol\beta,\boldsymbol\lambda) p(\boldsymbol\beta,\boldsymbol\lambda)}{p(\mathbf x)} \,\mathrm{d}\boldsymbol\lambda
 \end{equation}
 %
 with $\boldsymbol\theta = (\boldsymbol\beta, \boldsymbol\lambda)$. For instance, for the purpose of locating a \ac{GW} source on the sky, all parameters but $(\alpha, \delta)$ are nuisance parameters.
@@ -242,22 +242,22 @@ The \ac{CRLB} is a useful analytical tool for predicting with what error an unkn
 In the frequency domain, the strain $X (\omega)$ observed by a detector is a linear combination of two orthogonal \ac{GW} quadratures and additive noise,
 %
 \begin{equation}\label{eq:signal-model}
-	X (\omega) = H (\omega, \rho, \gamma, \tau) + N (\omega) = \frac{\rho}{\sigma} e^{i (\gamma - \omega \tau)} U (\omega) + N (\omega),
+	x (\omega) = h (\omega, \rho, \gamma, \tau) + n (\omega) = \frac{\rho}{\sigma} e^{i (\gamma - \omega \tau)} u (\omega) + n (\omega),
 \end{equation}
 %
-where $H (\omega)$ is the signal content, $N (\omega)$ is the detector's \ac{WSS} Gaussian noise with \ac{PSD} $S(\omega)$, $U (\omega)$ is the frequency-domain post-Newtonian inspiral signal, $\rho$ is the signal's amplitude, $\gamma$ is a phase angle the encodes the relative strength of two \ac{GW} quadratures, and $\tau$ is the time of arrival relative to an arbitrary time base. The quantity $\sigma$ is a normalization constant defined as the \ac{SNR} of the \ac{GW} source at a fiducial distance, here taken to be $D_\mathrm{fiducial} = 1$~Mpc,
+where $h (\omega)$ is the signal content, $n (\omega)$ is the detector's \ac{WSS} Gaussian noise with \ac{PSD} $S(\omega)$, $u (\omega)$ is the frequency-domain post-Newtonian inspiral signal, $\rho$ is the signal's amplitude, $\gamma$ is a phase angle the encodes the relative strength of two \ac{GW} quadratures, and $\tau$ is the time of arrival relative to an arbitrary time base. The quantity $\sigma$ is a normalization constant defined as the \ac{SNR} of the \ac{GW} source at a fiducial distance, here taken to be $D_\mathrm{fiducial} = 1$~Mpc,
 %
 \begin{equation}\label{eq:sigma}
-    \sigma^2 = \int_0^\infty \frac{\left| U (\omega)\right|^2}{S(\omega)} \, \mathrm{d}\omega.
+    \sigma^2 = \int_0^\infty \frac{\left| u (\omega)\right|^2}{S(\omega)} \, \mathrm{d}\omega.
 \end{equation}
 %
-The distance at which an optimally oriented \ac{GW} source would produce \ac{SNR}=1 is defined as $D_1 = D_\mathrm{fiducial} / \sigma$. The likelihood, or the probability of obtaining the observation $X(\omega)$ conditioned on the value of the parameter vector $\boldsymbol\theta = (\rho, \gamma, \tau)$, is Gaussian, with the log-likelihood proportional to:
+The distance at which an optimally oriented \ac{GW} source would produce \ac{SNR}=1 is defined as $D_1 = D_\mathrm{fiducial} / \sigma$. The likelihood, or the probability of obtaining the observation $x(\omega)$ conditioned on the value of the parameter vector $\boldsymbol\theta = (\rho, \gamma, \tau)$, is Gaussian, with the log-likelihood proportional to:
 %
 \begin{equation}\label{eq:gaussian-likelihood}
-	\mathcal{L}(X; \boldsymbol\theta) = p(X | \boldsymbol\theta)
+	\mathcal{L}(x; \boldsymbol\theta) = p(x | \boldsymbol\theta)
 		\propto \exp \left[
-		- \frac{1}{2} \int_0^\infty \frac{\left|X (\omega)
-			- H(\omega; \boldsymbol\theta) \right|^2}{S(\omega)} \, \mathrm{d}\omega
+		- \frac{1}{2} \int_0^\infty \frac{\left|x (\omega)
+			- h(\omega; \boldsymbol\theta) \right|^2}{S(\omega)} \, \mathrm{d}\omega
 	\right].
 \end{equation}
 
@@ -266,7 +266,7 @@ The Fisher information matrix for a measurement $\tilde x$ described by the unkn
 \begin{equation}\label{eq:general-fisher-matrix}
 	\mathcal{I}_{jk} = \mathrm{E} \, \left[
 		-\frac{\partial^2 \log
-			\mathcal{L}(X ; \boldsymbol\theta)}
+			\mathcal{L}(x ; \boldsymbol\theta)}
 			{\partial \theta_j \theta_k}
 	\right].
 \end{equation}
@@ -275,8 +275,8 @@ This equation involves double derivatives, but substantial simplification is pos
 %
 \begin{equation}\label{eq:gaussian-fisher-matrix}
 	\mathcal{I}_{jk} = \int_0^\infty \Re \left[
-        \left(\frac{\partial H}{\partial \theta_j}\right)^*
-        \left(\frac{\partial H}{\partial \theta_k}\right)
+        \left(\frac{\partial h}{\partial \theta_j}\right)^*
+        \left(\frac{\partial h}{\partial \theta_k}\right)
 	\right] \frac{1}{S(\omega)} \, \mathrm{d}\omega.
 \end{equation}
 %
@@ -284,8 +284,8 @@ This form is more useful because it involves only first derivatives, and of the 
 %
 \begin{equation}\label{eq:angular-frequency-moments}
     \overline{\omega^k} =
-        \left[ \int_0^\infty \frac{|U (\omega)|^2}{S(\omega)} \omega^k \, \mathrm{d}\omega \right]
-        \left[ \int_0^\infty \frac{|U (\omega)|^2}{S(\omega)} \, \mathrm{d}\omega \right]^{-1},
+        \left[ \int_0^\infty \frac{|u (\omega)|^2}{S(\omega)} \omega^k \, \mathrm{d}\omega \right]
+        \left[ \int_0^\infty \frac{|u (\omega)|^2}{S(\omega)} \, \mathrm{d}\omega \right]^{-1},
 \end{equation}
 %
 the Fisher matrix for the signal model in \Eref{eq:signal-model} is
