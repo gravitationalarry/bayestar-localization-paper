@@ -223,15 +223,7 @@ p(\boldsymbol\theta|\mathbf X) = \frac{p(\mathbf X|\boldsymbol\theta) p(\boldsym
 %
 introducing the prior distribution $p(\boldsymbol\theta)$ which encapsulates previous information about the paramters (for example, arising from earlier observations or from known physical bounds on the parameters), and the evidence $p(\mathbf X)$ which can be thought of as a normalization factor or as describing the parsimoniousness of the model.
 
-Removing nuisance parameters requires either replacing them with their measured values or marginalizing over them. The chirp mass is typically well measured by the detection pipeline, so we use the \ac{ML} value, $\hat{\mathcal{M}}$, for it. We marginalize over the other variables using a uniform prior, i.e.,
-%
-\begin{equation}
-p(\alpha,\delta,D_L|d) = \int\, d\tau_\oplus p_U(\tau_\oplus) d\phi_c p_U(\phi_c) d\phi p_U(\psi)  d\cos(\iota) p_U(\cos(\iota)) p(\alpha,\delta,D_L,\tau_\oplus,\phi_c,\psi,\cos(\iota)|d),
-\end{equation}
-%
-where $p_U(x)$ denotes a uniform distribution in $x$.
-
-For typical parameter estimation studies, the data, $d$, is taken to be the strain time series in each detector, $h_I(t)$, where $I$ indexes the detectors. Our interest here, however, is in obtaining accurate sky location results as quickly as possible. To that end, we instead base our posteriors on the \ac{ML} estimates of the signal-to-noise ratio (SNR), $\hat{\rho}_I$, the time-of-arrival (TOA), $\hat{\tau}_I$, and coalescence phase, $\hat{\phi}_I$, measured in each detector by the detection pipeline. Thus the sky location posterior can be computed without any re-filterning of the data.
+The choice of prior is open to one's astrophysical preconceptions, but during \ac{S6} when \ac{LIGO}'s Bayesian \ac{CBC} parameter estimation pipelines were pioneered, the prior was taken to be isotropic in sky location and binary orientation, and uniform in volume, arrival time, and the component masses~\cite{2013arXiv1304.1775T}. Put briefly, the prior was uniform in all of $(\alpha, \sin\delta, {D_\mathrm{L}}^3, t_\oplus, \cos\iota, \psi, \phi_c, m_1, m_2)$.
 
 \section{Measurement uncertainty}
 
@@ -462,7 +454,8 @@ where $F_{+,i}$ and $F_{\times,i}$ are the `$+$' and `$\times$' antenna factors 
 
 \subsection{Prior}
 
-Prior is uniform in $\mathbf{n}$, $t_\oplus$, x, and $\psi$. For distance, can choose either a prior that is uniform in $\log D_\mathrm{L}$ or uniform in volume.
+$t_\oplus$, $m_1$, $m_2$, ${D_\mathrm{L}}^3$ (volume)
+Prior is uniform in $\mathbf{n}$, $t_\oplus$, x, and $\psi$. For distance, can choose either a prior that is uniform in $\log D_\mathrm{L}$ or uniform in volume. \cite{2013arXiv1304.1775T}
 
 \subsection{Marginalization}
 
