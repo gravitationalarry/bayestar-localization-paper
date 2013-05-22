@@ -225,6 +225,14 @@ introducing the prior distribution $p(\boldsymbol\theta)$ which encapsulates pre
 
 The choice of prior is open to one's astrophysical preconceptions, but during \ac{S6} when \ac{LIGO}'s Bayesian \ac{CBC} parameter estimation pipelines were pioneered, the prior was taken to be isotropic in sky location and binary orientation, and uniform in volume, arrival time, and the component masses~\cite{2013arXiv1304.1775T}. Put briefly, the prior was uniform in all of $(\alpha, \sin\delta, {D_\mathrm{L}}^3, t_\oplus, \cos\iota, \psi, \phi_c, m_1, m_2)$.
 
+In Bayesian inference, although it is often easy to write down the likelihood or even the full posterior in closed form, usually one is interested in only a subset $\boldsymbol\beta$ of all of the model's parameters, the others $\boldsymbol\lambda$ being nuisance parameters. In this case, we integrate away the nuisance parameters, forming the marginal posterior
+%
+\begin{equation}\label{eq:marginal-posterior}
+	p(\boldsymbol\beta|\mathbf X) = \int \frac{p(\mathbf X|\boldsymbol\beta,\boldsymbol\lambda) p(\boldsymbol\beta,\boldsymbol\lambda)}{p(\mathbf X)} \,\mathrm{d}\boldsymbol\lambda
+\end{equation}
+%
+with $\boldsymbol\theta = (\boldsymbol\beta, \boldsymbol\lambda)$. For instance, for the purpose of locating a \ac{GW} source on the sky, all parameters but $(\alpha, \delta)$ are nuisance parameters.
+
 \section{Measurement uncertainty}
 
 The \ac{CRLB} is a useful analytical tool for predicting with what error an unknown parameter or parameters can be estimated from noisy observations. When an unbiased estimator exists, the \ac{CRLB} bound says that the covariance of the estimation error is bounded below by the Fisher information matrix. The \ac{CRLB} has been widely applied in \ac{GW} astronomy, for instance by \cite{fairhurst:2009} to predict the sky localization accuracy that is achievable with \ac{GW} observations. Here, we review the Fisher matrix calculation in \cite{fairhurst:2009} but add some physical interpretation to the particular structure of the covariance matrix.
