@@ -16,6 +16,8 @@
 
 \DeclareMathOperator{\cov}{cov}
 \DeclareMathOperator{\std}{std}
+\DeclareMathOperator*{\argmin}{\arg\!\min}
+\DeclareMathOperator*{\argmax}{\arg\!\max}
 
 \begin{document}
 
@@ -200,6 +202,14 @@ More succinctly, we can write the signal received by detector $i$ in terms of an
 \begin{equation}\label{eq:signal-model}
 	H_i (\omega; \boldsymbol\theta) = \frac{\rho_i}{\sigma_i} e^{\imath (\gamma_i - \omega \tau_i)} H_0(\omega; \boldsymbol\theta_\mathrm{in}).
 \end{equation}
+
+Detection of \acp{GW} from \ac{CBC} events consists of convolving the \dots explain matched filtering here \dots
+
+\begin{eqnarray}
+\hat{\boldsymbol\theta}_i, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{{H_0}^*(\omega; \boldsymbol\theta_\mathrm{in}) X_i(\omega) e^{-\imath \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
+\hat\rho_i &=& \frac{1}{\sigma_i} \left| \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-\imath \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right| \\
+\hat\gamma_i &=& \arg \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-\imath \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega
+\end{eqnarray}
 
 In the Bayesian framework, the parameters are inferred from the data by forming the posterior distribution, $p(\boldsymbol\theta|\mathbf X)$, which describes the probability of the parameters given the observations. Bayes' rule relates the likelihood $p(\mathbf X|\boldsymbol\theta)$ to the posterior $p(\boldsymbol\theta|\mathbf X)$,
 %
