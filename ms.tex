@@ -187,7 +187,7 @@ Assuming circular orbits and no spin precession, we can write the \ac{GW} signal
 	\end{array}\right)
 	\left(\begin{array}{cc}
 		1 \\
-		\imath
+		i
 	\end{array}\right) H_0(\omega; \boldsymbol\theta_\mathrm{in}).
 \end{eqnarray}
 %
@@ -200,15 +200,15 @@ D_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|H_0(\ome
 More succinctly, we can write the signal received by detector $i$ in terms of an amplitude $\rho_i$, a phase $\gamma_i$, and a time delay $\tau_i$,
 %
 \begin{equation}\label{eq:signal-model}
-	H_i (\omega; \boldsymbol\theta) = \frac{\rho_i}{\sigma_i} e^{\imath (\gamma_i - \omega \tau_i)} H_0(\omega; \boldsymbol\theta_\mathrm{in}).
+	H_i (\omega; \boldsymbol\theta) = \frac{\rho_i}{\sigma_i} e^{i (\gamma_i - \omega \tau_i)} H_0(\omega; \boldsymbol\theta_\mathrm{in}).
 \end{equation}
 
 Detection of \acp{GW} from \ac{CBC} events consists of convolving the \dots explain matched filtering here \dots
 
 \begin{eqnarray}
-\hat{\boldsymbol\theta}_i, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{{H_0}^*(\omega; \boldsymbol\theta_\mathrm{in}) X_i(\omega) e^{-\imath \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
-\hat\rho_i &=& \frac{1}{\sigma_i} \left| \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-\imath \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right| \\
-\hat\gamma_i &=& \arg \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-\imath \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega
+\hat{\boldsymbol\theta}_i, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{{H_0}^*(\omega; \boldsymbol\theta_\mathrm{in}) X_i(\omega) e^{-i \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
+\hat\rho_i &=& \frac{1}{\sigma_i} \left| \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right| \\
+\hat\gamma_i &=& \arg \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega
 \end{eqnarray}
 
 In the Bayesian framework, the parameters are inferred from the data by forming the posterior distribution, $p(\boldsymbol\theta|\mathbf X)$, which describes the probability of the parameters given the observations. Bayes' rule relates the likelihood $p(\mathbf X|\boldsymbol\theta)$ to the posterior $p(\boldsymbol\theta|\mathbf X)$,
@@ -238,7 +238,7 @@ The \ac{CRLB} is a useful analytical tool for predicting with what error an unkn
 In the frequency domain, the strain $X (\omega)$ observed by a detector is a linear combination of two orthogonal \ac{GW} quadratures and additive noise,
 %
 \begin{equation}\label{eq:signal-model}
-	X (\omega) = H (\omega, \rho, \gamma, \tau) + N (\omega) = \frac{\rho}{\sigma} e^{\imath (\gamma - \omega \tau)} U (\omega) + N (\omega),
+	X (\omega) = H (\omega, \rho, \gamma, \tau) + N (\omega) = \frac{\rho}{\sigma} e^{i (\gamma - \omega \tau)} U (\omega) + N (\omega),
 \end{equation}
 %
 where $H (\omega)$ is the signal content, $N (\omega)$ is the detector's \ac{WSS} Gaussian noise with \ac{PSD} $S(\omega)$, $U (\omega)$ is the frequency-domain post-Newtonian inspiral signal, $\rho$ is the signal's amplitude, $\gamma$ is a phase angle the encodes the relative strength of two \ac{GW} quadratures, and $\tau$ is the time of arrival relative to an arbitrary time base. The quantity $\sigma$ is a normalization constant defined as the \ac{SNR} of the \ac{GW} source at a fiducial distance, here taken to be $D_\mathrm{fiducial} = 1$~Mpc,
@@ -358,7 +358,7 @@ The likelihood in \Eref{eq:gaussian-likelihood} is the quantity that is maximize
 If we were to suppress the time parameter $\tau$, then we could reduce the likelihood to the form
 %
 \begin{equation}
-    \mathcal{L}(z; \rho, \gamma) \propto \exp \left[ -\frac{1}{2} \left|z - e^{\imath \gamma} \rho \right|^2 \right]
+    \mathcal{L}(z; \rho, \gamma) \propto \exp \left[ -\frac{1}{2} \left|z - e^{i \gamma} \rho \right|^2 \right]
 \end{equation}
 %
 for a complex scalar measurement $z$. This likelihood also describes the distribution of the length $\rho$ and angle $\gamma$ of a vector whose Cartesian components are perturbed with normally distributed errors. For this problem, $\rho$ and $\gamma$ are uncorrelated, $\rho^2$ being noncentrally $\chi^2$\nobreakdashes-disributed with two degrees of freedom and $\gamma$ being von~Mises\nobreakdashes-distributed.
