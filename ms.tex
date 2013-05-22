@@ -196,7 +196,9 @@ This linear combination matches the conventions used in \cite{PhysRevD.83.084002
 \begin{equation}\label{eq:horizon}
 D_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|H_0(\omega; \mathbf \theta)\right|^2}{S_i(\omega)} \,\mathrm{d}\omega.
 \end{equation}
-%
+
+\subsection{Detection, and matched filter bank as a maximum likelihood estimator}
+
 More succinctly, we can write the signal received by detector $i$ in terms of direct observables, the amplitude $\rho_i$, phase $\gamma_i$, and time delay $\tau_i$ on arrival at detector $i$,
 %
 \begin{equation}\label{eq:signal-model}
@@ -210,6 +212,8 @@ The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize 
 \hat\rho_i &=& \frac{1}{\sigma_i} \left| \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right| \\
 \hat\gamma_i &=& \arg \int_0^\infty \frac{{H_0}^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) X_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega.
 \end{eqnarray}
+
+\subsection{Bayesian probability and parameter estimation}
 
 In the Bayesian framework, the parameters are inferred from the data by forming the posterior distribution, $p(\boldsymbol\theta|\mathbf X)$, which describes the probability of the parameters given the observations. Bayes' rule relates the likelihood $p(\mathbf X|\boldsymbol\theta)$ to the posterior $p(\boldsymbol\theta|\mathbf X)$,
 %
