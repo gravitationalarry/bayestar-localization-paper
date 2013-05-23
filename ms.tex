@@ -235,6 +235,8 @@ In Bayesian inference, although it is often easy to write down the likelihood or
 %
 with $\boldsymbol\theta = (\boldsymbol\beta, \boldsymbol\lambda)$. For instance, for the purpose of locating a \ac{GW} source on the sky, all parameters but $(\alpha, \delta)$ are nuisance parameters.
 
+Computing the marginal posterior almost always involves many-dimensional and often ill-behaved integrals.\marginpar{More about \ac{MCMC} methods here.}
+
 \section{Measurement uncertainty}
 
 The \ac{CRLB} is a useful analytical tool for predicting with what error an unknown parameter or parameters can be estimated from noisy observations. When an unbiased estimator exists, the \ac{CRLB} bound says that the covariance of the estimation error is bounded below by the Fisher information matrix. The \ac{CRLB} has been widely applied in \ac{GW} astronomy, for instance by \cite{fairhurst:2009} to predict the sky localization accuracy that is achievable with \ac{GW} observations. Here, we review the Fisher matrix calculation in \cite{fairhurst:2009} but add some physical interpretation to the particular structure of the covariance matrix.
