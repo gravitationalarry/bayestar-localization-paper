@@ -243,34 +243,24 @@ The \ac{CRLB} is a useful analytical tool for predicting with what error an unkn
 
 \subsection{Fisher matrix}
 
-In the frequency domain, the strain $x (\omega)$ observed by a detector is a linear combination of two orthogonal \ac{GW} quadratures and additive noise,
-%
-\begin{equation}\label{eq:signal-model}
-	x (\omega) = h (\omega, \rho, \gamma, \tau) + n (\omega) = \frac{\rho}{\sigma} e^{i (\gamma - \omega \tau)} u (\omega) + n (\omega),
-\end{equation}
-%
-where $h (\omega)$ is the signal content, $n (\omega)$ is the detector's \ac{WSS} Gaussian noise with \ac{PSD} $S(\omega)$, $u (\omega)$ is the frequency-domain post-Newtonian inspiral signal, $\rho$ is the signal's amplitude, $\gamma$ is a phase angle the encodes the relative strength of two \ac{GW} quadratures, and $\tau$ is the time of arrival relative to an arbitrary time base. The quantity $\sigma$ is a normalization constant defined as the \ac{SNR} of the \ac{GW} source at a fiducial distance, here taken to be $D_\mathrm{fiducial} = 1$~Mpc,
-%
-\begin{equation}\label{eq:sigma}
-    \sigma^2 = \int_0^\infty \frac{\left| u (\omega)\right|^2}{S(\omega)} \, \mathrm{d}\omega.
-\end{equation}
-%
-The distance at which an optimally oriented \ac{GW} source would produce \ac{SNR}=1 is defined as $D_1 = D_\mathrm{fiducial} / \sigma$. The likelihood, or the probability of obtaining the observation $x(\omega)$ conditioned on the value of the parameter vector $\boldsymbol\theta = (\rho, \gamma, \tau)$, is Gaussian, with the log-likelihood proportional to:
+In order to estimate the \ac{ML} estimator accuracy for a matched filter, we will momentarily consider the likelihood for a single detector, and surpress the intrinsic degrees of freedom:
 %
 \begin{equation}\label{eq:gaussian-likelihood}
-	\mathcal{L}(x; \boldsymbol\theta) = p(x | \boldsymbol\theta)
+	\fl\mathcal{L}(x_i; \rho_i, \gamma_i, \tau_i) = p(x_i | \rho_i, \gamma_i, \tau_i)
 		\propto \exp \left[
-		- \frac{1}{2} \int_0^\infty \frac{\left|x (\omega)
-			- h(\omega; \boldsymbol\theta) \right|^2}{S(\omega)} \, \mathrm{d}\omega
-	\right].
+		- \frac{1}{2} \int_0^\infty \frac{\left|x_i (\omega)
+			- h_i(\omega; \rho_i, \gamma_i, \tau_i) \right|^2}{S_i(\omega)} \, \mathrm{d}\omega
+	\right],
 \end{equation}
+%
+with $h_i(\omega; \rho_i, \gamma_i, \tau_i)$ given by \Eref{eq:signal-model}.
 
-The Fisher information matrix for a measurement $\tilde x$ described by the unknown parameter vector $\boldsymbol{\theta}$ is
+The Fisher information matrix for a measurement $x$ described by the unknown parameter vector $\boldsymbol{\theta}$ is
 %
 \begin{equation}\label{eq:general-fisher-matrix}
 	\mathcal{I}_{jk} = \mathrm{E} \, \left[
 		-\frac{\partial^2 \log
-			\mathcal{L}(x ; \boldsymbol\theta)}
+			\mathcal{L}(x_i ; \boldsymbol\theta)}
 			{\partial \theta_j \theta_k}
 	\right].
 \end{equation}
@@ -279,56 +269,58 @@ This equation involves double derivatives, but substantial simplification is pos
 %
 \begin{equation}\label{eq:gaussian-fisher-matrix}
 	\mathcal{I}_{jk} = \int_0^\infty \Re \left[
-        \left(\frac{\partial h}{\partial \theta_j}\right)^*
-        \left(\frac{\partial h}{\partial \theta_k}\right)
-	\right] \frac{1}{S(\omega)} \, \mathrm{d}\omega.
+        \left(\frac{\partial h_i}{\partial \theta_j}\right)^*
+        \left(\frac{\partial h_i}{\partial \theta_k}\right)
+	\right] \frac{1}{S_i(\omega)} \, \mathrm{d}\omega.
 \end{equation}
 %
-This form is more useful because it involves only first derivatives, and of the signal $\tilde h (\omega)$ rather than the entire observation $\tilde x (\omega)$. In terms of the $k$th \ac{SNR}-weighted moment of angular frequency,
+This form is more useful because it involves only first derivatives, and of the signal $h (\omega)$ rather than the entire observation $x (\omega)$. In terms of the $k$th \ac{SNR}-weighted moment of angular frequency,
 %
 \begin{equation}\label{eq:angular-frequency-moments}
-    \overline{\omega^k} =
-        \left[ \int_0^\infty \frac{|u (\omega)|^2}{S(\omega)} \omega^k \, \mathrm{d}\omega \right]
-        \left[ \int_0^\infty \frac{|u (\omega)|^2}{S(\omega)} \, \mathrm{d}\omega \right]^{-1},
+    {\overline{\omega^k}}_i =
+        \left[ \int_0^\infty \frac{|h (\omega)|^2}{S_i(\omega)} \omega^k \, \mathrm{d}\omega \right]
+        \left[ \int_0^\infty \frac{|h (\omega)|^2}{S_i(\omega)} \, \mathrm{d}\omega \right]^{-1},
 \end{equation}
 %
 the Fisher matrix for the signal model in \Eref{eq:signal-model} is
 %
 \begin{equation}\label{eq:fisher-matrix}
 	\mathcal{I} = \bordermatrix{
-        ~ & \rho & \gamma & \tau \cr
-        \rho & 1 & 0 & 0 \cr
-        \gamma & 0 & \rho^2 & -\rho^2 \overline{\omega} \cr
-        \tau & 0 & -\rho^2 \overline{\omega} & \rho^2 \overline{\omega^2}
+        ~ & \rho_i & \gamma_i & \tau_i \cr
+        \rho_i & 1 & 0 & 0 \cr
+        \gamma_i & 0 & {\rho_i}^2 & -{\rho_i}^2 {\overline{\omega}}_i \cr
+        \tau_i & 0 & -{\rho_i}^2 {\overline{\omega}}_i & {\rho_i}^2 {\overline{\omega^2}}_i
     }.
 \end{equation}
 
 \subsection{\ac{CRLB} and physical interpretation}
 
-The \ac{CRLB} says that, element by element,
+The \ac{CRLB} says that, element by element,%
+%
+\marginpar{Element by element? I don't think that is right.}
 %
 \begin{equation}\label{eq:covariance-matrix}
     \cov{
         \left(
         \begin{array}{c}
-            \hat{\rho} - \rho \\
-            \hat{\gamma} - \gamma \\
-            \hat{\tau} - \tau
+            \hat{\rho}_i - \rho_i \\
+            \hat{\gamma}_i - \gamma_i \\
+            \hat{\tau}_i - \tau_i
         \end{array}
         \right)
     } \geq \mathcal{I}^{-1} = \left(
         \begin{array}{ccc}
             1 & 0 & 0 \\
-            0 & \rho^2 \overline{\omega^2}/{\omega_\mathrm{rms}}^2 & \rho^2 \overline{\omega}/{\omega_\mathrm{rms}}^2 \\
-            0 & \rho^2 \overline{\omega}/{\omega_\mathrm{rms}}^2 & \rho^2/{\omega_\mathrm{rms}}^2
+            0 & {\rho_i}^2 {\overline{\omega^2}}_i/{\omega_{\mathrm{rms},i}}^2 & {\rho_i}^2 {\overline{\omega}}_i/{\omega_{\mathrm{rms},i}}^2 \\
+            0 & {\rho_i}^2 {\overline{\omega}}_i/{\omega_{\mathrm{rms},i}}^2 & {\rho_i}^2/{\omega_{\mathrm{rms},i}}^2
         \end{array}
     \right)
 \end{equation}
 %
-where a hat $\hat{\phantom{\rho}}$ denotes the estimate of a parameter and ${\omega_\mathrm{rms}}^2 = \overline{\omega^2} - \overline{\omega}^2$. Reading off the $\tau \tau$ element of the covariance matrix reproduces the timing accuracy in Equation~(24) of \cite{fairhurst:2009},
+where a hat $\hat{\phantom{\rho}}$ denotes the estimate of a parameter and ${\omega_{\mathrm{rms},i}}^2 = {\overline{\omega^2}}_i - {{\overline{\omega}}_i}^2$. Reading off the $\tau \tau$ element of the covariance matrix reproduces the timing accuracy in Equation~(24) of \cite{fairhurst:2009},
 %
 \begin{equation}\label{eq:timing-crlb}
-    \std \left(\hat{\tau} - \tau \right) \geq \sqrt{\left(\mathcal{I}^{-1}\right)_{\tau\tau}} = \frac{\rho}{\omega_\mathrm{rms}}.
+    \std \left(\hat{\tau}_i - \tau_i \right) \geq \sqrt{\left(\mathcal{I}^{-1}\right)_{\tau\tau}} = \frac{\rho_i}{\omega_{\mathrm{rms},i}}.
 \end{equation}
 
 \marginpar{Plot covariance ellipses and estimator samples for each change of variables; that would be a nice visual here.}%
@@ -339,10 +331,10 @@ First, we put the phase and time on the same footing by measuring the time in un
 %
 \begin{equation}
     \mathcal{I}' = \bordermatrix{
-        ~ & \rho & \gamma & \gamma_\tau \cr
-        \rho & 1 & 0 & 0 \cr
-        \gamma & 0 & \rho^2 & -\rho^2\frac{\overline{\omega}}{\sqrt{\overline{\omega^2}}} \cr
-        \gamma_\tau & 0 & -\rho^2\frac{\overline{\omega}}{\sqrt{\overline{\omega^2}}} & \rho^2
+        ~ & \rho_i & \gamma_i & \gamma_{\tau,i} \cr
+        \rho_i & 1 & 0 & 0 \cr
+        \gamma_i & 0 & {\rho_i}^2 & -{\rho_i}^2\frac{{\overline{\omega}}_i}{\sqrt{{\overline{\omega^2}}_i}} \cr
+        \gamma_{\tau,i} & 0 & -{\rho_i}^2\frac{{\overline{\omega}}_i}{\sqrt{{\overline{\omega^2}}_i}} & {\rho_i}^2
     }.
 \end{equation}
 
@@ -350,10 +342,10 @@ The second change of variables, from $\gamma$ and $\gamma_\tau$ to $\gamma_\pm =
 %
 \begin{equation}
     \mathcal{I}'' = \bordermatrix{
-        ~ & \rho & \gamma_+ & \gamma_- \cr
-        \rho & 1 & 0 & 0 \cr
-        \gamma_+ & 0 & \left(1 - \frac{\overline{\omega}}{\sqrt{\overline{\omega^2}}}\right)\rho^2 & 0 \cr
-        \gamma_- & 0 & 0 & \left(1 + \frac{\overline{\omega}}{\sqrt{\overline{\omega^2}}}\right)\rho^2
+        ~ & \rho_i & \gamma_{+,i} & \gamma_{-,i} \cr
+        \rho_i & 1 & 0 & 0 \cr
+        \gamma_{+,i} & 0 & \left(1 - \frac{\overline{\omega}_i}{\sqrt{\overline{\omega^2}_i}}\right){\rho_i}^2 & 0 \cr
+        \gamma_{-,i} & 0 & 0 & \left(1 + \frac{\overline{\omega}_i}{\sqrt{\overline{\omega^2}_i}}\right){\rho_i}^2
     }.
 \end{equation}
 %
