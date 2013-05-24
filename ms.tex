@@ -411,12 +411,12 @@ If we assume that the time and amplitude estimation errors are uncorrelated, the
     \mathcal{L}(
         \hat{\tau}_1, \hat{\tau}_2, &\dots, \hat{\tau}_N,
         \hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N;
-        \mathbf{n}, t_\oplus, D_\mathrm{L}, x, \psi) \\
+        \mathbf{n}, t_\oplus, D_\mathrm{L}, u, \psi) \\
     &= \mathcal{L}_\mathrm{TOA}(
         \hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N; \mathbf{n}, t_\oplus) \\
         &\times
         \mathcal{L}_\mathrm{SNR}(\hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N;
-         \mathbf{n}, D_\mathrm{L}, x, \psi
+         \mathbf{n}, D_\mathrm{L}, u, \psi
     ).
 \end{eqnarray*}
 %
@@ -469,7 +469,7 @@ We have no explicit prior on the intrinsic paramters; in our analysis they are f
 %
 The prior does not permit negative values of $u$ because only even powers of $u$ appear in \Eref{eq:snr-model}. The prior only permits $\psi$ to run to $pi/2$ because only trigonometric functions of $4\psi$ appear in \Eref{eq:snr-model}.
 
-\subsection{Marginalization}
+\subsection{Marginalization over $t_\oplus$}
 
 The overall arrival time $t_\oplus$ can be marginalized out analytically, giving the \ac{TOA}-only marginal posterior
 %
@@ -485,6 +485,40 @@ where
     \langle \tilde{\tau} \rangle =
     \left(\sum_{i=1}^N \frac{{\tilde{\tau}_i}^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)\left(\sum_{i=1}^N \frac{1}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)^{-1}.
 \end{equation}
+
+\subsection{Posterior}
+
+\begin{eqnarray}
+    p(
+		\mathbf{n} |
+        \hat{\tau}_1, \hat{\tau}_2, &\dots, \hat{\tau}_N,
+        \hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N) \nonumber\\
+    &= p(\mathbf{n} |
+        \hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N) \nonumber\\
+        &\times
+        p(\mathbf{n} |
+		\hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N
+    )
+\end{eqnarray}
+%
+where
+%
+\begin{equation*}
+	\fl
+    p(\mathbf{n} |
+	\hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N)
+	\propto
+	\int_0^\frac{\pi}{2}
+	\int_0^1
+	\int_{D_{\mathrm{L},\mathrm{min}}}^{D_{\mathrm{L},\mathrm{max}}}
+	\exp \left[
+	        -\frac{1}{2} \sum_{i=1}^N \left(\hat{\rho}_i - \rho_i(\mathbf{n}, D_\mathrm{L}, u, \psi) \right)^2
+	    \right]
+	{D_\mathrm{L}}^m
+	\,\mathrm{d}D_\mathrm{L}
+	\,\mathrm{d}u
+	\,\mathrm{d}\psi.
+\end{equation*}
 
 The marginalization over $D_\mathrm{L}$, $u$, and $\psi$ must be done numerically. The outermost integration is over $u$ and $\psi$, and is done with Newton\nobreakdashes--Cotes by evaluating $\mathcal{L}_\mathrm{SNR}$ on a regular lattice in $u$ and $\psi$. This integration scheme is first order in $u$ and second order in $\psi$.
 
