@@ -529,7 +529,7 @@ The innermost integration is over $D_\mathrm{L}$ and is performed using adaptive
 Before evaluating each inner integral over $D_\mathrm{L}$, the quantities $A=-\frac{1}{2} \sum_i {\rho_i}^2$ and $B=\sum_i \rho_i \hat\rho_i$ are precalculated so that the integrand can be written as
 %
 \begin{equation*}
-	\exp(A {D_\mathrm{L}}^{-2} + B D_\mathrm{L}) {D_\mathrm{L}}^m.
+	\exp(\frac{A}{{D_\mathrm{L}}^2} + \frac{B}{D_\mathrm{L}}) {D_\mathrm{L}}^m.
 \end{equation*}
 %
 Then, we see that the likelihood $\exp(A {D_\mathrm{L}}^{-2} + B D_\mathrm{L})$ is maximized when $D_\mathrm{L} = D_{\mathrm{L},0} = -2A/B$. The likelihood takes on a factor $\eta$ of its maximum value when
