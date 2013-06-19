@@ -9,42 +9,34 @@ from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import BboxConnectorPatch
 from matplotlib.transforms import Bbox, TransformedBbox, blended_transform_factory
 from matplotlib import ticker
-from scipy import special
 import numpy as np
 import sys
 
-xmin = 0.
-xmax = 1.
-a = 0.1
-a2 = a * a
-y1 = 0.01
-y2 = 0.005
-break1 = (a - a2 * np.sqrt(-2*np.log(y1))) / (1 + 2 * a2 * np.log(y1))
-if a * np.sqrt(-2 * np.log(y2)) < 1:
-    break2 = (a + a2 * np.sqrt(-2*np.log(y1))) / (1 + 2 * a2 * np.log(y1))
-else:
-    break2 = (np.log(y2) - np.sqrt(np.log(y1) * np.log(y2))) / (np.sqrt(-2*np.log(y2)) * (np.log(y2) - np.log(y1)))
+# Input parameters
+rmin = 0
+rmax = 18
+A = -0.5 * 3 * 49
+B = 3 * 30
+eta = 0.01
+m = 2
 
-breakpoints = [xmin]
-if xmin < break1 < xmax:
-    breakpoints.append(break1)
-if xmin < break2 < xmax:
-    breakpoints.append(break2)
-breakpoints.append(xmax)
+# Breakpoints
+middle_breakpoint = -2*A/B
+lower_breakpoint = 1/(1/middle_breakpoint + np.sqrt(np.log(eta) / A))
+upper_breakpoint = 1/(1/middle_breakpoint - np.sqrt(np.log(eta) / A))
+breakpoints = filter(lambda r: rmin <= r <= rmax,
+    [rmin, lower_breakpoint, middle_breakpoint, upper_breakpoint, rmax])
 
-colors = 'rgb'
+colors = 'crgb'
 fig = plt.figure(figsize=(5, 5))
 ax0 = plt.axes([0.2, 0.5, 0.6, 0.4])
 
-for i, (break1, break2) in enumerate(zip(breakpoints[:-1], breakpoints[1:])):
-    x = np.linspace(break1, break2, 100)
-    I0e = special.i0e(1 / a2)
-    lognorm = - 1 / (2 * a2) - np.log(I0e)
-    I0e = special.i0e(1 / (a * x))
-    integrand = I0e * np.exp(-1/(2*x*x) + lognorm + 1 / (a * x))
-    plt.fill_between(x, np.zeros(x.shape), integrand, color=colors[i])
-plt.xlim(xmin, xmax)
-ax0.xaxis.set_major_locator(ticker.MultipleLocator(0.1))
+for break1, break2, color in zip(breakpoints[:-1], breakpoints[1:], colors):
+    r = np.linspace(break1, break2, 100)
+    integrand = np.exp(A*r**-2 + B*r**-1 - A*middle_breakpoint**-2 - B*middle_breakpoint**-1) * (r/middle_breakpoint)**2 
+    plt.fill_between(r, np.zeros_like(r), integrand, color=color)
+plt.xlim(rmin, rmax)
+ax0.xaxis.set_major_locator(ticker.MultipleLocator(1))
 trans0 = blended_transform_factory(ax0.transData, ax0.transAxes)
 plt.setp(ax0.get_xticklabels(), visible=False)
 plt.setp(ax0.get_yticklabels(), visible=False)
@@ -76,17 +68,14 @@ for i, (break1, break2) in enumerate(zip(breakpoints[:-1], breakpoints[1:])):
     fig.artists.append(BboxConnectorPatch(ax.bbox, mybbox0, 1, 4, 2, 3, facecolor='none', linestyle='dashed'))
     if i > 0:
         plt.setp(ax.get_yticklabels(), visible=False)
-    x = np.linspace(break1, break2, 100)
-    I0e = special.i0e(1 / a2)
-    lognorm = - 1 / (2 * a2) - np.log(I0e)
-    I0e = special.i0e(1 / (a * x))
-    integrand = I0e * np.exp(-1/(2*x*x) + lognorm + 1 / (a * x))
-    plt.fill_between(x, np.zeros(x.shape), integrand, color=colors[i])
+    r = np.linspace(break1, break2, 100)
+    integrand = np.exp(A*r**-2 + B*r**-1 - A*middle_breakpoint**-2 - B*middle_breakpoint**-1) * (r/middle_breakpoint)**2
+    plt.fill_between(r, np.zeros_like(r), integrand, color=colors[i])
     plt.xlim(break1, break2)
     plt.setp(ax.get_xticklabels(), visible=False)
     plt.setp(ax.get_yticklabels(), visible=False)
-    ax.xaxis.set_major_locator(ticker.MultipleLocator(0.1))
-plt.ylim(-.1, 1.1)
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
+plt.ylim(-.1, 1.2)
 
 
 if len(sys.argv) > 1:
