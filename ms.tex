@@ -522,28 +522,43 @@ where
 
 The marginalization over $D_\mathrm{L}$, $u$, and $\psi$ must be done numerically. The outermost integration is over $u$ and $\psi$, and is done with Newton\nobreakdashes--Cotes by evaluating $\mathcal{L}_\mathrm{SNR}$ on a regular lattice in $u$ and $\psi$.
 
-\marginpar{Explain initial integration breakpoints and how they are calculated. Cite \texttt{gsl\_integrate\_qagp}.}%
-%
-The innermost integration is over $D_\mathrm{L}$ and is performed using adaptive Gaussian quadrature, but with a twist that speeds up convergence.
+\begin{figure}
+    \caption{\label{fig:radial_integrand}Illustration of initial subdivisions for distance integration scheme. Distance increases from left to right. In the print version, the left\nobreakdashes-hand tail, the left\nobreakdashes- and right\nobreakdashes-hand sides of the maximum likelihood peak, and the right\nobreakdashes-hand tail, are colored cyan, red, green, and blue, respectively.}
+    \begin{center}
+        \includegraphics{radial_integrand}
+    \end{center}
+\end{figure}
 
-Before evaluating each inner integral over $D_\mathrm{L}$, the quantities $A=-\frac{1}{2} \sum_i {\rho_i}^2$ and $B=\sum_i \rho_i \hat\rho_i$ are precalculated so that the integrand can be written as
+The innermost integration is over $D_\mathrm{L}$ and is performed using adaptive Gaussian quadrature, but with a twist that speeds up convergence. As in many parameter estimation problems, the integrand may be sharply peaked, and any generic adaptive integration scheme may take a long time to find the peak. Before evaluating each inner integral over $D_\mathrm{L}$, the quantities $A=-\frac{1}{2} \sum_i {\rho_i}^2$ and $B=\sum_i \rho_i \hat\rho_i$ are precalculated so that the integrand can be written as
 %
 \begin{equation*}
 	\exp\left(\frac{A}{{D_\mathrm{L}}^2} + \frac{B}{D_\mathrm{L}}\right) {D_\mathrm{L}}^m.
 \end{equation*}
 %
-Then, we see that the likelihood $\exp(A {D_\mathrm{L}}^{-2} + B D_\mathrm{L})$ is maximized when $D_\mathrm{L} = D_{\mathrm{L},0} = -2A/B$. The likelihood takes on a factor $\eta$ of its maximum value when
+Then, we see that the likelihood $\exp(A {D_\mathrm{L}}^{-2} + B {D_\mathrm{L}}^{-1})$ is maximized when $D_\mathrm{L} = D_{\mathrm{L},0} = -2A/B$. The likelihood takes on a factor $\eta$ (say, $\eta=0.01$) of its maximum value when
 %
 \begin{equation}
-	D_\mathrm{L} = D_{\mathrm{L},\pm} = \left(\frac{1}{D_{\mathrm{L},0}} \pm \sqrt{\frac{\log\eta}{A}}\right)^{-1}.
+	D_\mathrm{L} = D_{\mathrm{L},\pm} = \left(\frac{1}{D_{\mathrm{L},0}} \mp \sqrt{\frac{\log\eta}{A}}\right)^{-1}.
 \end{equation}
-
-\begin{figure}
-    \caption{\label{fig:radial_integrand}Illustration of initial subdivisions for radial integration scheme.}
-    \begin{center}
-        \includegraphics{radial_integrand}
-    \end{center}
-\end{figure}
+%
+We have now identified up to five breakpoints that partition the distance integrand into up to four intervals with quantitatively distinct behavior. These intervals are depicted in Figure~\ref{fig:radial_integrand} with distance increasing from left to right. There is a left\nobreakdashes-hand or small distance tail in which the integrand is small and monotically increasing, a left\nobreakdashes- and right\nobreakdashes-hand side of the maximum likelihood peak, and a right\nobreakdashes-hand tail in which the integrand is small and monotonically decreasing. These breakpoints are:
+%
+\begin{equation}
+    D_{\mathrm{L},\mathrm{break}} = \{ D_\mathrm{L} \in
+    \left\{
+    \begin{array}{c}
+    D_{\mathrm{L},\mathrm{min}} \\
+    D_{\mathrm{L},-} \\
+    D_{\mathrm{L},0} \\
+    D_{\mathrm{L},+} \\
+    D_{\mathrm{L},\mathrm{max}}
+    \end{array}
+    \right\} :
+    D_{\mathrm{L},\mathrm{min}} \leq D_\mathrm{L}
+    \leq D_{\mathrm{L},\mathrm{max}}\}.
+\end{equation}
+%
+We use these breakpoints as initial subdivision in an adaptive Gaussian quadrature algorithm. Specifically, we use the GNU Scientific Library's \verb|gsl_integrate_qagp|\footnote{\url{http://www.gnu.org/software/gsl/manual/html_node/QAGP-adaptive-integration-with-known-singular-points.html}} function, which is designed to integrate functions with known singular points (though, of course, or integrand has no singular points). This function estimates the integral over each subdivision and each interval's contribution to the total error, then subdivides the interval whose error contribution is largest. Subdivisions continue until a fixed total fractional error is reached. In this way, most integrand evaluations are expended on the most important distance interval, whether that happens to be the tails (when the posterior is dominated by the prior) or the peak (when the posterior is dominated by the observations).
 
 \section{Hierarchical refinement}
 
