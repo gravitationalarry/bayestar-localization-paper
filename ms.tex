@@ -93,6 +93,8 @@ There is therefore a strong case for performing electromagnetic followups of the
 
 In this paper we present a rapid and accurate method of sky localization that makes use of Bayesian methods. It differs from existing techniques is several important ways.  In the first place, we fix the intrinsic parameters to their \ac{ML} estimates, as provided by the detection pipeline.  This reduces the dimensionality of the parameter space we need to sample. In addition, the technique takes as its input the \ac{ML} estimates of the extrinsic parameters, instead of the $h(t)$ time series. This makes the likelihood itself much faster to evaluate. Finally, instead of of using \ac{MCMC} or some similar method for statistical sampling, we make use of a deterministic quadrature scheme. We call this technique \ac{BAYESTAR}%
 %
+\marginpar{Probably need to change the backronym. BAYESian TriAngulation and Rapid localization?}
+%
 \footnote{A pun on the Cylon battleships in the American television series Battlestar Galactica. The defining characteristic of the Cylons is that they repeatedly defeat humanity by using their superhuman information\nobreakdashes-gathering ability to coordinate overwhelming forces. The name also suggests that, like the Cylons, \acp{GW} detectors may some day rise against us humans.}%
 %
 \footnote{We do not like to mention the final `T' in the acronym, because then it would be called BAYES\nobreakdashes-TART, which would sound ridiculous.}%
