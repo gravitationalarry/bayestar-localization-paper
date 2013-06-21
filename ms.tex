@@ -473,9 +473,9 @@ The prior does not permit negative values of $u$ because only even powers of $u$
 
 \subsection{Marginalization over $t_\oplus$}
 
-The overall arrival time $t_\oplus$ can be marginalized out analytically, giving the \ac{TOA}-only marginal posterior
+The overall arrival time $t_\oplus$ can be marginalized out analytically, giving the \ac{TOA}\nobreakdashes-only marginal posterior
 %
-\begin{equation}
+\begin{equation}\label{eq:toa-posterior}
     p(\mathbf{n} | \hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N) \propto \exp\left[
         -\frac{1}{2} \sum_{i=1}^N \frac{\left( \tilde{\tau}_i - \langle \tilde{\tau} \rangle \right)^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}
     \right]
@@ -487,6 +487,12 @@ where
     \langle \tilde{\tau} \rangle =
     \left(\sum_{i=1}^N \frac{{\tilde{\tau}_i}^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)\left(\sum_{i=1}^N \frac{1}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)^{-1}.
 \end{equation}
+
+\subsection{Adaptive resolution}
+
+The \ac{TOA}\nobreakdashes-only posterior in \Eref{eq:toa-posterior} is numerically trivial to evaluate because it involves no numerical integrals. However, as we will see in the next section, the \ac{SNR}\nobreakdashes-only posterior is numerically expensive.
+
+We evaluate the \ac{TOA}\nobreakdashes-only posterior at the centers of \ac{HEALPix} pixels at the lowest possible resolution. Then, we increase the resolution until 99.99\% of the \ac{TOA}\nobreakdashes-only posterior is contained within at least 3072 pixels. The numerically expensive \ac{SNR} integrals are done only for the pixels that comprise the 99.99th percentile at this resolution. All other pixels are set to zero.
 
 \subsection{Posterior}
 
@@ -525,7 +531,7 @@ where
 The marginalization over $D_\mathrm{L}$, $u$, and $\psi$ must be done numerically. The outermost integration is over $u$ and $\psi$, and is done with Newton\nobreakdashes--Cotes by evaluating $\mathcal{L}_\mathrm{SNR}$ on a regular lattice in $u$ and $\psi$.
 
 \begin{figure}
-    \caption{\label{fig:radial_integrand}Illustration of initial subdivisions for distance integration scheme. Distance increases from left to right. In the print version, the left\nobreakdashes-hand tail, the left\nobreakdashes- and right\nobreakdashes-hand sides of the maximum likelihood peak, and the right\nobreakdashes-hand tail, are colored cyan, red, green, and blue, respectively.}
+    \caption{\label{fig:radial_integrand}Illustration of initial subdivisions for distance integration scheme. Distance increases from left to right. In the color version, the left\nobreakdashes-hand tail, the left\nobreakdashes- and right\nobreakdashes-hand sides of the maximum likelihood peak, and the right\nobreakdashes-hand tail, are colored cyan, red, green, and blue, respectively.}
     \begin{center}
         \includegraphics{radial_integrand}
     \end{center}
@@ -562,14 +568,10 @@ We have now identified up to five breakpoints that partition the distance integr
 %
 We use these breakpoints as initial subdivision in an adaptive Gaussian quadrature algorithm. Specifically, we use the GNU Scientific Library's \verb|gsl_integrate_qagp|\footnote{\url{http://www.gnu.org/software/gsl/manual/html_node/QAGP-adaptive-integration-with-known-singular-points.html}} function, which is designed to integrate functions with known singular points (though, of course, or integrand has no singular points). This function estimates the integral over each subdivision and each interval's contribution to the total error, then subdivides the interval whose error contribution is largest. Subdivisions continue until a fixed total fractional error is reached. In this way, most integrand evaluations are expended on the most important distance interval, whether that happens to be the tails (when the posterior is dominated by the prior) or the peak (when the posterior is dominated by the observations).
 
-\section{Hierarchical refinement}
-
-\marginpar{Talk about adaptive selection of HEALPix resolution and of pixels on which to evaluate \ac{SNR} marginal posterior. Something to think about: this is logically easier to explain last, but chronologically makes more sense first.}
-
 
 \ack Source code for \ac{BAYESTAR} is available on the \ac{LIGO} \acl{DASWG} web site at \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/bayestar.html}.
 
-Some of the results in this paper have been derived using HEALPix \cite{healpix}.
+Some of the results in this paper have been derived using \ac{HEALPix} \cite{healpix}.
 
 \ac{LIGO} was constructed by the California Institute of Technology and Massachusetts Institute of Technology with funding from the \ac{NSF} and operates under cooperative agreement PHY\nobreakdashes-0107417. Some results were produced on the NEMO computing cluster operated by the Center for Gravitation and Cosmology at University of Wisconsin\nobreakdashes--Milwaukee under \ac{NSF} Grants PHY\nobreakdashes-0923409 and PHY\nobreakdashes-0600953. This research is supported by the \ac{NSF} through a Graduate Research Fellowship to L.S. This paper has \ac{LIGO} Document Number \ac{LIGO}\nobreakdashes-PXXXXXXX\nobreakdashes-vX.
 
