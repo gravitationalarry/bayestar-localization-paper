@@ -569,6 +569,8 @@ We have now identified up to five breakpoints that partition the distance integr
 %
 We use these breakpoints as initial subdivision in an adaptive Gaussian quadrature algorithm. Specifically, we use the GNU Scientific Library's \verb|gsl_integrate_qagp|\footnote{\url{http://www.gnu.org/software/gsl/manual/html_node/QAGP-adaptive-integration-with-known-singular-points.html}} function, which is designed to integrate functions with known singular points (though, of course, or integrand has no singular points). This function estimates the integral over each subdivision and each interval's contribution to the total error, then subdivides the interval whose error contribution is largest. Subdivisions continue until a fixed total fractional error is reached. In this way, most integrand evaluations are expended on the most important distance interval, whether that happens to be the tails (when the posterior is dominated by the prior) or the peak (when the posterior is dominated by the observations).
 
+The \ac{SNR} marginalization integrals for different pixels may be evaluated in parallel. In our C language implementation, the loop over pixels is parallelized with OpenMP\footnote{http://openmp.org/}.
+
 
 \ack Source code for \ac{BAYESTAR} is available on the \ac{LIGO} \acl{DASWG} web site at \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/bayestar.html}.
 
