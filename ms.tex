@@ -31,58 +31,6 @@
 Timely \acl{EM} follow\nobreakdashes-up of \acl{CBC} events detected by \acl{aLIGO} requires rapidly inferring the sky location from the \ac{GW} observations. Calculation of the posterior distribution of the sky location and intrinsic source parameters given the \ac{GW} strain takes hours with state\nobreakdashes-of\nobreakdashes-the\nobreakdashes-art \ac{MCMC} parameter estimation codes. By taking as the measurement not the \ac{GW} strain itself but the amplitude and \acl{TOA} of the putative signal at each detector, and by fixing the intrinsic source parameters, we have constructed a non-\ac{MCMC}, fully deterministic Bayesian parameter estimation algorithm that takes just seconds to produce sky maps of posterior probability.
 \end{abstract}
 
-\section*{Outline}
-
-\begin{enumerate}
-\item Introduction {
-	\begin{enumerate}
-	\item Background: \acp{GRB}, \acp{CBC}, \acs{LIGO}
-	\item Time scales of \acp{GRB}, \acp{CBC}
-	\item Current sky localization algorithms and response times
-	\end{enumerate}
-}
-\item Preliminaries {
-	\begin{enumerate}
-	\item Fisher information, \ac{CRLB}
-	\item Matched\nobreakdashes-filter estimator
-	\end{enumerate}
-}
-\item Algorithm {
-	\begin{enumerate}
-	\item Assumptions
-	\item Signal model
-	\item Likelihood function
-	\item Priors and marginalization
-	\item Procedure
-	\end{enumerate}
-}
-\item Results {
-	\begin{enumerate}
-	\item Injection population
-	\item Cumulative fraction vs. confidence level plots
-	\item Sky localization accuracy as a function of distance or \ac{SNR}
-	\item Speed
-	\end{enumerate}
-}
-\item Discussion {
-	\begin{enumerate}
-	\item Potential further refinements
-	\item What astrophysical targets were accessible before
-	\item What new targets are available with the response time of seconds
-	\item Lay out timeline of follow\nobreakdashes-up campaign, including different tiers of inference and different types of telescopes
-	\end{enumerate}
-}
-\item Appendices {
-	\begin{enumerate}
-	\item Code listing?
-	\item Any proofs that are needed in the body but would interrupt the text?
-	\end{enumerate}
-}
-\end{enumerate}
-
-
-\section{Introduction}
-
 Ground-based \ac{GW} interferometers are entering the advanced detector era, positioning themselves to make profound discoveries about the universe. The \ac{aLIGO} and Vigo detectors will be part of a worldwide network that also includes KAGRA and hopefully LIGO-India. Coalescing neutron star binaries are among the most likely sources, with event rates of $~ 50/\mathrm{yr}$~\cite{rates}.%
 %
 \marginpar{Check that number.}%
