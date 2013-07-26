@@ -56,7 +56,7 @@ In the frequency domain, the data recorded by a single \ac{GW} interferometer ar
 %
 where $h_i (\omega; \boldsymbol\theta)$ is the \ac{GW} signal received by detector $i$, given a parameter vector $\boldsymbol\theta$ that describes the \ac{GW} source, and $n_i (\omega)$ is that detector's \ac{WSS} Gaussian noise with one\nobreakdashes-sided \ac{PSD} $S_i(\omega) = E\left[n_i(\omega)^2\right]$. We shall denote the combined observation from a network of detectors as $\mathbf x (\omega) \equiv \{x_i (\omega)\}_i$.
 
-The likelihood, or the probability of obtaining the observation $\mathbf x$ conditioned on the value of $\boldsymbol\theta$, is Gaussian, with the log\nobreakdashes-likelihood proportional to:
+The likelihood, or the probability of obtaining the observation $\mathbf x$ conditioned on the value of $\boldsymbol\theta$, is the product of Gaussian distributions, one Gaussian for each detector:
 %
 \begin{equation}\label{eq:gaussian-likelihood}
 	\mathcal{L}(\mathbf x; \boldsymbol\theta) = \prod_i p(x_i | \boldsymbol\theta)
