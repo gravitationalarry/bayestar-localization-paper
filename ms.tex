@@ -486,7 +486,7 @@ The marginalization over $D_\mathrm{L}$, $u$, and $\psi$ must be done numericall
     \end{center}
 \end{figure}
 
-The innermost integration is over $D_\mathrm{L}$ and is performed using adaptive Gaussian quadrature, but with a twist that speeds up convergence. As in many parameter estimation problems, the integrand may be sharply peaked, and any generic adaptive integration scheme may take a long time to find the peak. Before evaluating each inner integral over $D_\mathrm{L}$, the quantities $A=-\frac{1}{2} \sum_i {\rho_i}^2$ and $B=\sum_i \rho_i \hat\rho_i$ are precalculated so that the integrand can be written as
+The innermost integration is over $D_\mathrm{L}$ and is performed using adaptive Gaussian quadrature, but with a twist that speeds up convergence. As in many parameter estimation problems, the integrand may be sharply peaked, and any generic adaptive integration scheme may take a long time to find the peak. Before evaluating each inner integral over $D_\mathrm{L}$, the quantities $A=-\frac{1}{2} \sum_i {\rho_i}^2$ and $B=\sum_i \rho_i \hat\rho_i$ are pre\nobreakdashes-calculated so that the integrand can be written as
 %
 \begin{equation*}
 	\exp\left(\frac{A}{{D_\mathrm{L}}^2} + \frac{B}{D_\mathrm{L}}\right) {D_\mathrm{L}}^m.
