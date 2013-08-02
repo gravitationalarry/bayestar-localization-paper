@@ -182,7 +182,7 @@ In what follows, we propose a complementary rapid parameter estimation scheme th
 
 \section{Measurement uncertainty}
 
-The \ac{CRLB} is a useful analytical tool for predicting with what error an unknown parameter or parameters can be estimated from noisy observations. When an unbiased estimator exists, the \ac{CRLB} bound says that the covariance of the estimation error is bounded below by the Fisher information matrix. The \ac{CRLB} has been widely applied in \ac{GW} astronomy, for instance by \cite{fairhurst:2009} to predict the sky localization accuracy that is achievable with \ac{GW} observations. Here, we review the Fisher matrix calculation in \cite{fairhurst:2009} and discuss the interpretation.
+The first task is to understand the uncertainty in the \ac{ML} point estimates from the detection. We begin with the \ac{CRLB}, which constraints the covariance of any unbiased estimator. The \ac{CRLB} has been widely applied in \ac{GW}. Here, we review the Fisher matrix calculation in \cite{fairhurst:2009} and discuss the interpretation.
 
 \subsection{Fisher matrix}
 
@@ -238,17 +238,21 @@ the Fisher matrix for the signal model in \Eref{eq:signal-model} is
 
 \subsection{\ac{CRLB} and physical interpretation}
 
-The \ac{CRLB} says that, element by element,%
+If $\hat{\boldsymbol\theta}$ is an unbiased estimator of $\boldsymbol\theta$, $\tilde{\boldsymbol\theta} = \hat{\boldsymbol\theta} - \boldsymbol\theta$ is the measurement error, and $\Sigma = \mathrm{E} \, [\tilde{\boldsymbol\theta}\tilde{\boldsymbol\theta}^\intercal]$ is the covariance of the measurement error, then the \ac{CRLB} says that
 %
-\marginpar{Element by element? I don't think that is right.}
+\begin{equation}
+    \Sigma \geq \mathcal{I}^{-1}
+\end{equation}
+%
+in the sense that $\left(\Sigma - \mathcal{I}^{-1}\right)$ is positive semi\nobreakdashes-definite. Specifically, for our likelihood, the \ac{CRLB} implies that
 %
 \begin{equation}\label{eq:covariance-matrix}
     \cov{
         \left(
         \begin{array}{c}
-            \hat{\rho}_i - \rho_i \\
-            \hat{\gamma}_i - \gamma_i \\
-            \hat{\tau}_i - \tau_i
+            \tilde{\rho}_i \\
+            \tilde{\gamma}_i \\
+            \tilde{\tau}_i
         \end{array}
         \right)
     } \geq \mathcal{I}^{-1} = \left(
@@ -260,13 +264,11 @@ The \ac{CRLB} says that, element by element,%
     \right)
 \end{equation}
 %
-where a hat $\hat{\phantom{\rho}}$ denotes the estimate of a parameter and ${\omega_{\mathrm{rms},i}}^2 = {\overline{\omega^2}}_i - {{\overline{\omega}}_i}^2$. Reading off the $\tau \tau$ element of the covariance matrix reproduces the timing accuracy in Equation~(24) of \cite{fairhurst:2009},
+where ${\omega_{\mathrm{rms},i}}^2 = {\overline{\omega^2}}_i - {{\overline{\omega}}_i}^2$. Reading off the $\tau \tau$ element of the covariance matrix reproduces the timing accuracy in Equation~(24) of \cite{fairhurst:2009},
 %
 \begin{equation}\label{eq:timing-crlb}
     \std \left(\hat{\tau}_i - \tau_i \right) \geq \sqrt{\left(\mathcal{I}^{-1}\right)_{\tau\tau}} = \frac{\rho_i}{\omega_{\mathrm{rms},i}}.
 \end{equation}
-
-\marginpar{Plot covariance ellipses and estimator samples for each change of variables; that would be a nice visual here.}%
 %
 Furthermore, the Fisher matrix in \Eref{eq:fisher-matrix} is block diagonal, which implies that estimation errors in the signal amplitude $\rho$ are uncorrelated with the phase $\gamma$ and time $\tau$. A sequence of two changes of variables lends some physical interpretation to the nature of the coupled estimation errors in $\gamma$ and $\tau$.
 
