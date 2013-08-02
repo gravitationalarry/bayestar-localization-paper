@@ -48,15 +48,15 @@ In this paper we present a rapid and accurate method of sky localization that ma
 
 \section{Theory of \ac{GW} detection and parameter estimation}
 
-In the frequency domain, the data recorded by a single \ac{GW} interferometer are
+In the frequency domain, the strain observed by a single \ac{GW} interferometer is
 %
 \begin{equation}\label{eq:signal-model}
 	x_i (\omega) = h_i (\omega; \boldsymbol\theta) + n_i (\omega),
 \end{equation}
 %
-where $h_i (\omega; \boldsymbol\theta)$ is the \ac{GW} signal received by detector $i$, given a parameter vector $\boldsymbol\theta$ that describes the \ac{GW} source, and $n_i (\omega)$ is that detector's \ac{WSS} Gaussian noise with one\nobreakdashes-sided \ac{PSD} $S_i(\omega) = E\left[n_i(\omega)^2\right]$. We shall denote the combined observation from a network of detectors as $\mathbf x (\omega) \equiv \{x_i (\omega)\}_i$.
+where $h_i (\omega; \boldsymbol\theta)$ is the \ac{GW} signal given a parameter vector $\boldsymbol\theta$ that describes the \ac{GW} source, and $n_i (\omega)$ is that detector's \ac{WSS} Gaussian noise with one\nobreakdashes-sided \ac{PSD} $S_i(\omega) = E\left[n_i(\omega)^2\right]$. We shall denote the combined observation from a network of detectors as $\mathbf x (\omega) \equiv \{x_i (\omega)\}_i$.
 
-The likelihood, or the probability of obtaining the observation $\mathbf x$ conditioned on the value of $\boldsymbol\theta$, is the product of Gaussian distributions, one Gaussian for each detector:
+The likelihood, or the probability of obtaining the observation $\mathbf x$ conditioned on the value of $\boldsymbol\theta$, is a product of Gaussian distributions:
 %
 \begin{equation}\label{eq:gaussian-likelihood}
 	\mathcal{L}(\mathbf x; \boldsymbol\theta) = \prod_i p(x_i | \boldsymbol\theta)
@@ -111,7 +111,7 @@ A \ac{CBC} source is specified by a vector of extrinsic parameters describing it
         \end{array}
 \end{equation}
 %
-Even this list of parameters involves some simplifying assumptions. First, for \ac{BNS} systems, we omit binary eccentricity as an intrinsic parameter because tidal interaction of the progenitor stars~\cite{0004-637X-572-1-407} and later \ac{GW} emission~\cite{PhysRev.136.B1224} circularize the orbit long before the inspiral enters \ac{LIGO}'s frequency range of $\sim$10\nobreakdashes--1000~kHz. Eccentricity would play a major role in the evolution and waveforms of \ac{NSBH} and \ac{BBH} sources formed by dynamical capture~\cite{PhysRevD.87.043004}. Tidal deformabilities of the \acp{NS} are omitted because the effect of tides on the inspiral would only be detectable by an Einstein Telescope-class \ac{GW} observatory~\cite{PhysRevD.81.123016}. Furthermore, in \ac{GW} detection efforts, especially those focused on \ac{BNS} systems, the component spins $\mathbf{S}_1$ and $\mathbf{S}_2$ are often assumed to be nonprecessing and aligned with the system's total angular momentum and condensed to a single scalar parameter $\chi$, or even neglected entirely, $\mathbf{S}_1 = \mathbf{S}_2 = 0$. In this work we will not consider spin precession.
+This list of parameters involves some simplifying assumptions. Eccentricity is omitted: although it does play a major role in the evolution and waveforms of \ac{NSBH} and \ac{BBH} sources formed by dynamical capture~\cite{PhysRevD.87.043004}, \ac{BNS} systems formed by binary stellar evolution should circularize due to tidal interaction~\cite{0004-637X-572-1-407} and later \ac{GW} emission~\cite{PhysRev.136.B1224} long before the inspiral enters \ac{LIGO}'s frequency range of $\sim$10\nobreakdashes--1000~kHz. Tidal deformabilities of the \acp{NS} are omitted because the signal imprinted by the companions' material properties is so small that it will only be detectable by an Einstein Telescope\nobreakdashes-class \ac{GW} observatory~\cite{PhysRevD.81.123016}. Furthermore, in \ac{GW} detection efforts, especially those focused on \ac{BNS} systems, the component spins $\mathbf{S}_1$ and $\mathbf{S}_2$ are often assumed to be nonprecessing and aligned with the system's total angular momentum and condensed to a single scalar parameter $\chi$, or even neglected entirely, $\mathbf{S}_1 = \mathbf{S}_2 = 0$.
 
 Assuming circular orbits and no spin precession, we can write the \ac{GW} signal in each detector as a linear combination of two basis waveforms $h_0$ and $h_{\pi/2}$. For nonprecessing systems, $h = h_0$ and $h_{\pi/2}$ are approximately ``in quadrature'' in the same sense as the sine and cosine functions, being nearly orthogonal and out of phase by ${\pi/2}$ at all frequencies. In other words, $h_{\pi/2}(\omega) = i h_0(\omega)$ for all $\omega$. This linear combination isolates all dependence on the extrinsic parameters $\boldsymbol\theta_\mathrm{ex}$ into the coefficients and all dependence on the intrinsic parameters $\boldsymbol\theta_\mathrm{in}$ into the basis waveform,
 %
@@ -151,7 +151,7 @@ More succinctly, we can write the signal received by detector $i$ in terms of di
 	h_i (\omega; \boldsymbol\theta) = \frac{\rho_i}{\sigma_i} e^{i (\gamma_i - \omega \tau_i)} h(\omega; \boldsymbol\theta_\mathrm{in}).
 \end{equation}
 
-The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from \Eref{eq:gaussian-likelihood} with the above signal model. This takes the form of a bank of matched filters, or template waveforms that are continually convolved with the incoming data stream. The matched filter or \ac{ML} estimates are given by
+The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from the likelihood in \Eref{eq:gaussian-likelihood} and the signal model in \Eref{eq:signal-model}. Concretely, this results in a bank of matched filters, or template waveforms that are convolved with the incoming data stream. The matched filter or \ac{ML} parameter estimates are given by
 %
 \begin{eqnarray}
 \hat{\boldsymbol\theta}_i, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{h^*(\omega; \boldsymbol\theta_\mathrm{in}) x_i(\omega) e^{-i \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
@@ -181,7 +181,7 @@ In Bayesian inference, although it is often easy to write down the likelihood or
 %
 with $\boldsymbol\theta = (\boldsymbol\beta, \boldsymbol\lambda)$. For instance, for the purpose of locating a \ac{GW} source on the sky, all parameters but $(\alpha, \delta)$ are nuisance parameters.
 
-Computing the marginal posterior almost always involves many-dimensional and often ill-behaved integrals.\marginpar{More about \ac{MCMC} methods here.}
+Bayesian parameter estimation has many advantages, including broad generality and the ability to make probabilistically meaningful statements even with very low \ac{SNR} measurements. However, in problems of even modest complexity, the marginalization step burdens the analysis with nasty, many-dimensional, ill-behaved integrals. Almost all modern parameter estimation tactics are variations of \ac{MCMC} integration. Though powerful, \ac{MCMC} is slow and non-deterministic. With the most sophisticated \ac{CBC} parameter estimation codes, it still takes days to process a single event.
 
 \section{Measurement uncertainty}
 
@@ -191,7 +191,7 @@ The \ac{CRLB} is a useful analytical tool for predicting with what error an unkn
 
 In order to estimate the \ac{ML} estimator accuracy for a matched filter, we will momentarily consider the likelihood for a single detector, and suppress the intrinsic degrees of freedom:
 %
-\begin{equation}\label{eq:gaussian-likelihood}
+\begin{equation}\label{eq:gaussian-likelihood-spa}
 	\fl\mathcal{L}(x_i; \rho_i, \gamma_i, \tau_i) = p(x_i | \rho_i, \gamma_i, \tau_i)
 		\propto \exp \left[
 		- \frac{1}{2} \int_0^\infty \frac{\left|x_i (\omega)
@@ -299,7 +299,7 @@ Thus, in the appopriate time units, the \textit{sum and difference} of the phase
 
 \subsection{Noise model for point parameters}
 
-The likelihood in \Eref{eq:gaussian-likelihood} is the quantity that is maximized by the matched\nobreakdashes-filter estimator. However, just because we have the covariance matrix defined by \Eref{eq:covariance-matrix} does not mean that the distribution of estimator errors is multivariate Gaussian. Nonetheless, it is straightforward to qualitatively describe the distribution.
+The likelihood in \Eref{eq:gaussian-likelihood-spa} is the quantity that is maximized by the matched\nobreakdashes-filter estimator. However, just because we have the covariance matrix defined by \Eref{eq:covariance-matrix} does not mean that the distribution of estimator errors is multivariate Gaussian. Nonetheless, it is straightforward to qualitatively describe the distribution.
 
 If we were to suppress the time parameter $\tau$, then we could reduce the likelihood to the form
 %
