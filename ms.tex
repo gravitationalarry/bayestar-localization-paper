@@ -152,15 +152,13 @@ More succinctly, we can write the signal received by detector $i$ in terms of di
 	h_i (\omega; \boldsymbol\theta) = \frac{\rho_i}{\sigma_i} e^{i (\gamma_i - \omega \tau_i)} h(\omega; \boldsymbol\theta_\mathrm{in}).
 \end{equation}
 
-The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from the likelihood in \Eref{eq:gaussian-likelihood} and the signal model in \Eref{eq:signal-model}. Concretely, this results in a bank of matched filters, or template waveforms that are convolved with the incoming data stream. The matched filter or \ac{ML} parameter estimates are given by
+The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from the likelihood in \Eref{eq:gaussian-likelihood} and the signal model in \Eref{eq:signal-model}. Concretely, this results in a bank of matched filters, or template waveforms that are convolved with the incoming data stream. The matched filter or \ac{ML} point estimates of the signal parameters are
 %
 \begin{eqnarray}
 \hat{\boldsymbol\theta}_i, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{h^*(\omega; \boldsymbol\theta_\mathrm{in}) x_i(\omega) e^{-i \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
 \hat\rho_i &=& \frac{1}{\sigma_i} \left| \int_0^\infty \frac{h^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) x_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right| \\
-\hat\gamma_i &=& \arg \int_0^\infty \frac{h^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) x_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega,
+\hat\gamma_i &=& \arg \int_0^\infty \frac{h^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) x_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega.
 \end{eqnarray}
-%
-where the $^*$ denotes a complex conjugate.
 
 \subsection{Bayesian probability and parameter estimation}
 
@@ -183,6 +181,8 @@ In Bayesian inference, although it is often easy to write down the likelihood or
 with $\boldsymbol\theta = (\boldsymbol\beta, \boldsymbol\lambda)$. For instance, for the purpose of locating a \ac{GW} source on the sky, all parameters but $(\alpha, \delta)$ are nuisance parameters.
 
 Bayesian parameter estimation has many advantages, including broad generality and the ability to make probabilistically meaningful statements even with very low \ac{SNR} measurements. However, in problems of even modest complexity, the marginalization step burdens the analysis with nasty, many-dimensional, ill-behaved integrals. Almost all modern parameter estimation tactics are variations of \ac{MCMC} integration. Though powerful, \ac{MCMC} is slow and non-deterministic. With the most sophisticated \ac{CBC} parameter estimation codes, it still takes days to process a single event. This delay is undesirable for planning targeted \ac{EM} follow\nobreakdashes-up searches of \ac{LIGO} events.
+
+In what follows, we propose a complementary rapid parameter estimation scheme that can produce reliable positions estimates within minutes of a detection. We can even use our scheme to speed up the full \ac{MCMC} analysis and make the refined parameter estimates available more quickly. The key difference is that we start not from the \ac{GW} signal itself, but from the point parameter estimates from the detection. By harnessing the detection pipeline in this manner, we arrive at a simpler Bayesian problem that is amenable to straightforward, deterministic, numerical quadrature.
 
 \section{Measurement uncertainty}
 
