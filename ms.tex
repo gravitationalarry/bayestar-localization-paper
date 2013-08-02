@@ -21,7 +21,8 @@
 
 \begin{document}
 
-\title[Rapid-response Bayesian sky localization]{Rapid-response Bayesian sky localization for electromagnetic follow-up of gravitational-wave candidates}
+\title[Rapid-response Bayesian sky localization]{WHOOMP! (There It Is) \\
+Rapid Bayesian position reconstruction for gravitational\nobreakdashes-wave transients}
 \author{Leo Singer and Larry R. Price}
 \address{\acs{LIGO} Laboratory, California Institute of Technology, Pasadena, CA 91125, USA}
 \ead{\mailto{leo.singer@ligo.org}, \mailto{larryp@caltech.edu}}
@@ -181,7 +182,7 @@ In Bayesian inference, although it is often easy to write down the likelihood or
 %
 with $\boldsymbol\theta = (\boldsymbol\beta, \boldsymbol\lambda)$. For instance, for the purpose of locating a \ac{GW} source on the sky, all parameters but $(\alpha, \delta)$ are nuisance parameters.
 
-Bayesian parameter estimation has many advantages, including broad generality and the ability to make probabilistically meaningful statements even with very low \ac{SNR} measurements. However, in problems of even modest complexity, the marginalization step burdens the analysis with nasty, many-dimensional, ill-behaved integrals. Almost all modern parameter estimation tactics are variations of \ac{MCMC} integration. Though powerful, \ac{MCMC} is slow and non-deterministic. With the most sophisticated \ac{CBC} parameter estimation codes, it still takes days to process a single event.
+Bayesian parameter estimation has many advantages, including broad generality and the ability to make probabilistically meaningful statements even with very low \ac{SNR} measurements. However, in problems of even modest complexity, the marginalization step burdens the analysis with nasty, many-dimensional, ill-behaved integrals. Almost all modern parameter estimation tactics are variations of \ac{MCMC} integration. Though powerful, \ac{MCMC} is slow and non-deterministic. With the most sophisticated \ac{CBC} parameter estimation codes, it still takes days to process a single event. This delay is undesirable for planning targeted \ac{EM} follow\nobreakdashes-up searches of \ac{LIGO} events.
 
 \section{Measurement uncertainty}
 
