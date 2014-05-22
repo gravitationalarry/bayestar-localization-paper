@@ -151,9 +151,9 @@ More succinctly, we can write the signal received by detector $i$ in terms of di
 The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from the likelihood in \Eref{eq:gaussian-likelihood} and the signal model in \Eref{eq:signal-model}. Concretely, this results in a bank of matched filters, or template waveforms that are convolved with the incoming data stream. The matched filter or \ac{ML} point estimates of the signal parameters are
 %
 \begin{eqnarray}
-\hat{\boldsymbol\theta}_i, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{h^*(\omega; \boldsymbol\theta_\mathrm{in}) x_i(\omega) e^{-i \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
-\hat\rho_i &=& \frac{1}{\sigma_i} \left| \int_0^\infty \frac{h^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) x_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right| \\
-\hat\gamma_i &=& \arg \int_0^\infty \frac{h^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) x_i(\omega) e^{-i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega.
+\hat{\boldsymbol\theta}_i, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{h^*(\omega; \boldsymbol\theta_\mathrm{in}) x_i(\omega) e^{i \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
+\hat\rho_i &=& \frac{1}{\sigma_i} \left| \int_0^\infty \frac{h^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) x_i(\omega) e^{i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right| \\
+\hat\gamma_i &=& \arg \int_0^\infty \frac{h^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) x_i(\omega) e^{i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega.
 \end{eqnarray}
 
 \subsection{Bayesian probability and parameter estimation}
