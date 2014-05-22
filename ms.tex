@@ -36,7 +36,7 @@ Ground-based \ac{GW} interferometers are entering the advanced detector era, pos
 
 There is therefore a strong case for performing electromagnetic followups of these sources of \acp{GW}. Indeed, the final science run of the intitial LIGO and Virgo instruments saw the first joint search for \acp{GW} from compact binaries and their electromagnetic counterparts \cite{abadie2012first}.  As we prepare for the next generation of these searches there is a need for determining the location of the source as precisely as possible in as little time as possible.
 
-In this paper we present a rapid and accurate method of sky localization that makes use of Bayesian methods. It differs from existing techniques is several important ways.  In the first place, we fix the intrinsic parameters to their \ac{ML} estimates, as provided by the detection pipeline.  This reduces the dimensionality of the parameter space we need to sample. In addition, the technique takes as its input the \ac{ML} estimates of the extrinsic parameters, instead of the $h(t)$ time series. This makes the likelihood itself much faster to evaluate. Finally, instead of of using \ac{MCMC} or some similar method for statistical sampling, we make use of a deterministic quadrature scheme. We call this technique \ac{BAYESTAR}%
+In this paper we present a rapid and accurate method of sky localization that makes use of Bayesian methods. It differs from existing techniques in several important ways.  In the first place, we fix the intrinsic parameters to their \ac{ML} estimates, as provided by the detection pipeline.  This reduces the dimensionality of the parameter space we need to sample. In addition, the technique takes as its input the \ac{ML} estimates of the extrinsic parameters, instead of the $h(t)$ time series. This makes the likelihood itself much faster to evaluate. Finally, instead of of using \ac{MCMC} or some similar method for statistical sampling, we make use of a deterministic quadrature scheme. We call this technique \ac{BAYESTAR}%
 %
 \footnote{A pun on the Cylon battleships in the American television series Battlestar Galactica. The defining characteristic of the Cylons is that they repeatedly defeat humanity by using their superhuman information\nobreakdashes-gathering ability to coordinate overwhelming forces. The name also suggests that, like the Cylons, \ac{GW} detectors may some day rise against us humans.}%
 %
@@ -51,7 +51,7 @@ In the frequency domain, the strain observed by a single \ac{GW} interferometer 
 	x_i (\omega) = h_i (\omega; \boldsymbol\theta) + n_i (\omega),
 \end{equation}
 %
-where $h_i (\omega; \boldsymbol\theta)$ is the \ac{GW} signal given a parameter vector $\boldsymbol\theta$ that describes the \ac{GW} source, and $n_i (\omega)$ is that detector's \ac{WSS} Gaussian noise with one\nobreakdashes-sided \ac{PSD} $S_i(\omega) = E\left[n_i(\omega)^2\right]$. We shall denote the combined observation from a network of detectors as $\mathbf x (\omega) \equiv \{x_i (\omega)\}_i$.
+where $h_i (\omega; \boldsymbol\theta)$ is the \ac{GW} signal given a parameter vector $\boldsymbol\theta$ that describes the \ac{GW} source, and $n_i (\omega)$ is that detector's \ac{WSS} Gaussian noise with one\nobreakdashes-sided \ac{PSD} $S_i(\omega) = E\left[\left|n_i(\omega)\right|^2\right]$. We shall denote the combined observation from a network of detectors as $\mathbf x (\omega) \equiv \{x_i (\omega)\}_i$.
 
 The likelihood, or the probability of obtaining the observation $\mathbf x$ conditioned on the value of $\boldsymbol\theta$, is a product of Gaussian distributions:
 %
@@ -176,13 +176,13 @@ In Bayesian inference, although it is often easy to write down the likelihood or
 %
 with $\boldsymbol\theta = (\boldsymbol\beta, \boldsymbol\lambda)$. For instance, for the purpose of locating a \ac{GW} source on the sky, all parameters but $(\alpha, \delta)$ are nuisance parameters.
 
-Bayesian parameter estimation has many advantages, including broad generality and the ability to make probabilistically meaningful statements even with very low \ac{SNR} measurements. However, in problems of even modest complexity, the marginalization step burdens the analysis with nasty, many-dimensional, ill-behaved integrals. Almost all modern parameter estimation tactics are variations of \ac{MCMC} integration. Though powerful, \ac{MCMC} is slow and non-deterministic. With the most sophisticated \ac{CBC} parameter estimation codes, it still takes days to process a single event. This delay is undesirable for planning targeted \ac{EM} follow\nobreakdashes-up searches of \ac{LIGO} events.
+Bayesian parameter estimation has many advantages, including broad generality and the ability to make probabilistically meaningful statements even with very low \ac{SNR} measurements. However, in problems of even modest complexity, the marginalization step burdens the analysis with nasty, many-dimensional, ill-behaved integrals. Almost all modern parameter estimation tactics are variations of \ac{MCMC} integration. Though powerful, \ac{MCMC} is historically slow and non-deterministic. With the most sophisticated \ac{CBC} parameter estimation codes, it still takes days to process a single event. This delay is undesirable for planning targeted \ac{EM} follow\nobreakdashes-up searches of \ac{LIGO} events.
 
 In what follows, we propose a complementary rapid parameter estimation scheme that can produce reliable positions estimates within minutes of a detection. We can even use our scheme to speed up the full \ac{MCMC} analysis and make the refined parameter estimates available more quickly. The key difference is that we start not from the \ac{GW} signal itself, but from the point parameter estimates from the detection. By harnessing the detection pipeline in this manner, we arrive at a simpler Bayesian problem that is amenable to straightforward, deterministic, numerical quadrature.
 
 \section{Measurement uncertainty}
 
-The first task is to understand the uncertainty in the \ac{ML} point estimates from the detection. We begin with the \ac{CRLB}, which constraints the covariance of any unbiased estimator. The \ac{CRLB} has been widely applied in \ac{GW}. Here, we review the Fisher matrix calculation in \cite{fairhurst:2009} and discuss the interpretation.
+The first task is to quantify the uncertainty in the \ac{ML} estimates of the \acp{TOA} and amplitudes from the detection. We begin with the \ac{CRLB}, which constraints the covariance of any unbiased estimator. The \ac{CRLB} has been widely applied in \ac{GW}. Here, we review the Fisher matrix calculation in \cite{fairhurst:2009} and discuss the interpretation.
 
 \subsection{Fisher matrix}
 
@@ -272,7 +272,7 @@ where ${\omega_{\mathrm{rms},i}}^2 = {\overline{\omega^2}}_i - {{\overline{\omeg
 %
 Furthermore, the Fisher matrix in \Eref{eq:fisher-matrix} is block diagonal, which implies that estimation errors in the signal amplitude $\rho$ are uncorrelated with the phase $\gamma$ and time $\tau$. A sequence of two changes of variables lends some physical interpretation to the nature of the coupled estimation errors in $\gamma$ and $\tau$.
 
-First, we put the phase and time on the same footing by measuring the time in units of $1 / 2 \pi \sqrt{\overline{\omega^2}}$ with a change of variables from $\tau$ to $\gamma_\tau = 2 \pi \sqrt{\overline{\omega^2}} \tau$:
+First, we put the phase and time on the same footing by measuring the time in units of $1 / \sqrt{\overline{\omega^2}}$ with a change of variables from $\tau$ to $\gamma_\tau = \sqrt{\overline{\omega^2}} \tau$:
 %
 \begin{equation}
     \mathcal{I}' = \bordermatrix{
@@ -296,6 +296,10 @@ The second change of variables, from $\gamma$ and $\gamma_\tau$ to $\gamma_\pm =
 %
 Thus, in the appopriate time units, the \textit{sum and difference} of the phase and time of the signal are measured independently.
 
+\subsection{Barankin bound}
+
+It is well known that the \ac{CRLB} is not a tight bound in the sense that there does not always exist an estimator that achieves it. Barankin derived a tight bound for any unbiased estimator \cite{barankin1949locally}.
+
 \subsection{Noise model for point parameters}
 
 The likelihood in \Eref{eq:gaussian-likelihood-spa} is the quantity that is maximized by the matched\nobreakdashes-filter estimator. However, just because we have the covariance matrix defined by \Eref{eq:covariance-matrix} does not mean that the distribution of estimator errors is multivariate Gaussian. Nonetheless, it is straightforward to qualitatively describe the distribution.
@@ -314,7 +318,7 @@ for a complex scalar measurement $z$. This likelihood also describes the distrib
 %
 We know that the matched\nobreakdashes-filter estimator's distribution, given a particular true value of $\rho$, $\gamma$, and $\tau$, must go to zero at $\hat{\rho}=0$ and must be periodic in $\gamma$ but not $\tau$. From just these properties, the estimator's distribution should be an approximate Gaussian, but wrapped diagonally around a cylinder where the radius represents $\hat{\rho}$, the angle around the cylinder represents $\hat{\gamma}$, and the distance up or down the cylinder represents $\hat{\tau}$.
 
-There are many ways to realize a distribution function with these properties, but they tend to be difficult to work with.%
+There are many ways to realize a distribution function with these properties, but they tend to be difficult to work with.
 %
 \marginpar{Give some examples.}%
 %
@@ -531,6 +535,6 @@ Some of the results in this paper have been derived using \ac{HEALPix} \cite{hea
 
 \section*{References}
 \bibliographystyle{iopart-num}
-\bibliography{apj-jour,bib/telescope}
+\bibliography{apj-jour,bib/telescope,ms}
 
 \end{document}
