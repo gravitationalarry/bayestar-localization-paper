@@ -65,7 +65,7 @@ for i, (break1, break2) in enumerate(zip(breakpoints[:-1], breakpoints[1:])):
     fig.subplots_adjust(wspace=0.15)
     bbox0 = Bbox.from_extents(break1, 0, break2, 1)
     mybbox0 = TransformedBbox(bbox0, trans0)
-    fig.artists.append(BboxConnectorPatch(ax.bbox, mybbox0, 1, 4, 2, 3, facecolor='none', linestyle='dashed'))
+    fig.artists.append(BboxConnectorPatch(ax.bbox, mybbox0, 1, 4, 2, 3, facecolor='none', linestyle='dashed', linewidth=0.5))
     if i > 0:
         plt.setp(ax.get_yticklabels(), visible=False)
     r = np.linspace(break1, break2, 100)
