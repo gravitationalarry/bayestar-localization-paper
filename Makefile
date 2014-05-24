@@ -3,7 +3,16 @@ BIBTEX = env BIBINPUTS=:$(CURDIR)/astronat/apj: TEXINPUTS=:$(CURDIR)/iopart: bib
 
 all: ms.pdf
 
-PREREQS = ms.tex bib/aas_macros.sty ligo-acronyms/acronyms.tex bib/telescope.bib radial_integrand.pdf
+FIGURES = \
+	inclination_integral_convergence.pdf \
+	polarization_angle_integral_convergence.pdf \
+	radial_integrand.pdf
+
+PREREQS = ms.tex \
+	bib/aas_macros.sty \
+	ligo-acronyms/acronyms.tex \
+	bib/telescope.bib \
+	$(FIGURES)
 
 ms.pdf: $(PREREQS)
 	$(TEX) -draftmode $(patsubst %.pdf,%,$@)
@@ -11,8 +20,14 @@ ms.pdf: $(PREREQS)
 	$(TEX) -draftmode $(patsubst %.pdf,%,$@)
 	$(TEX) $(patsubst %.pdf,%,$@)
 
-radial_integrand.pdf: radial_integrand.py
+inclination_integral_convergence.pdf: inclination_integral_convergence.py matplotlibrc
+	python $<
+
+polarization_angle_integral_convergence.pdf: polarization_angle_integral_convergence.py matplotlibrc
+	python $<
+
+radial_integrand.pdf: radial_integrand.py matplotlibrc
 	python $< $@
 
 clean:
-	rm -f ms.{aux,log,out,bbl,blg,pdf} radial_integrand.pdf
+	rm -f ms.{aux,log,out,bbl,blg,pdf} $(FIGURES)

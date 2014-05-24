@@ -1,0 +1,12 @@
+# Matplotlib plot settings for ApJ-style publications.
+# Figure size in inches in Matplotlib should directly map
+# to figure size on page, with font sizes matching body text and caption text.
+backend: pdf
+text.usetex: true
+font.family: serif
+font.serif: Times
+font.size: 9
+figure.dpi: 300
+axes.linewidth: 0.5
+grid.linewidth: 0.25
+lines.linewidth: 0.5
