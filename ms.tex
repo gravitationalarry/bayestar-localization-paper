@@ -151,10 +151,19 @@ More succinctly, we can write the signal received by detector $i$ in terms of di
 The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from the likelihood in \Eref{eq:gaussian-likelihood} and the signal model in \Eref{eq:signal-model}. Concretely, this results in a bank of matched filters, or template waveforms that are convolved with the incoming data stream. The matched filter or \ac{ML} point estimates of the signal parameters are
 %
 \begin{eqnarray}
-\hat{\boldsymbol\theta}_i, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{h^*(\omega; \boldsymbol\theta_\mathrm{in}) x_i(\omega) e^{i \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
+\hat{\boldsymbol\theta}_\mathrm{in}, \{\hat\tau_i\}_i &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i} \sum_i \frac{1}{{\sigma_i}^2} \left| \int_0^\infty \frac{h^*(\omega; \boldsymbol\theta_\mathrm{in}) x_i(\omega) e^{i \omega \tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right|^2 \\
 \hat\rho_i &=& \frac{1}{\sigma_i} \left| \int_0^\infty \frac{h^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) x_i(\omega) e^{i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega \right| \\
 \hat\gamma_i &=& \arg \int_0^\infty \frac{h^*(\omega; \hat{\boldsymbol\theta}_\mathrm{in}) x_i(\omega) e^{i \omega \hat\tau_i}}{S_i(\omega)} \,\mathrm{d}\omega.
 \end{eqnarray}
+%
+A detection candidate consists of the set $\{\hat{\boldsymbol\theta}_\mathrm{in}, \left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i\}$. There are various ways to characterize the significance of a
+detection candidate, but in Gaussian noise the combined SNR $\hat\rho_\mathrm{c}$ suffices,
+%
+\marginpar{What is the least that I can get away with saying about false alarm rate estimation and likelihood ratios?}
+%
+\begin{equation}
+	\hat\rho_\mathrm{c} = \sqrt{\sum_i {\hat\rho_i}^2}.
+\end{equation}.
 
 \subsection{Bayesian probability and parameter estimation}
 
@@ -181,6 +190,14 @@ Bayesian parameter estimation has many advantages, including broad generality an
 In what follows, we propose a complementary rapid parameter estimation scheme that can produce reliable positions estimates within minutes of a detection. We can even use our scheme to speed up the full \ac{MCMC} analysis and make the refined parameter estimates available more quickly. The key difference is that we start not from the \ac{GW} signal itself, but from the point parameter estimates from the detection. By harnessing the detection pipeline in this manner, we arrive at a simpler Bayesian problem that is amenable to straightforward, deterministic, numerical quadrature.
 
 \section{Measurement uncertainty}
+
+For the purpose of rapid sky localization, we assume that we do not have access to the \ac{GW} data $\mathbf{x}$ itself, and that our only contact with it is through the ML parameter estimates $\{\hat{\boldsymbol\theta}_\mathrm{in}, \left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i\}$. Although this is a significant departure from conventional GW parameter estimation techniques, we can still apply the full Bayesian machinery of Equation~(\ref{eq:marginal-posterior}) to compute a posterior distribution for the sky location.
+
+\marginpar{This is poorly worded.}%
+%
+There are many practical advantages of doing so. For one, there are difficulties in synchronously gathering together the calibrated GW strain data, auxiliary instrument channels, and data quality vetoes from all of the sites. The data consumed by the real\nobreakdashes-time detection pipeline are not necessarily final. Longer\nobreakdashes-running follow\nobreakdashes-up analyses can benefit from offline calibration, whereas the rapid sky localization need not re\nobreakdashes-analyze the online data.
+
+Moreover, the dimensionality of the problem is greatly reduced, and the problem becomes computationally easier.
 
 The first task is to quantify the uncertainty in the \ac{ML} estimates of the \acp{TOA} and amplitudes from the detection. We begin with the \ac{CRLB}, which constraints the covariance of any unbiased estimator. The \ac{CRLB} has been widely applied in \ac{GW}. Here, we review the Fisher matrix calculation in \cite{fairhurst:2009} and discuss the interpretation.
 
