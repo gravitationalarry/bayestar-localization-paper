@@ -391,15 +391,15 @@ If we assume that $\hat{\boldsymbol\theta}_\mathrm{in} = \boldsymbol\theta_\math
 	p\left(\hat\rho_i, \hat\gamma_i, \hat\tau_i
 		\middle| \rho_i, \gamma_i, \tau_i \right) \propto
 	\exp \left[ - \frac{1}{2}{\hat\rho_i}^2 - \frac{1}{2}{\rho_i}^2
-		+ \hat\rho_i \rho_i \Re \left\{ e^{i \tilde{\gamma}_i} a^*(\tilde{\tau}_i)
+		+ \hat\rho_i \rho_i \Re \left\{ e^{i \tilde{\gamma}_i} a_i^*(\tilde{\tau}_i)
 		\right\}
 	\right]
 \end{equation}
 %
-with $\tilde{\gamma}_i = \hat\gamma_i - \gamma_i$, $\tilde{\tau}_i = \hat\tau_i - \tau_i$, and the template's autocorrelation function $a(t; \boldsymbol\theta_\mathrm{in})$ defined as
+with $\tilde{\gamma}_i = \hat\gamma_i - \gamma_i$, $\tilde{\tau}_i = \hat\tau_i - \tau_i$, and the template's autocorrelation function $a_i(t; \boldsymbol\theta_\mathrm{in})$ defined as
 %
 \begin{equation}
-	a(t; \boldsymbol\theta_\mathrm{in}) := \frac{1}{\sigma_i(\boldsymbol\theta_\mathrm{in})} \int_0^\infty \frac{\left| h(\omega; \hat{\boldsymbol\theta}_\mathrm{in})\right|^2}{S_i(\omega)} e^{i \omega t} \,d\omega.
+	a_i(t; \boldsymbol\theta_\mathrm{in}) := \frac{1}{{{\sigma_i}^2(\boldsymbol\theta_\mathrm{in})}} \int_0^\infty \frac{\left| h(\omega; \hat{\boldsymbol\theta}_\mathrm{in})\right|^2}{S_i(\omega)} e^{i \omega t} \,d\omega.
 \end{equation}
 
 To assemble the joint likelihood for the whole network, we just form the product from the individual detectors:
@@ -415,9 +415,11 @@ To assemble the joint likelihood for the whole network, we just form the product
 %
 To marginalize over the coalescence phase, we can insert an arbitrary nuisance phase $\eta$ by making the replacement $\tilde{\gamma}_i \rightarrow \tilde{\gamma}_i + \eta$. Then integrating over $\eta$ from $0$ to $2\pi$ and suppressing normalization factors, we get the \ac{BAYESTAR} likelihood
 %
+\marginpar{Different symbol? Is $\mathcal{L}_\mathrm{BAYESTAR}$ too grandiose?}
+%
 \begin{equation}
 	\mathcal{L}_\mathrm{BAYESTAR} = \exp \left[ - \frac{1}{2} \sum_i {\rho_i}^2 \right] I_0 \left[
-		\left| \sum_i \hat\rho_i \rho_i e^{i \tilde{\gamma}_i} a^*(\tilde{\tau}_i)
+		\left| \sum_i \hat\rho_i \rho_i e^{i \tilde{\gamma}_i} a_i^*(\tilde{\tau}_i)
 		\right|
 	\right],
 \end{equation}
