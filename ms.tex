@@ -430,57 +430,6 @@ where $I_0$ is a modified Bessel function of the first kind.
 
 \subsection{Likelihood}
 
-\marginpar{Explain why none of these expressions depend on the coalescence phase $\phi_c$.}%
-%
-If we assume that the time and amplitude estimation errors are uncorrelated, then we can separate the likelihood into one factor that depends only on time and one that depends only on amplitude:
-%
-\begin{eqnarray*}
-    \mathcal{L}(
-        \hat{\tau}_1, \hat{\tau}_2, &\dots, \hat{\tau}_N,
-        \hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N;
-        \mathbf{n}, t_\oplus, D_\mathrm{L}, u, \psi) \\
-    &= \mathcal{L}_\mathrm{TOA}(
-        \hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N; \mathbf{n}, t_\oplus) \\
-        &\times
-        \mathcal{L}_\mathrm{SNR}(\hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N;
-         \mathbf{n}, D_\mathrm{L}, u, \psi
-    ).
-\end{eqnarray*}
-%
-The \ac{TOA}-only factor depends only on the \ac{TOA} estimates $\hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N$, the unknown sky location $\mathbf{n}$ (or equivalently, the right ascension $\alpha$, declination $\delta$, and sidereal time), and the absolute \ac{TOA} at an arbitrary reference point (herein, the geocenter), $t_\oplus$, the fixed geographical locations of the detectors, $\mathbf{r}_i$, and the speed of light $c$.
-%
-\begin{equation}
-    \mathcal{L}_\mathrm{TOA} \propto
-    \exp \left[
-            -\frac{1}{2} \sum_{i=1}^N \frac{\left(\hat{\tau}_i - \tau_i\right)^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}
-        \right]
-    = \exp \left[
-        -\frac{1}{2} \sum_{i=1}^N \frac{\left(\hat{\tau}_i + \mathbf{n} \cdot \mathbf{r}_i / c - t_\oplus \right)^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}
-    \right]
-\end{equation}
-%
-The \ac{SNR}-only factor depends only on the \ac{SNR} estimates $\hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N$, but it depends on the unknown sky location, luminosity distance $D_\mathrm{L}$, cosine-inclination $u$, and polarization angle $\psi$.
-%
-\begin{equation}
-    \mathcal{L}_\mathrm{SNR} \propto \exp \left[
-        -\frac{1}{2} \sum_{i=1}^N \left(\hat{\rho}_i - \rho_i(\mathbf{n}, D_\mathrm{L}, u, \psi) \right)^2
-    \right]
-\end{equation}
-%
-It is easily shown from \Eref{eq:full-signal-model} that
-%
-\begin{eqnarray}\label{eq:snr-model}
-    {\rho_i}^2 &=
-        \frac{1}{8} \left(\frac{D_{1,i}}{D_\mathrm{L}}\right)^2 \left\{
-            ( {F_{+,i}}^2 + {F_{\times,i}}^2 \right)
-            \left(1 + 6 u^2 + u^4 \right) \nonumber\\
-            &+ \left(1 - u^2 \right)^2 \left[\left( {F_{+,i}}^2 - {F_{\times,i}}^2 \right) \cos {4\psi}
-            + 2 \left( {F_{+,i}} {F_{\times,i}} ) \sin {4\psi} \right]
-        \right\}.
-\end{eqnarray}
-%
-A similar expression appears in Appendix~A of~\cite{PhysRevD.87.064033}.
-
 \subsection{Prior}
 
 We have no explicit prior on the intrinsic parameters; in our analysis they are fixed at their \ac{ML} estimates, $\hat{\boldsymbol\theta}$. The distance prior is given by a user-selected power of distance, ${D_\mathrm{L}}^m$, where $m=2$ for a prior that is uniform in volume, and $m=-1$ for a scale-invariant prior that is uniform in $\log D_\mathrm{L}$. The priors are bounded as follows:
@@ -490,28 +439,9 @@ We have no explicit prior on the intrinsic parameters; in our analysis they are 
 \begin{eqnarray*}
 	D_\mathrm{L} &\in& [D_{\mathrm{L},\mathrm{min}}, D_{\mathrm{L},\mathrm{max}}] \\
 	t_\oplus &\in& [-\infty, \infty] \\
-	u &\in& [0, 1] \\
+	u &\in& [-1, 1] \\
 	\psi &\in& [0, \pi/2)
 \end{eqnarray*}
-%
-The prior does not permit negative values of $u$ because only even powers of $u$ appear in \Eref{eq:snr-model}. The prior only permits $\psi$ to run to $\pi/2$ because only trigonometric functions of $4\psi$ appear in \Eref{eq:snr-model}.
-
-\subsection{Marginalization over $t_\oplus$}
-
-The overall arrival time $t_\oplus$ can be marginalized out analytically, giving the \ac{TOA}\nobreakdashes-only marginal posterior
-%
-\begin{equation}\label{eq:toa-posterior}
-    p(\mathbf{n} | \hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N) \propto \exp\left[
-        -\frac{1}{2} \sum_{i=1}^N \frac{\left( \tilde{\tau}_i - \langle \tilde{\tau} \rangle \right)^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}
-    \right]
-\end{equation}
-%
-where
-%
-\begin{equation}
-    \langle \tilde{\tau} \rangle =
-    \left(\sum_{i=1}^N \frac{{\tilde{\tau}_i}^2}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)\left(\sum_{i=1}^N \frac{1}{\left(\hat{\rho_i} / \omega_{\mathrm{rms},i}\right)^2}\right)^{-1}.
-\end{equation}
 
 \subsection{Adaptive resolution}
 
