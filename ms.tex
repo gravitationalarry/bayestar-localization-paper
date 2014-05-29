@@ -467,7 +467,25 @@ Fisher matrix elements of \Eref{eq:autocor-likelihood}, with detector subscript 
 %
 Matrix elements that are not listed have values that are implied by the symmetry of the Fisher matrix. Note that the minus signs are correct but a little confusing: despite them, ${I}_{\gamma\gamma}, {I}_{\tau\tau} \geq 0$ and ${I}_{\gamma\tau} \leq 0$.
 
-If we can show that the common factor approaches a delta function, $w(t; \rho) \rightarrow \delta(t)$ as $\rho \rightarrow \infty$, then the Fisher matrix approaches \Eref{eq:fisher-matrix} as $\rho \rightarrow \infty$.
+If we can show that the common factor approaches a delta function, $w(t; \rho) \rightarrow \delta(t)$ as $\rho \rightarrow \infty$, then the Fisher matrix approaches \Eref{eq:fisher-matrix} as $\rho \rightarrow \infty$. Certainly it behaves very much like a delta function. The Bessel functions asymptotically approach:
+%
+\begin{equation*}
+	I_0(x), I_1(x) \rightarrow \frac{e^x}{\sqrt{2 \pi x}}
+	\textrm{ as } x \rightarrow \infty.
+\end{equation*}
+%
+For large $\rho$, it seems like we could write:
+%
+\begin{equation*}
+	w(t; \rho) \rightarrow \frac{
+		\displaystyle
+		\exp\left[\frac{\rho^2}{2}|a(t)|^2\right]
+	}{
+		\displaystyle
+		\int_{-\infty}^\infty \exp\left[\frac{\rho^2}{2}|a(t')|^2\right] dt'
+	}
+	\textrm{ as } \rho \rightarrow \infty.
+\end{equation*}
 
 \section{The \ac{BAYESTAR} algorithm}
 
