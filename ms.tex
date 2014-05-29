@@ -437,11 +437,11 @@ Fisher matrix elements of \Eref{eq:autocor-likelihood}, with detector subscript 
 	\mathcal{I}_{\rho\gamma} &=& 0 \\
 	\nonumber
 	\mathcal{I}_{\rho\tau} &=& 0 \\
-	\mathcal{I}_{\gamma\gamma} &=& \frac{\rho^2}{2}
+	\mathcal{I}_{\gamma\gamma} &=& \rho^2
 		\int_{-\infty}^\infty \left|a(t)\right|^2 w(t; \rho) dt \\
-	\mathcal{I}_{\tau\tau} &=& -\frac{\rho^2}{2}
+	\mathcal{I}_{\tau\tau} &=& -\rho^2
 		\int_{-\infty}^\infty \Re\left[a^*(t) a''(t)\right] w(t; \rho) dt \\
-	\mathcal{I}_{\gamma\tau} &=& -\frac{\rho^2}{2}
+	\mathcal{I}_{\gamma\tau} &=& -\rho^2
 		\int_{-\infty}^\infty \Im\left[a^*(t) a'(t)\right] w(t; \rho) dt \\
 	\nonumber\textrm{where} && \\
 	\nonumber
@@ -458,12 +458,14 @@ Fisher matrix elements of \Eref{eq:autocor-likelihood}, with detector subscript 
 		\right)
 	}{
 		\displaystyle
-		\int_{-\infty}^\infty
+		2 \int_{-\infty}^\infty
 		\exp\left[\frac{\rho^2}{4}\left|a(t')\right|^2\right]
 		I_0\left[\frac{\rho^2}{4}\left|a(t')\right|^2\right]
 		dt'
 	}.
 \end{eqnarray}
+%
+Matrix elements that are not listed have values that are implied by the symmetry of the Fisher matrix. Note that the minus signs are correct but a little confusing: despite them, ${I}_{\gamma\gamma}, {I}_{\tau\tau} \geq 0$ and ${I}_{\gamma\tau} \leq 0$.
 
 If we can show that the common factor approaches a delta function, $w(t; \rho) \rightarrow \delta(t)$ as $\rho \rightarrow \infty$, then the Fisher matrix approaches \Eref{eq:fisher-matrix} as $\rho \rightarrow \infty$.
 
