@@ -121,33 +121,41 @@ A \ac{CBC} source is specified by a vector of extrinsic parameters describing it
 %
 This list of parameters involves some simplifying assumptions. Eccentricity is omitted: although it does play a major role in the evolution and waveforms of \ac{NSBH} and \ac{BBH} sources formed by dynamical capture~\cite{PhysRevD.87.043004}, \ac{BNS} systems formed by binary stellar evolution should circularize due to tidal interaction~\cite{0004-637X-572-1-407} and later \ac{GW} emission~\cite{PhysRev.136.B1224} long before the inspiral enters \ac{LIGO}'s frequency range of $\sim$10\nobreakdashes--1000~kHz. Tidal deformabilities of the \acp{NS} are omitted because the signal imprinted by the companions' material properties is so small that it will only be detectable by an Einstein Telescope\nobreakdashes-class \ac{GW} observatory~\cite{PhysRevD.81.123016}. Furthermore, in \ac{GW} detection efforts, especially those focused on \ac{BNS} systems, the component spins $\mathbf{S}_1$ and $\mathbf{S}_2$ are often assumed to be nonprecessing and aligned with the system's total angular momentum and condensed to a single scalar parameter $\chi$, or even neglected entirely, $\mathbf{S}_1 = \mathbf{S}_2 = 0$.
 
-Assuming circular orbits and no spin precession, we can write the \ac{GW} signal in each detector as a linear combination of two basis waveforms $h_0$ and $h_{\pi/2}$. For nonprecessing systems, $h = h_0$ and $h_{\pi/2}$ are approximately ``in quadrature'' in the same sense as the sine and cosine functions, being nearly orthogonal and out of phase by ${\pi/2}$ at all frequencies. In other words, $h_{\pi/2}(\omega) = i h_0(\omega)$ for all $\omega$. This linear combination isolates all dependence on the extrinsic parameters $\boldsymbol\theta_\mathrm{ex}$ into the coefficients and all dependence on the intrinsic parameters $\boldsymbol\theta_\mathrm{in}$ into the basis waveform,
+Assuming circular orbits and no spin precession, we can write the \ac{GW} signal in each detector as a linear combination of two basis waveforms $h_0$ = $h$ and $h_{\pi/2}$. For nonprecessing systems, $h_0$ and $h_{\pi/2}$ are approximately ``in quadrature'' in the same sense as the sine and cosine functions, being nearly orthogonal and out of phase by ${\pi/2}$ at all frequencies. If $h_0$ and $h_{\pi/2}$ are Fourier transforms of real functions, then $h_0(\omega) = h_0^*(-\omega)$ and $h_{\pi/2}(\omega) = h_{\pi/2}^*(-\omega)$, and we can write (assuming an arbitrary phase convention)
 %
-\begin{eqnarray}\label{eq:full-signal-model}
-	\fl h_i(\omega; \boldsymbol\theta) &=& e^{-i\omega t_\oplus}\frac{D_{1,i}}{D_\mathrm{L}}
-	\left(\begin{array}{cc}
-		F_{+,i}(\alpha, \delta, t_\oplus) \\
-		F_{\times,i}(\alpha, \delta, t_\oplus)
-	\end{array}\right)^\intercal
-	\left(\begin{array}{cc}
-		\cos{2\psi} & -\sin{2\psi} \\
-		\sin{2\psi} & \cos{2\psi}
-	\end{array}\right)
-	\left(\begin{array}{cc}
-		\frac{1}{2}\left(1+u^2\right) & 0 \\
-		0 & u
-	\end{array}\right) \nonumber\\\fl &\cdot&
-	\left(\begin{array}{cc}
-		\cos{2\phi_c} & -\sin{2\phi_c} \\
-		\sin{2\phi_c} & \cos{2\phi_c}
-	\end{array}\right)
-	\left(\begin{array}{cc}
-		1 \\
-		i
-	\end{array}\right) h(\omega; \boldsymbol\theta_\mathrm{in}).
-\end{eqnarray}
+\begin{equation}
+	h_{\pi/2}(\omega) = h_0(\omega) \cdot
+	\cases{
+		-i & if $\omega \geq 0$ \\
+		i & if $\omega < 0$
+	}.
+\end{equation}
 %
-This linear combination matches the conventions used in \cite{PhysRevD.83.084002}, and is the frequency-domain equivalent of their Equation~(2.8). The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector antenna factors, and depend on the orientation of detector $i$ as well as the sky location and sidereal time of the event, and are derived in~\cite{PhysRevD.63.042003}. The quantity $D_{1,i}$ is a fiducial distance at which detector $i$ would register SNR=1 for an optimally oriented binary (face\nobreakdashes-on, and in a direction perpendicular to the interferometer's arms),
+Then, we can write the signal model in a way that isolates all dependence on the extrinsic parameters $\boldsymbol\theta_\mathrm{ex}$ into the coefficients and all dependence on the intrinsic parameters $\boldsymbol\theta_\mathrm{in}$ into the basis waveform, by taking the Fourier transform of Equation~(2.8) of \cite{PhysRevD.83.084002}:
+%
+\begin{equation}\label{eq:full-signal-model}
+	h_i(\omega; \boldsymbol\theta) = \e^{-i \omega t_\oplus}
+	\frac{D_{1,i}}{D_\mathrm{L}}
+	\e^{2 i \phi_c}
+	\left[
+	\frac{1}{2} \left(1 + \cos^2 \iota\right) \Re \left\{z\right\} - i
+	\left(\cos\iota\right) \Im z
+	\right]
+	h(\omega; \boldsymbol\theta_\mathrm{in})
+\end{equation}
+%
+for $\omega \geq 0$, where
+%
+\begin{equation}
+	z = e^{-2 i \psi} \left(
+	F_{+,i}(\alpha, \delta, t_\oplus) +
+	i F_{\times,i}(\alpha, \delta, t_\oplus)
+	\right).
+\end{equation}
+%
+The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector antenna factors, and depend on the orientation of detector $i$ as well as the sky location and sidereal time of the event, and are derived in~\cite{PhysRevD.63.042003}. The quantity $D_{1,i}$ is a fiducial distance at which detector $i$ would register SNR=1 for an optimally oriented binary (face\nobreakdashes-on, and in a direction perpendicular to the interferometer's arms),
+%
+\marginpar{I seem to have dropped a factor of 2 here...}%
 %
 \begin{equation}\label{eq:horizon}
 D_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|h(\omega; \mathbf \theta)\right|^2}{S_i(\omega)} \,d\omega.
