@@ -387,7 +387,7 @@ Another way is to plug the signal model from \Eref{eq:signal-model} \emph{evalua
 %
 If we assume that $\hat{\boldsymbol\theta}_\mathrm{in} = \boldsymbol\theta_\mathrm{in}$, then this reduces to
 %
-\begin{equation}
+\begin{equation}\label{eq:autocor-likelihood}
 	p\left(\hat\rho_i, \hat\gamma_i, \hat\tau_i
 		\middle| \rho_i, \gamma_i, \tau_i \right) \propto
 	\exp \left[ - \frac{1}{2}{\hat\rho_i}^2 - \frac{1}{2}{\rho_i}^2
@@ -425,6 +425,47 @@ To marginalize over the coalescence phase, we can insert an arbitrary nuisance p
 \end{equation}
 %
 where $I_0$ is a modified Bessel function of the first kind.
+
+\subsection{Properties}
+
+Fisher matrix elements of \Eref{eq:autocor-likelihood}, with detector subscript suppressed:
+%
+\begin{eqnarray}
+	\nonumber
+	\mathcal{I}_{\rho\rho} &=& 1 \\
+	\nonumber
+	\mathcal{I}_{\rho\gamma} &=& 0 \\
+	\nonumber
+	\mathcal{I}_{\rho\tau} &=& 0 \\
+	\mathcal{I}_{\gamma\gamma} &=& \frac{\rho^2}{2}
+		\int_{-\infty}^\infty \left|a(t)\right|^2 w(t; \rho) dt \\
+	\mathcal{I}_{\tau\tau} &=& -\frac{\rho^2}{2}
+		\int_{-\infty}^\infty \Re\left[a^*(t) a''(t)\right] w(t; \rho) dt \\
+	\mathcal{I}_{\gamma\tau} &=& -\frac{\rho^2}{2}
+		\int_{-\infty}^\infty \Im\left[a^*(t) a'(t)\right] w(t; \rho) dt \\
+	\nonumber\textrm{where} && \\
+	\nonumber
+	a'(t) &=& \frac{\partial a}{\partial t} \\
+	\nonumber
+	a''(t) &=& \frac{\partial^2 a}{\partial t^2} \\
+	\nonumber
+	w(t; \rho) &=& \frac{
+		\displaystyle
+		\exp\left[\frac{\rho^2}{4}\left|a(t)\right|^2\right]
+		\left(
+		I_0\left[\frac{\rho^2}{4}\left|a(t)\right|^2\right] +
+		I_1\left[\frac{\rho^2}{4}\left|a(t)\right|^2\right]
+		\right)
+	}{
+		\displaystyle
+		\int_{-\infty}^\infty
+		\exp\left[\frac{\rho^2}{4}\left|a(t')\right|^2\right]
+		I_0\left[\frac{\rho^2}{4}\left|a(t')\right|^2\right]
+		dt'
+	}.
+\end{eqnarray}
+
+If we can show that the common factor approaches a delta function, $w(t; \rho) \rightarrow \delta(t)$ as $\rho \rightarrow \infty$, then the Fisher matrix approaches \Eref{eq:fisher-matrix} as $\rho \rightarrow \infty$.
 
 \section{The \ac{BAYESTAR} algorithm}
 
