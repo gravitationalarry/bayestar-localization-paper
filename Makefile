@@ -20,13 +20,13 @@ ms.pdf: $(PREREQS)
 	$(TEX) -draftmode $(patsubst %.pdf,%,$@)
 	$(TEX) $(patsubst %.pdf,%,$@)
 
-inclination_integral_convergence.pdf: inclination_integral_convergence.py matplotlibrc
+inclination_integral_convergence.pdf: scripts/inclination_integral_convergence.py matplotlibrc
 	python $<
 
-polarization_angle_integral_convergence.pdf: polarization_angle_integral_convergence.py matplotlibrc
+polarization_angle_integral_convergence.pdf: scripts/polarization_angle_integral_convergence.py matplotlibrc
 	python $<
 
-radial_integrand.pdf: radial_integrand.py matplotlibrc
+radial_integrand.pdf: scripts/radial_integrand.py matplotlibrc
 	python $< $@
 
 clean:

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from __future__ import division
 """
 Create a figure that depicts the subdivision technique for the radial integral.
@@ -10,7 +9,6 @@ from mpl_toolkits.axes_grid1.inset_locator import BboxConnectorPatch
 from matplotlib.transforms import Bbox, TransformedBbox, blended_transform_factory
 from matplotlib import ticker
 import numpy as np
-import sys
 
 # Input parameters
 rmin = 0
@@ -77,8 +75,4 @@ for i, (break1, break2) in enumerate(zip(breakpoints[:-1], breakpoints[1:])):
     ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
 plt.ylim(-.1, 1.2)
 
-
-if len(sys.argv) > 1:
-    plt.savefig(sys.argv[1])
-else:
-    plt.show()
+plt.savefig('radial_integrand.pdf')
