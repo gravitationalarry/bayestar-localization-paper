@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{bib/aas_macros}
 \usepackage[colorlinks]{hyperref}
+\usepackage{protosem}
 \input{ligo-acronyms/acronyms}
 
 % From http://www.f.kth.se/~ante/latex.php
@@ -437,7 +438,7 @@ where $I_0$ is a modified Bessel function of the first kind.
 
 \subsection{Properties}
 
-Fisher matrix elements of \Eref{eq:autocor-likelihood}, with detector subscript suppressed:
+We can compute the Fisher matrix elements for the autocorrelation likelihood given by \Eref{eq:autocor-likelihood}, with detector subscript suppressed:
 %
 \begin{eqnarray}
 	\nonumber
@@ -446,12 +447,15 @@ Fisher matrix elements of \Eref{eq:autocor-likelihood}, with detector subscript 
 	\mathcal{I}_{\rho\gamma} &=& 0 \\
 	\nonumber
 	\mathcal{I}_{\rho\tau} &=& 0 \\
+	\label{eq:fisher-autocor-gamma-gamma}
 	\mathcal{I}_{\gamma\gamma} &=& \rho^2
-		\int_{-\infty}^\infty \left|a(t)\right|^2 w(t; \rho) dt \\
+		\int_{-T}^T \left|a(t)\right|^2 w(t; \rho) dt \\
+	\label{eq:fisher-autocor-tau-tau}
 	\mathcal{I}_{\tau\tau} &=& -\rho^2
-		\int_{-\infty}^\infty \Re\left[a^*(t) a''(t)\right] w(t; \rho) dt \\
+		\int_{-T}^T \Re\left[a^*(t) a''(t)\right] w(t; \rho) dt \\
+	\label{eq:fisher-autocor-gamma-tau}
 	\mathcal{I}_{\gamma\tau} &=& -\rho^2
-		\int_{-\infty}^\infty \Im\left[a^*(t) a'(t)\right] w(t; \rho) dt \\
+		\int_{-T}^T \Im\left[a^*(t) a'(t)\right] w(t; \rho) dt \\
 	\nonumber\textrm{where} && \\
 	\nonumber
 	a'(t) &=& \frac{\partial a}{\partial t} \\
@@ -467,14 +471,14 @@ Fisher matrix elements of \Eref{eq:autocor-likelihood}, with detector subscript 
 		\right)
 	}{
 		\displaystyle
-		2 \int_{-\infty}^\infty
+		2 \int_{-T}^T
 		\exp\left[\frac{\rho^2}{4}\left|a(t')\right|^2\right]
 		I_0\left[\frac{\rho^2}{4}\left|a(t')\right|^2\right]
 		dt'
 	}.
 \end{eqnarray}
 %
-Matrix elements that are not listed have values that are implied by the symmetry of the Fisher matrix. Note that the minus signs are correct but a little confusing: despite them, ${I}_{\gamma\gamma}, {I}_{\tau\tau} \geq 0$ and ${I}_{\gamma\tau} \leq 0$.
+Matrix elements that are not listed have values that are implied by the symmetry of the Fisher matrix. Note that the minus signs are correct but a little confusing: despite them, ${I}_{\gamma\gamma}, {I}_{\tau\tau} \geq 0$ and ${I}_{\gamma\tau} \leq 0$. The time integration limits $[-T, T]$ constitute a flat prior on arrival time, the time coincidence window between detectors.
 
 Observe that
 %
@@ -486,14 +490,14 @@ Observe that
 	a''(0) = -\overline{\omega^2}.
 \end{equation*}
 %
-If we can show that the common factor approaches a delta function, $w(t; \rho) \rightarrow \delta(t)$ as $\rho \rightarrow \infty$, then the Fisher matrix approaches \Eref{eq:fisher-matrix} as $\rho \rightarrow \infty$. Certainly it behaves very much like a delta function. The Bessel functions asymptotically approach:
+If we can show that the common factor approaches a delta function, $w(t; \rho) \rightarrow \delta(t)$ as $\rho \rightarrow \infty$, then the Fisher matrix for the autocorrelation likelihood approaches the Fisher matrix for the full GW data, \Eref{eq:fisher-matrix}, as $\rho \rightarrow \infty$. The Bessel functions asymptotically approach:
 %
 \begin{equation*}
 	I_0(x), I_1(x) \rightarrow \frac{e^x}{\sqrt{2 \pi x}}
 	\textrm{ as } x \rightarrow \infty.
 \end{equation*}
 %
-For large $\rho$, it seems like we could write:
+For large $\rho$, the exponential dominates and we can write:
 %
 \begin{equation*}
 	w(t; \rho) \rightarrow \frac{
@@ -501,10 +505,47 @@ For large $\rho$, it seems like we could write:
 		\exp\left[\frac{\rho^2}{2}|a(t)|^2\right]
 	}{
 		\displaystyle
-		\int_{-\infty}^\infty \exp\left[\frac{\rho^2}{2}|a(t')|^2\right] dt'
+		\int_{-T}^T \exp\left[\frac{\rho^2}{2}|a(t')|^2\right] dt'
 	}
 	\textrm{ as } \rho \rightarrow \infty.
 \end{equation*}
+%
+The Taylor expansion of $|a(t)|^2$ is
+%
+\begin{equation*}
+	|a(t)|^2 = 1 + \frac{1}{2} \left(\frac{\partial^2}{\partial t^2}|a(t)|^2 \Bigg|_{t=0}\right) t^2 + \mathcal{O}(t^4)
+	= 1 - {\omega_\mathrm{rms}}^2 t^2 + \mathcal{O}(t^4).
+\end{equation*}
+%
+Substituting, we find that $w(t; \rho)$ approaches a normalized Gaussian distribution:
+%
+\begin{equation*}
+	w(t; \rho) \approx \frac{
+		\displaystyle
+		\exp\left[-\frac{1}{2} \rho^2 {\omega_\mathrm{rms}}^2 t^2\right]
+	}{
+		\displaystyle
+		\int_{-T}^T \exp\left[-\frac{1}{2} \rho^2 {\omega_\mathrm{rms}}^2 (t')^2\right] dt'
+	}.
+\end{equation*}
+%
+And finally, because the Dirac delta function may be defined as the limit of a Gaussian, $w(t; \rho) \rightarrow \delta(t)$ as $\rho \rightarrow \infty$.
+
+We can now write the Fisher matrix for the autocorrelation likelihood in a way that makes a comparison to the full signal model explicit. Define:
+%
+\begin{eqnarray*}
+	\mathcal{I}_\gamma\gamma &=& \rho^2 \cdot \textproto{D}_{\gamma\gamma}(\rho) \\
+	\mathcal{I}_\tau\tau &=& \rho^2 \overline{\omega^2} \cdot \textproto{D}_{\tau\tau}(\rho) \\
+	\mathcal{I}_\gamma\tau &=& -\rho^2 \overline{\omega} \cdot \textproto{D}_{\gamma\tau}(\rho)
+\end{eqnarray*}
+%
+Now, the $\textproto{D}_{ij}$ %
+%
+\marginpar{The Fish(er) factor. Go home, Leo.}%
+%
+contain the integrals from Equations~(\ref{eq:fisher-autocor-gamma-gamma}, \ref{eq:fisher-autocor-tau-tau}, \ref{eq:fisher-autocor-gamma-tau}) and encode the departure of the autocorrelation likelihood from the likelihood of the full data at low SNR. All of the $\textproto{D}_{ij}(\rho)$ are sigmoid-type functions that run from 0 at $\rho = 0$ and asymptotically approach 1 as $\rho \rightarrow \infty$. The transitional SNR $\rho_\mathrm{crit}$ is largely the same for all three nontrivial matrix elements, and is determined by the time coincidence window $T$ and the signal bandwidth $\omega_\mathrm{rms}$.
+%
+\marginpar{The transitional SNR is probably proportional to some power of $(\omega_\mathrm{rms} T)$.}
 
 \section{The \ac{BAYESTAR} algorithm}
 
