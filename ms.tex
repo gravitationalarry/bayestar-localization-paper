@@ -544,13 +544,13 @@ Now, the $\textproto{D}_{ij}$ %
 %
 \marginpar{The Fish(er) factor. Go home, Leo.}%
 %
-contain the integrals from Equations~(\ref{eq:fisher-autocor-gamma-gamma}, \ref{eq:fisher-autocor-tau-tau}, \ref{eq:fisher-autocor-gamma-tau}) and encode the departure of the autocorrelation likelihood from the likelihood of the full data at low SNR. All of the $\textproto{D}_{ij}(\rho)$ are sigmoid-type functions that run from 0 at $\rho = 0$ and asymptotically approach 1 as $\rho \rightarrow \infty$. The transition SNR $\rho_\mathrm{crit}$ is largely the same for all three nontrivial matrix elements, and is determined by the time coincidence window $T$ and the signal bandwidth $\omega_\mathrm{rms}$.
+contain the integrals from Equations~(\ref{eq:fisher-autocor-gamma-gamma}, \ref{eq:fisher-autocor-tau-tau}, \ref{eq:fisher-autocor-gamma-tau}) and encode the departure of the autocorrelation likelihood from the likelihood of the full data at low SNR. All of the $\textproto{D}_{ij}(\rho)$ are sigmoid-type functions that asymptotically approach 1 as $\rho \rightarrow \infty$. The transition SNR $\rho_\mathrm{crit}$ is largely the same for all three nontrivial matrix elements, and is determined by the time coincidence window $T$ and the signal bandwidth $\omega_\mathrm{rms}$.
 %
 \marginpar{The transition SNR is probably proportional to some power of $(\omega_\mathrm{rms} T)$.}
 
 In the limit of large SNR, our interpretation is that the point estimates $(\hat\rho, \hat\gamma, \hat\tau)$ contain all of the information about the underlying extrinsic parameters.
 
-On the other hand, in the low SNR limit, the vanishing of $\textproto{D}_{ij}(\rho)$ reflects the fact that some information is lost when the full data $\mathbf{x}$ is discarded. Concretely, as the prior interval $T$ becomes large compared to 1/$\rho\omega_\mathrm{rms}$, the ML estimator becomes more and more prone to pick up a spurious noise fluctuation far from the true signal. Clearly, when the coincidence window $T$ is kept small as possible, more information is retained in the ML point estimates. Put another way, if $T$ is small, then the transition SNR $\rho_\mathrm{crit}$ is also small and fainter signals become useful for parameter estimation.
+On the other hand, in the low SNR limit, the diminishing value of $\textproto{D}_{ij}(\rho)$ reflects the fact that some information is lost when the full data $\mathbf{x}$ is discarded. Concretely, as the prior interval $T$ becomes large compared to 1/$\rho\omega_\mathrm{rms}$, the ML estimator becomes more and more prone to pick up a spurious noise fluctuation far from the true signal. Clearly, when the coincidence window $T$ is kept small as possible, more information is retained in the ML point estimates. Put another way, if $T$ is small, then the transition SNR $\rho_\mathrm{crit}$ is also small and fainter signals become useful for parameter estimation.
 
 \begin{figure}
     \begin{center}
