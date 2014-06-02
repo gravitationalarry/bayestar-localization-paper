@@ -154,7 +154,7 @@ for $\omega \geq 0$, where
 	\right).
 \end{equation}
 %
-The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector antenna factors, and depend on the orientation of detector $i$ as well as the sky location and sidereal time of the event, and are derived in~\cite{PhysRevD.63.042003}. The quantity $D_{1,i}$ is a fiducial distance at which detector $i$ would register SNR=1 for an optimally oriented binary (face\nobreakdashes-on, and in a direction perpendicular to the interferometer's arms),
+The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector antenna factors, defined such that $0 \leq {F_{+,i}}^2 + {F_{\times,i}} \leq 1$. They depend on the orientation of detector $i$ as well as the sky location and sidereal time of the event, and are derived in~\cite{PhysRevD.63.042003}. The quantity $D_{1,i}$ is a fiducial distance at which detector $i$ would register SNR=1 for an optimally oriented binary (face\nobreakdashes-on, and in a direction perpendicular to the interferometer's arms),
 %
 \marginpar{I seem to have dropped a factor of 2 here...}%
 %
@@ -270,7 +270,7 @@ The Fisher information matrix for a measurement $x$ described by the unknown par
 	\right].
 \end{equation}
 %
-This equation involves double derivatives, but substantial simplification is possible when---as in this case---the likelihood is Gaussian:
+In other words, it is the expectation value, condition on the true parameter values, of the Jacobian of the log likelihood. This equation involves double derivatives, but substantial simplification is possible when---as in this case---the likelihood is Gaussian:
 %
 \begin{equation}\label{eq:gaussian-fisher-matrix}
 	\mathcal{I}_{jk} = \int_0^\infty \Re \left[
@@ -438,6 +438,22 @@ where $I_0$ is a modified Bessel function of the first kind.
 
 \subsection{Properties}
 
+First, observe that at the true parameter values, $\hat{\boldsymbol\theta}_i = \boldsymbol\theta_i$, the logarithms of \Eref{eq:autocor-likelihood} and \Eref{eq:gaussian-likelihood-spa} have the same Jacobian. This is because the derivatives of the autocorrelation function are
+%
+\begin{equation*}
+    a^{(n)}(t) = i^n \overline{\omega^n};
+\end{equation*}
+%
+for instance,
+%
+\begin{equation*}
+    a(0) = 1,
+    \qquad
+    a'(0) = i \overline{\omega},
+    \qquad
+    a''(0) = -\overline{\omega^2}.
+\end{equation*}
+
 We can compute the Fisher matrix elements for the autocorrelation likelihood given by \Eref{eq:autocor-likelihood}, with detector subscript suppressed:
 %
 \begin{eqnarray}
@@ -457,11 +473,6 @@ We can compute the Fisher matrix elements for the autocorrelation likelihood giv
 	\mathcal{I}_{\gamma\tau} &=& -\rho^2
 		\int_{-T}^T \Im\left[a^*(t) a'(t)\right] w(t; \rho) dt \\
 	\nonumber\textrm{where} && \\
-	\nonumber
-	a'(t) &=& \frac{\partial a}{\partial t} \\
-	\nonumber
-	a''(t) &=& \frac{\partial^2 a}{\partial t^2} \\
-	\nonumber
 	w(t; \rho) &=& \frac{
 		\displaystyle
 		\exp\left[\frac{\rho^2}{4}\left|a(t)\right|^2\right]
@@ -480,17 +491,7 @@ We can compute the Fisher matrix elements for the autocorrelation likelihood giv
 %
 Matrix elements that are not listed have values that are implied by the symmetry of the Fisher matrix. Note that the minus signs are correct but a little confusing: despite them, ${I}_{\gamma\gamma}, {I}_{\tau\tau} \geq 0$ and ${I}_{\gamma\tau} \leq 0$. The time integration limits $[-T, T]$ constitute a flat prior on arrival time, the time coincidence window between detectors.
 
-Observe that
-%
-\begin{equation*}
-	a(0) = 1,
-	\qquad
-	a'(0) = i \overline{\omega},
-	\qquad
-	a''(0) = -\overline{\omega^2}.
-\end{equation*}
-%
-If we can show that the common factor approaches a delta function, $w(t; \rho) \rightarrow \delta(t)$ as $\rho \rightarrow \infty$, then the Fisher matrix for the autocorrelation likelihood approaches the Fisher matrix for the full GW data, \Eref{eq:fisher-matrix}, as $\rho \rightarrow \infty$. The Bessel functions asymptotically approach:
+If we can show that the weighting function $w(t; \rho)$ approaches a Dirac delta function as $\rho \rightarrow \infty$, then the Fisher matrix for the autocorrelation likelihood approaches the Fisher matrix for the full GW data, \Eref{eq:fisher-matrix}, as $\rho \rightarrow \infty$. The Bessel functions asymptotically approach:
 %
 \begin{equation*}
 	I_0(x), I_1(x) \rightarrow \frac{e^x}{\sqrt{2 \pi x}}
