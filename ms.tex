@@ -60,7 +60,7 @@ In this paper we present a rapid and accurate method of sky localization that ma
 In the frequency domain, the strain observed by a single \ac{GW} interferometer is
 %
 \begin{equation}\label{eq:signal-model}
-	x_i (\omega) = h_i (\omega; \boldsymbol\theta) + n_i (\omega),
+    x_i (\omega) = h_i (\omega; \boldsymbol\theta) + n_i (\omega),
 \end{equation}
 %
 where $h_i (\omega; \boldsymbol\theta)$ is the \ac{GW} signal given a parameter vector $\boldsymbol\theta$ that describes the \ac{GW} source, and $n_i (\omega)$ is that detector's \ac{WSS} Gaussian noise with one\nobreakdashes-sided \ac{PSD} $S_i(\omega) = E\left[\left|n_i(\omega)\right|^2\right]$. We shall denote the combined observation from a network of detectors as $\mathbf x (\omega) \equiv \{x_i (\omega)\}_i$.
@@ -68,11 +68,11 @@ where $h_i (\omega; \boldsymbol\theta)$ is the \ac{GW} signal given a parameter 
 The likelihood, or the probability of obtaining the observation $\mathbf x$ conditioned on the value of $\boldsymbol\theta$, is a product of Gaussian distributions:
 %
 \begin{equation}\label{eq:gaussian-likelihood}
-	\mathcal{L}(\mathbf x; \boldsymbol\theta) = \prod_i p(x_i | \boldsymbol\theta)
-		\propto \exp \left[
-		- \frac{1}{2} \sum_i \int_0^\infty \frac{\left|x_i (\omega)
-			- h_i(\omega; \boldsymbol\theta) \right|^2}{S_i(\omega)} \, d\omega
-	\right].
+    \mathcal{L}(\mathbf x; \boldsymbol\theta) = \prod_i p(x_i | \boldsymbol\theta)
+        \propto \exp \left[
+        - \frac{1}{2} \sum_i \int_0^\infty \frac{\left|x_i (\omega)
+            - h_i(\omega; \boldsymbol\theta) \right|^2}{S_i(\omega)} \, d\omega
+    \right].
 \end{equation}
 
 A \ac{CBC} source is specified by a vector of extrinsic parameters describing its position and orientation and intrinsic parameters describing the physical properties of the binary components:
@@ -125,33 +125,33 @@ This list of parameters involves some simplifying assumptions. Eccentricity is o
 Assuming circular orbits and no spin precession, we can write the \ac{GW} signal in each detector as a linear combination of two basis waveforms $h_0$ = $h$ and $h_{\pi/2}$. For nonprecessing systems, $h_0$ and $h_{\pi/2}$ are approximately ``in quadrature'' in the same sense as the sine and cosine functions, being nearly orthogonal and out of phase by ${\pi/2}$ at all frequencies. If $h_0$ and $h_{\pi/2}$ are Fourier transforms of real functions, then $h_0(\omega) = h_0^*(-\omega)$ and $h_{\pi/2}(\omega) = h_{\pi/2}^*(-\omega)$, and we can write (assuming an arbitrary phase convention)
 %
 \begin{equation}
-	h_{\pi/2}(\omega) = h_0(\omega) \cdot
-	\cases{
-		-i & if $\omega \geq 0$ \\
-		i & if $\omega < 0$
-	}.
+    h_{\pi/2}(\omega) = h_0(\omega) \cdot
+    \cases{
+        -i & if $\omega \geq 0$ \\
+        i & if $\omega < 0$
+    }.
 \end{equation}
 %
 Then, we can write the signal model in a way that isolates all dependence on the extrinsic parameters $\boldsymbol\theta_\mathrm{ex}$ into the coefficients and all dependence on the intrinsic parameters $\boldsymbol\theta_\mathrm{in}$ into the basis waveform, by taking the Fourier transform of Equation~(2.8) of \cite{PhysRevD.83.084002}:
 %
 \begin{equation}\label{eq:full-signal-model}
-	h_i(\omega; \boldsymbol\theta) = \e^{-i \omega t_\oplus}
-	\frac{D_{1,i}}{D_\mathrm{L}}
-	\e^{2 i \phi_c}
-	\left[
-	\frac{1}{2} \left(1 + \cos^2 \iota\right) \Re \left\{z\right\} - i
-	\left(\cos\iota\right) \Im z
-	\right]
-	h(\omega; \boldsymbol\theta_\mathrm{in})
+    h_i(\omega; \boldsymbol\theta) = \e^{-i \omega t_\oplus}
+    \frac{D_{1,i}}{D_\mathrm{L}}
+    \e^{2 i \phi_c}
+    \left[
+    \frac{1}{2} \left(1 + \cos^2 \iota\right) \Re \left\{z\right\} - i
+    \left(\cos\iota\right) \Im z
+    \right]
+    h(\omega; \boldsymbol\theta_\mathrm{in})
 \end{equation}
 %
 for $\omega \geq 0$, where
 %
 \begin{equation}
-	z = e^{-2 i \psi} \left(
-	F_{+,i}(\alpha, \delta, t_\oplus) +
-	i F_{\times,i}(\alpha, \delta, t_\oplus)
-	\right).
+    z = e^{-2 i \psi} \left(
+    F_{+,i}(\alpha, \delta, t_\oplus) +
+    i F_{\times,i}(\alpha, \delta, t_\oplus)
+    \right).
 \end{equation}
 %
 The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector antenna factors, defined such that $0 \leq {F_{+,i}}^2 + {F_{\times,i}} \leq 1$. They depend on the orientation of detector $i$ as well as the sky location and sidereal time of the event, and are derived in~\cite{PhysRevD.63.042003}. The quantity $D_{1,i}$ is a fiducial distance at which detector $i$ would register SNR=1 for an optimally oriented binary (face\nobreakdashes-on, and in a direction perpendicular to the interferometer's arms),
@@ -165,7 +165,7 @@ D_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|h(\omega
 More succinctly, we can write the signal received by detector $i$ in terms of observable extrinsic parameters $\boldsymbol\theta_i = (\rho_i, \gamma_i, \tau_i)$, the amplitude $\rho_i$, phase $\gamma_i$, and time delay $\tau_i$ on arrival at detector $i$,
 %
 \begin{equation}\label{eq:signal-model}
-	h_i (\omega; \boldsymbol\theta_i, \boldsymbol\theta_\mathrm{in}) = h_i (\omega; \rho_i, \gamma_i, \tau_i, \boldsymbol\theta_\mathrm{in}) = \frac{\rho_i}{\sigma_i} e^{i (\gamma_i - \omega \tau_i)} h(\omega; \boldsymbol\theta_\mathrm{in}).
+    h_i (\omega; \boldsymbol\theta_i, \boldsymbol\theta_\mathrm{in}) = h_i (\omega; \rho_i, \gamma_i, \tau_i, \boldsymbol\theta_\mathrm{in}) = \frac{\rho_i}{\sigma_i} e^{i (\gamma_i - \omega \tau_i)} h(\omega; \boldsymbol\theta_\mathrm{in}).
 \end{equation}
 
 The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from the likelihood in \Eref{eq:gaussian-likelihood} and the signal model in \Eref{eq:signal-model}. Concretely, this results in a bank of matched filters, or the cross-correlation between a template waveform and the incoming data stream,
@@ -177,14 +177,14 @@ y_i(\tau_i;\boldsymbol\theta_\mathrm{in}) = \frac{1}{\sigma_i (\boldsymbol\theta
 The \ac{ML} point estimates of the signal parameters, $\mathrm{MLE}(\mathbf{x}) = \{\{ \hat{\boldsymbol\theta}_i \}_i, \hat{\boldsymbol\theta}_\mathrm{in}\} = \{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\boldsymbol\theta}_\mathrm{in}\}$, are given by
 %
 \begin{eqnarray}
-	\hat{\boldsymbol\theta}_\mathrm{in}, \{\hat\tau_i\}_i
-		&=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i}
-		\sum_i \left| y_i\left(\tau_i;
-		\boldsymbol\theta_\mathrm{in}\right) \right|^2, \\
-	\hat\rho_i &=& \left| y_i\left(\hat\tau_i;
-		\hat{\boldsymbol\theta}_\mathrm{in}\right) \right|, \\
-	\hat\gamma_i &=& \arg y_i\left(\hat\tau_i;
-		\hat{\boldsymbol\theta}_\mathrm{in}\right).
+    \hat{\boldsymbol\theta}_\mathrm{in}, \{\hat\tau_i\}_i
+        &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i}
+        \sum_i \left| y_i\left(\tau_i;
+        \boldsymbol\theta_\mathrm{in}\right) \right|^2, \\
+    \hat\rho_i &=& \left| y_i\left(\hat\tau_i;
+        \hat{\boldsymbol\theta}_\mathrm{in}\right) \right|, \\
+    \hat\gamma_i &=& \arg y_i\left(\hat\tau_i;
+        \hat{\boldsymbol\theta}_\mathrm{in}\right).
 \end{eqnarray}
 %
 A detection candidate consists of the set $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\boldsymbol\theta}_\mathrm{in}\}$. There are various ways to characterize the significance of a detection candidate, but in Gaussian noise the combined SNR $\hat\rho_\mathrm{c}$ suffices,
@@ -192,7 +192,7 @@ A detection candidate consists of the set $\{\left\{ \hat\rho_i, \hat\gamma_i, \
 \marginpar{What is the least that I can get away with saying about false alarm rate estimation and likelihood ratios?}%
 %
 \begin{equation}
-	\hat\rho_\mathrm{c} = \sqrt{\sum_i {\hat\rho_i}^2}.
+    \hat\rho_\mathrm{c} = \sqrt{\sum_i {\hat\rho_i}^2}.
 \end{equation}
 
 \subsection{Bayesian probability and parameter estimation}
@@ -210,7 +210,7 @@ The choice of prior is open to one's astrophysical preconceptions, but during \a
 In Bayesian inference, although it is often easy to write down the likelihood or even the full posterior in closed form, usually one is interested in only a subset $\boldsymbol\beta$ of all of the model's parameters, the others $\boldsymbol\lambda$ being nuisance parameters. In this case, we integrate away the nuisance parameters, forming the marginal posterior
 %
 \begin{equation}\label{eq:marginal-posterior}
-	p(\boldsymbol\beta|\mathbf x) = \int \frac{p(\mathbf x|\boldsymbol\beta,\boldsymbol\lambda) p(\boldsymbol\beta,\boldsymbol\lambda)}{p(\mathbf x)} \,d\boldsymbol\lambda
+    p(\boldsymbol\beta|\mathbf x) = \int \frac{p(\mathbf x|\boldsymbol\beta,\boldsymbol\lambda) p(\boldsymbol\beta,\boldsymbol\lambda)}{p(\mathbf x)} \,d\boldsymbol\lambda
 \end{equation}
 %
 with $\boldsymbol\theta = (\boldsymbol\beta, \boldsymbol\lambda)$. For instance, for the purpose of locating a \ac{GW} source on the sky, all parameters but $(\alpha, \delta)$ are nuisance parameters.
@@ -232,14 +232,14 @@ There are many practical advantages of doing so. For one, there are difficulties
 To treat the ML estimates as measurements in and of themselves, we need to work out their likelihood, marginalized over the GW signal $\mathbf{x}$,
 %
 \begin{equation}\label{eq:detection-candidate-likelihood}
-	p\left(\{\hat{\boldsymbol\theta}_i\}_i,
-		\hat{\boldsymbol\theta}_\mathrm{in}
-	\middle| \boldsymbol\theta\right)
-	\propto \int\limits_{\mathclap{\mathbf{x} | \mathrm{MLE}(\mathbf{x}) =
-		\{\{\hat{\boldsymbol\theta}_i\}_i,
-		\hat{\boldsymbol\theta}_\mathrm{in}\}}}
-	p(\mathbf{x} | \boldsymbol\theta) \, p(\boldsymbol\theta)
-	\, d\mathbf{x}
+    p\left(\{\hat{\boldsymbol\theta}_i\}_i,
+        \hat{\boldsymbol\theta}_\mathrm{in}
+    \middle| \boldsymbol\theta\right)
+    \propto \int\limits_{\mathclap{\mathbf{x} | \mathrm{MLE}(\mathbf{x}) =
+        \{\{\hat{\boldsymbol\theta}_i\}_i,
+        \hat{\boldsymbol\theta}_\mathrm{in}\}}}
+    p(\mathbf{x} | \boldsymbol\theta) \, p(\boldsymbol\theta)
+    \, d\mathbf{x}
 \end{equation}
 %
 The integral above could be written in terms of the matched filter signals $\left\{y_i\right\}_i$, such that $y_i\left(\hat\tau_i, \hat{\boldsymbol\theta}_\mathrm{in}\right) = \hat\rho_i e^{\hat\gamma_i}$ and $\forall t$, $\left|y_i(t, \boldsymbol\theta_\mathrm{in})\right| \leq \hat\rho_i$. The combination of the nontrivial integration limits and the Fourier transform in the matched filter seem like a problem for direct evaluation.
@@ -247,14 +247,14 @@ The integral above could be written in terms of the matched filter signals $\lef
 However, even without directly evaluating the distribution of the \ac{ML} estimator, we know many of its properties. The \ac{CRLB} gives its covariance in the asymptotic limit of high \ac{SNR}. The \ac{CRLB} has been widely applied in \ac{GW} data analysis \cite{fairhurst:2009}. We will momentarily consider the likelihood for a single detector:
 %
 \begin{equation}\label{eq:gaussian-likelihood-spa}
-	\mathcal{L}\left(x_i; \rho_i, \gamma_i, \tau_i,
-		\boldsymbol\theta_\mathrm{in}\right)
-	\propto \exp \left[
-		- \frac{1}{2} \int_0^\infty \frac{\left|x_i (\omega)
-			- h_i\left(x_i; \rho_i, \gamma_i, \tau_i,
-				\boldsymbol\theta_\mathrm{in}\right)
-		\right|^2}{S_i(\omega)} \, d\omega
-	\right],
+    \mathcal{L}\left(x_i; \rho_i, \gamma_i, \tau_i,
+        \boldsymbol\theta_\mathrm{in}\right)
+    \propto \exp \left[
+        - \frac{1}{2} \int_0^\infty \frac{\left|x_i (\omega)
+            - h_i\left(x_i; \rho_i, \gamma_i, \tau_i,
+                \boldsymbol\theta_\mathrm{in}\right)
+        \right|^2}{S_i(\omega)} \, d\omega
+    \right],
 \end{equation}
 %
 with $h_i(\omega; \rho_i, \gamma_i, \tau_i, \boldsymbol\theta_\mathrm{in})$ given by \Eref{eq:signal-model}.
@@ -262,21 +262,21 @@ with $h_i(\omega; \rho_i, \gamma_i, \tau_i, \boldsymbol\theta_\mathrm{in})$ give
 The Fisher information matrix for a measurement $x$ described by the unknown parameter vector $\boldsymbol{\theta}$ is
 %
 \begin{equation}\label{eq:general-fisher-matrix}
-	\mathcal{I}_{jk} = \mathrm{E} \, \left[
-		-\frac{\partial^2 \log
-			\mathcal{L}(x_i ; \boldsymbol\theta)}
-			{\partial \theta_j \theta_k}
-	\middle| \boldsymbol\theta
-	\right].
+    \mathcal{I}_{jk} = \mathrm{E} \, \left[
+        -\frac{\partial^2 \log
+            \mathcal{L}(x_i ; \boldsymbol\theta)}
+            {\partial \theta_j \theta_k}
+    \middle| \boldsymbol\theta
+    \right].
 \end{equation}
 %
 In other words, it is the expectation value, condition on the true parameter values, of the Jacobian of the log likelihood. This equation involves double derivatives, but substantial simplification is possible when---as in this case---the likelihood is Gaussian:
 %
 \begin{equation}\label{eq:gaussian-fisher-matrix}
-	\mathcal{I}_{jk} = \int_0^\infty \Re \left[
+    \mathcal{I}_{jk} = \int_0^\infty \Re \left[
         \left(\frac{\partial h_i}{\partial \theta_j}\right)^*
         \left(\frac{\partial h_i}{\partial \theta_k}\right)
-	\right] \frac{1}{S_i(\omega)} \, d\omega.
+    \right] \frac{1}{S_i(\omega)} \, d\omega.
 \end{equation}
 %
 This form is more useful because it involves only first derivatives, and of the signal $h (\omega)$ rather than the entire observation $x (\omega)$. In terms of the $k$th \ac{SNR}-weighted moment of angular frequency,
@@ -290,20 +290,20 @@ This form is more useful because it involves only first derivatives, and of the 
 the Fisher matrix for the signal in the $i$th detector is
 %
 \begin{equation}
-	\mathcal{I}_i = \left(
-		\begin{array}{cc}
-			\mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_i} &
-			\mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_\mathrm{in}} \\
-			{\mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_\mathrm{in}}}^\intercal &
-			{\rho_i}^2 \mathcal{I}_{\boldsymbol\theta_\mathrm{in},\boldsymbol\theta_\mathrm{in}}
-		\end{array}
-	\right)
+    \mathcal{I}_i = \left(
+        \begin{array}{cc}
+            \mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_i} &
+            \mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_\mathrm{in}} \\
+            {\mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_\mathrm{in}}}^\intercal &
+            {\rho_i}^2 \mathcal{I}_{\boldsymbol\theta_\mathrm{in},\boldsymbol\theta_\mathrm{in}}
+        \end{array}
+    \right)
 \end{equation}
 %
 where
 %
 \begin{equation}\label{eq:fisher-matrix}
-	\mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_i} = \bordermatrix{
+    \mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_i} = \bordermatrix{
         ~ & \rho_i & \gamma_i & \tau_i \cr
         \rho_i & 1 & 0 & 0 \cr
         \gamma_i & 0 & {\rho_i}^2 & -{\rho_i}^2 {\overline{\omega}}_i \cr
@@ -382,45 +382,45 @@ These conditions could be satisfied by realizing a multivariate Gaussian distrib
 Another way is to plug the signal model from \Eref{eq:signal-model} \emph{evaluated at the ML parameter estimates} into the single-detector likelihood in \Eref{eq:gaussian-likelihood-spa}:
 %
 \begin{eqnarray*}
-	\fl p\left(\hat{\boldsymbol\theta}_i \middle| \boldsymbol\theta \right)
-	&:=&
-	p\left(x_i(\omega) = h_i(\omega; \hat{\boldsymbol\theta}_i)
-		\middle| \boldsymbol\theta \right)
-	\\\fl
-	&\propto& \exp \left[
-		- \frac{1}{2} \int_0^\infty \frac{\left|
-			\frac{\hat{\rho}_i}{\sigma_i(\hat{\boldsymbol\theta}_\mathrm{in})} e^{i (\hat\gamma_i - \omega \hat\tau_i)} h(\omega; \hat{\boldsymbol\theta}_\mathrm{in})
-			- \frac{\rho_i}{\sigma_i(\boldsymbol\theta_\mathrm{in})} e^{i (\gamma_i - \omega \tau_i)} h(\omega; \boldsymbol\theta_\mathrm{in})
-		\right|^2}{S_i(\omega)} \, d\omega
-	\right].
+    \fl p\left(\hat{\boldsymbol\theta}_i \middle| \boldsymbol\theta \right)
+    &:=&
+    p\left(x_i(\omega) = h_i(\omega; \hat{\boldsymbol\theta}_i)
+        \middle| \boldsymbol\theta \right)
+    \\\fl
+    &\propto& \exp \left[
+        - \frac{1}{2} \int_0^\infty \frac{\left|
+            \frac{\hat{\rho}_i}{\sigma_i(\hat{\boldsymbol\theta}_\mathrm{in})} e^{i (\hat\gamma_i - \omega \hat\tau_i)} h(\omega; \hat{\boldsymbol\theta}_\mathrm{in})
+            - \frac{\rho_i}{\sigma_i(\boldsymbol\theta_\mathrm{in})} e^{i (\gamma_i - \omega \tau_i)} h(\omega; \boldsymbol\theta_\mathrm{in})
+        \right|^2}{S_i(\omega)} \, d\omega
+    \right].
 \end{eqnarray*}
 %
 If we assume that $\hat{\boldsymbol\theta}_\mathrm{in} = \boldsymbol\theta_\mathrm{in}$, then this reduces to
 %
 \begin{equation}\label{eq:autocor-likelihood}
-	p\left(\hat\rho_i, \hat\gamma_i, \hat\tau_i
-		\middle| \rho_i, \gamma_i, \tau_i \right) \propto
-	\exp \left[ - \frac{1}{2}{\hat\rho_i}^2 - \frac{1}{2}{\rho_i}^2
-		+ \hat\rho_i \rho_i \Re \left\{ e^{i \tilde{\gamma}_i} a_i^*(\tilde{\tau}_i)
-		\right\}
-	\right]
+    p\left(\hat\rho_i, \hat\gamma_i, \hat\tau_i
+        \middle| \rho_i, \gamma_i, \tau_i \right) \propto
+    \exp \left[ - \frac{1}{2}{\hat\rho_i}^2 - \frac{1}{2}{\rho_i}^2
+        + \hat\rho_i \rho_i \Re \left\{ e^{i \tilde{\gamma}_i} a_i^*(\tilde{\tau}_i)
+        \right\}
+    \right]
 \end{equation}
 %
 with $\tilde{\gamma}_i = \hat\gamma_i - \gamma_i$, $\tilde{\tau}_i = \hat\tau_i - \tau_i$, and the template's autocorrelation function $a_i(t; \boldsymbol\theta_\mathrm{in})$ defined as
 %
 \begin{equation}
-	a_i(t; \boldsymbol\theta_\mathrm{in}) := \frac{1}{{{\sigma_i}^2(\boldsymbol\theta_\mathrm{in})}} \int_0^\infty \frac{\left| h(\omega; \hat{\boldsymbol\theta}_\mathrm{in})\right|^2}{S_i(\omega)} e^{i \omega t} \,d\omega.
+    a_i(t; \boldsymbol\theta_\mathrm{in}) := \frac{1}{{{\sigma_i}^2(\boldsymbol\theta_\mathrm{in})}} \int_0^\infty \frac{\left| h(\omega; \hat{\boldsymbol\theta}_\mathrm{in})\right|^2}{S_i(\omega)} e^{i \omega t} \,d\omega.
 \end{equation}
 
 To assemble the joint likelihood for the whole network, we just form the product from the individual detectors:
 %
 \begin{equation}
-	\fl p\left(\left\{\hat\rho_i, \hat\gamma_i, \hat\tau_i\right\}_i
-		\middle| \left\{\rho_i, \gamma_i, \tau_i\right\}_i \right) \propto
-	\exp \left[ - \frac{1}{2} \sum_i {\hat\rho_i}^2 - \frac{1}{2} \sum_i {\rho_i}^2
-		+ \sum_i \hat\rho_i \rho_i \Re \left\{ e^{i \tilde{\gamma}_i} a^*(\tilde{\tau}_i)
-		\right\}
-	\right].
+    \fl p\left(\left\{\hat\rho_i, \hat\gamma_i, \hat\tau_i\right\}_i
+        \middle| \left\{\rho_i, \gamma_i, \tau_i\right\}_i \right) \propto
+    \exp \left[ - \frac{1}{2} \sum_i {\hat\rho_i}^2 - \frac{1}{2} \sum_i {\rho_i}^2
+        + \sum_i \hat\rho_i \rho_i \Re \left\{ e^{i \tilde{\gamma}_i} a^*(\tilde{\tau}_i)
+        \right\}
+    \right].
 \end{equation}
 %
 To marginalize over the coalescence phase, we can insert an arbitrary nuisance phase $\eta$ by making the replacement $\tilde{\gamma}_i \rightarrow \tilde{\gamma}_i + \eta$. Then integrating over $\eta$ from $0$ to $2\pi$ and suppressing normalization factors, we get the \ac{BAYESTAR} likelihood
@@ -428,10 +428,10 @@ To marginalize over the coalescence phase, we can insert an arbitrary nuisance p
 \marginpar{Different symbol? Is $\mathcal{L}_\mathrm{BAYESTAR}$ too grandiose?}
 %
 \begin{equation}
-	\mathcal{L}_\mathrm{BAYESTAR} = \exp \left[ - \frac{1}{2} \sum_i {\rho_i}^2 \right] I_0 \left[
-		\left| \sum_i \hat\rho_i \rho_i e^{i \tilde{\gamma}_i} a_i^*(\tilde{\tau}_i)
-		\right|
-	\right],
+    \mathcal{L}_\mathrm{BAYESTAR} = \exp \left[ - \frac{1}{2} \sum_i {\rho_i}^2 \right] I_0 \left[
+        \left| \sum_i \hat\rho_i \rho_i e^{i \tilde{\gamma}_i} a_i^*(\tilde{\tau}_i)
+        \right|
+    \right],
 \end{equation}
 %
 where $I_0$ is a modified Bessel function of the first kind.
@@ -457,36 +457,36 @@ for instance,
 We can compute the Fisher matrix elements for the autocorrelation likelihood given by \Eref{eq:autocor-likelihood}, with detector subscript suppressed:
 %
 \begin{eqnarray}
-	\nonumber
-	\mathcal{I}_{\rho\rho} &=& 1 \\
-	\nonumber
-	\mathcal{I}_{\rho\gamma} &=& 0 \\
-	\nonumber
-	\mathcal{I}_{\rho\tau} &=& 0 \\
-	\label{eq:fisher-autocor-gamma-gamma}
-	\mathcal{I}_{\gamma\gamma} &=& \rho^2
-		\int_{-T}^T \left|a(t)\right|^2 w(t; \rho) dt \\
-	\label{eq:fisher-autocor-tau-tau}
-	\mathcal{I}_{\tau\tau} &=& -\rho^2
-		\int_{-T}^T \Re\left[a^*(t) a''(t)\right] w(t; \rho) dt \\
-	\label{eq:fisher-autocor-gamma-tau}
-	\mathcal{I}_{\gamma\tau} &=& -\rho^2
-		\int_{-T}^T \Im\left[a^*(t) a'(t)\right] w(t; \rho) dt \\
-	\nonumber\textrm{where} && \\
-	w(t; \rho) &=& \frac{
-		\displaystyle
-		\exp\left[\frac{\rho^2}{4}\left|a(t)\right|^2\right]
-		\left(
-		I_0\left[\frac{\rho^2}{4}\left|a(t)\right|^2\right] +
-		I_1\left[\frac{\rho^2}{4}\left|a(t)\right|^2\right]
-		\right)
-	}{
-		\displaystyle
-		2 \int_{-T}^T
-		\exp\left[\frac{\rho^2}{4}\left|a(t')\right|^2\right]
-		I_0\left[\frac{\rho^2}{4}\left|a(t')\right|^2\right]
-		dt'
-	}.
+    \nonumber
+    \mathcal{I}_{\rho\rho} &=& 1 \\
+    \nonumber
+    \mathcal{I}_{\rho\gamma} &=& 0 \\
+    \nonumber
+    \mathcal{I}_{\rho\tau} &=& 0 \\
+    \label{eq:fisher-autocor-gamma-gamma}
+    \mathcal{I}_{\gamma\gamma} &=& \rho^2
+        \int_{-T}^T \left|a(t)\right|^2 w(t; \rho) dt \\
+    \label{eq:fisher-autocor-tau-tau}
+    \mathcal{I}_{\tau\tau} &=& -\rho^2
+        \int_{-T}^T \Re\left[a^*(t) a''(t)\right] w(t; \rho) dt \\
+    \label{eq:fisher-autocor-gamma-tau}
+    \mathcal{I}_{\gamma\tau} &=& -\rho^2
+        \int_{-T}^T \Im\left[a^*(t) a'(t)\right] w(t; \rho) dt \\
+    \nonumber\textrm{where} && \\
+    w(t; \rho) &=& \frac{
+        \displaystyle
+        \exp\left[\frac{\rho^2}{4}\left|a(t)\right|^2\right]
+        \left(
+        I_0\left[\frac{\rho^2}{4}\left|a(t)\right|^2\right] +
+        I_1\left[\frac{\rho^2}{4}\left|a(t)\right|^2\right]
+        \right)
+    }{
+        \displaystyle
+        2 \int_{-T}^T
+        \exp\left[\frac{\rho^2}{4}\left|a(t')\right|^2\right]
+        I_0\left[\frac{\rho^2}{4}\left|a(t')\right|^2\right]
+        dt'
+    }.
 \end{eqnarray}
 %
 Matrix elements that are not listed have values that are implied by the symmetry of the Fisher matrix. Note that the minus signs are correct but a little confusing: despite them, ${I}_{\gamma\gamma}, {I}_{\tau\tau} \geq 0$ and ${I}_{\gamma\tau} \leq 0$. The time integration limits $[-T, T]$ constitute a flat prior on arrival time, the time coincidence window between detectors.
@@ -494,40 +494,40 @@ Matrix elements that are not listed have values that are implied by the symmetry
 If we can show that the weighting function $w(t; \rho)$ approaches a Dirac delta function as $\rho \rightarrow \infty$, then the Fisher matrix for the autocorrelation likelihood approaches the Fisher matrix for the full GW data, \Eref{eq:fisher-matrix}, as $\rho \rightarrow \infty$. The Bessel functions asymptotically approach:
 %
 \begin{equation*}
-	I_0(x), I_1(x) \rightarrow \frac{e^x}{\sqrt{2 \pi x}}
-	\textrm{ as } x \rightarrow \infty.
+    I_0(x), I_1(x) \rightarrow \frac{e^x}{\sqrt{2 \pi x}}
+    \textrm{ as } x \rightarrow \infty.
 \end{equation*}
 %
 For large $\rho$, the exponential dominates and we can write:
 %
 \begin{equation*}
-	w(t; \rho) \rightarrow \frac{
-		\displaystyle
-		\exp\left[\frac{\rho^2}{2}|a(t)|^2\right]
-	}{
-		\displaystyle
-		\int_{-T}^T \exp\left[\frac{\rho^2}{2}|a(t')|^2\right] dt'
-	}
-	\textrm{ as } \rho \rightarrow \infty.
+    w(t; \rho) \rightarrow \frac{
+        \displaystyle
+        \exp\left[\frac{\rho^2}{2}|a(t)|^2\right]
+    }{
+        \displaystyle
+        \int_{-T}^T \exp\left[\frac{\rho^2}{2}|a(t')|^2\right] dt'
+    }
+    \textrm{ as } \rho \rightarrow \infty.
 \end{equation*}
 %
 The Taylor expansion of $|a(t)|^2$ is
 %
 \begin{equation*}
-	|a(t)|^2 = 1 + \frac{1}{2} \left(\frac{\partial^2}{\partial t^2}|a(t)|^2 \Bigg|_{t=0}\right) t^2 + \mathcal{O}(t^4)
-	= 1 - {\omega_\mathrm{rms}}^2 t^2 + \mathcal{O}(t^4).
+    |a(t)|^2 = 1 + \frac{1}{2} \left(\frac{\partial^2}{\partial t^2}|a(t)|^2 \Bigg|_{t=0}\right) t^2 + \mathcal{O}(t^4)
+    = 1 - {\omega_\mathrm{rms}}^2 t^2 + \mathcal{O}(t^4).
 \end{equation*}
 %
 Substituting, we find that $w(t; \rho)$ approaches a normalized Gaussian distribution:
 %
 \begin{equation*}
-	w(t; \rho) \approx \frac{
-		\displaystyle
-		\exp\left[-\frac{1}{2} \rho^2 {\omega_\mathrm{rms}}^2 t^2\right]
-	}{
-		\displaystyle
-		\int_{-T}^T \exp\left[-\frac{1}{2} \rho^2 {\omega_\mathrm{rms}}^2 (t')^2\right] dt'
-	}.
+    w(t; \rho) \approx \frac{
+        \displaystyle
+        \exp\left[-\frac{1}{2} \rho^2 {\omega_\mathrm{rms}}^2 t^2\right]
+    }{
+        \displaystyle
+        \int_{-T}^T \exp\left[-\frac{1}{2} \rho^2 {\omega_\mathrm{rms}}^2 (t')^2\right] dt'
+    }.
 \end{equation*}
 %
 And finally, because the Dirac delta function may be defined as the limit of a Gaussian, $w(t; \rho) \rightarrow \delta(t)$ as $\rho \rightarrow \infty$.
@@ -535,9 +535,9 @@ And finally, because the Dirac delta function may be defined as the limit of a G
 We can now write the Fisher matrix for the autocorrelation likelihood in a way that makes a comparison to the full signal model explicit. Define:
 %
 \begin{eqnarray*}
-	\mathcal{I}_{\gamma\gamma} &=& \rho^2 \cdot \textproto{D}_{\gamma\gamma}(\rho) \\
-	\mathcal{I}_{\tau\tau} &=& \rho^2 \overline{\omega^2} \cdot \textproto{D}_{\tau\tau}(\rho) \\
-	\mathcal{I}_{\gamma\tau} &=& -\rho^2 \overline{\omega} \cdot \textproto{D}_{\gamma\tau}(\rho)
+    \mathcal{I}_{\gamma\gamma} &=& \rho^2 \cdot \textproto{D}_{\gamma\gamma}(\rho) \\
+    \mathcal{I}_{\tau\tau} &=& \rho^2 \overline{\omega^2} \cdot \textproto{D}_{\tau\tau}(\rho) \\
+    \mathcal{I}_{\gamma\tau} &=& -\rho^2 \overline{\omega} \cdot \textproto{D}_{\gamma\tau}(\rho)
 \end{eqnarray*}
 %
 Now, the $\textproto{D}_{ij}$ %
@@ -644,34 +644,34 @@ We evaluate the \ac{TOA}\nobreakdashes-only posterior at the centers of \ac{HEAL
 
 \begin{eqnarray}
     p(
-		\mathbf{n} |
+        \mathbf{n} |
         \hat{\tau}_1, \hat{\tau}_2, &\dots, \hat{\tau}_N,
         \hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N) \nonumber\\
     &= p(\mathbf{n} |
         \hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N) \nonumber\\
         &\times
         p(\mathbf{n} |
-		\hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N
+        \hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N
     )
 \end{eqnarray}
 %
 where
 %
 \begin{equation*}
-	\fl
+    \fl
     p(\mathbf{n} |
-	\hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N)
-	\propto
-	\int_0^\frac{\pi}{2}
-	\int_0^1
-	\int_{D_{\mathrm{L},\mathrm{min}}}^{D_{\mathrm{L},\mathrm{max}}}
-	\exp \left[
-	        -\frac{1}{2} \sum_{i=1}^N \left(\hat{\rho}_i - \rho_i(\mathbf{n}, D_\mathrm{L}, u, \psi) \right)^2
-	    \right]
-	{D_\mathrm{L}}^m
-	\,dD_\mathrm{L}
-	\,du
-	\,d\psi.
+    \hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N)
+    \propto
+    \int_0^\frac{\pi}{2}
+    \int_0^1
+    \int_{D_{\mathrm{L},\mathrm{min}}}^{D_{\mathrm{L},\mathrm{max}}}
+    \exp \left[
+            -\frac{1}{2} \sum_{i=1}^N \left(\hat{\rho}_i - \rho_i(\mathbf{n}, D_\mathrm{L}, u, \psi) \right)^2
+        \right]
+    {D_\mathrm{L}}^m
+    \,dD_\mathrm{L}
+    \,du
+    \,d\psi.
 \end{equation*}
 
 The marginalization over $D_\mathrm{L}$, $u$, and $\psi$ must be done numerically. The outermost integration is over $u$ and $\psi$, and is done with Newton\nobreakdashes--Cotes by evaluating $\mathcal{L}_\mathrm{SNR}$ on a regular lattice in $u$ and $\psi$.
@@ -686,13 +686,13 @@ The marginalization over $D_\mathrm{L}$, $u$, and $\psi$ must be done numericall
 The innermost integration is over $D_\mathrm{L}$ and is performed using adaptive Gaussian quadrature, but with a twist that speeds up convergence. As in many parameter estimation problems, the integrand may be sharply peaked, and any generic adaptive integration scheme may take a long time to find the peak. Before evaluating each inner integral over $D_\mathrm{L}$, the quantities $A=-\frac{1}{2} \sum_i {\rho_i}^2$ and $B=\sum_i \rho_i \hat\rho_i$ are pre\nobreakdashes-calculated so that the integrand can be written as
 %
 \begin{equation*}
-	\exp\left(\frac{A}{{D_\mathrm{L}}^2} + \frac{B}{D_\mathrm{L}}\right) {D_\mathrm{L}}^m.
+    \exp\left(\frac{A}{{D_\mathrm{L}}^2} + \frac{B}{D_\mathrm{L}}\right) {D_\mathrm{L}}^m.
 \end{equation*}
 %
 Then, we see that the likelihood $\exp(A {D_\mathrm{L}}^{-2} + B {D_\mathrm{L}}^{-1})$ is maximized when $D_\mathrm{L} = D_{\mathrm{L},0} = -2A/B$. The likelihood takes on a factor $\eta$ (say, $\eta=0.01$) of its maximum value when
 %
 \begin{equation}
-	D_\mathrm{L} = D_{\mathrm{L},\pm} = \left(\frac{1}{D_{\mathrm{L},0}} \mp \sqrt{\frac{\log\eta}{A}}\right)^{-1}.
+    D_\mathrm{L} = D_{\mathrm{L},\pm} = \left(\frac{1}{D_{\mathrm{L},0}} \mp \sqrt{\frac{\log\eta}{A}}\right)^{-1}.
 \end{equation}
 %
 We have now identified up to five breakpoints that partition the distance integrand into up to four intervals with quantitatively distinct behavior. These intervals are depicted in Figure~\ref{fig:radial_integrand} with distance increasing from left to right. There is a left\nobreakdashes-hand or small distance tail in which the integrand is small and monotonically increasing, a left\nobreakdashes- and right\nobreakdashes-hand side of the maximum likelihood peak, and a right\nobreakdashes-hand tail in which the integrand is small and monotonically decreasing. These breakpoints are:
