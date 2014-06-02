@@ -575,8 +575,20 @@ On the other hand, in the low SNR limit, the diminishing value of $\textproto{D}
     \item $\hat\rho_i, \hat\gamma_i, \hat\tau_i$
     \item Sampled PSD
     \item Waveform?
-    \item Masses
+    \item Masses $\hat m_1, \hat m_2$
 \end{itemize}
+
+\subsection{Autocorrelation series}
+
+\marginpar{This part may be too technical.}%
+%
+To calculate the autocorrelation sequence, we need to compute the inverse DFT of the autopower spectral density of the template. A BNS signal remains in the Advanced LIGO sensitive band for thousands of seconds, but we will only be interested in $\sim 10$\,ms of the autocorrelation sequence. If we have a sequence of length $N$, and we only need the first $M$ samples of the inverse DFT, where $M$ divides $N$ and $cM = N$, then we may make use of the following identity to compute the DFT with a speedup of $\log N/M$:
+%
+\begin{eqnarray*}
+    x[n] &=& \sum_{k=0}^{N-1} \exp \left[ \frac{2 \pi i k n}{N} \right] Y[k] \\
+    &=& \sum_{j=0}^{c-1} \sum_{m=0}^{M-1} \exp \left[ \frac{2 \pi i (m c + j) n}{c M} \right] Y[m c + j] \\
+    &=& \sum_{j=0}^{c-1} \exp \left[ \frac{2 \pi i j n}{N} \right] \sum_{m=0}^{M-1} \exp \left[ \frac{2 \pi i m n}{M} \right] Y[m c + j].
+\end{eqnarray*}
 
 \subsection{Prior}
 
