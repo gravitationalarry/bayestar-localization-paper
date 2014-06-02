@@ -85,7 +85,7 @@ A \ac{CBC} source is specified by a vector of extrinsic parameters describing it
                 \delta \\
                 D_\mathrm{L} \\
                 t_\oplus \\
-                u \\
+                \iota \\
                 \psi \\
                 \phi_c \\
                 \hdashline[1pt/1pt]
@@ -102,7 +102,7 @@ A \ac{CBC} source is specified by a vector of extrinsic parameters describing it
                     declination \\
                     luminosity distance \\
                     arrival time at geocenter \\
-                    $\cos(\textrm{inclination angle})$ \\
+                    inclination angle \\
                     polarization angle \\
                     coalescence phase \\
                     \hdashline[1pt/1pt]
@@ -572,16 +572,58 @@ On the other hand, in the low SNR limit, the diminishing value of $\textproto{D}
 
 \subsection{Prior}
 
-We have no explicit prior on the intrinsic parameters; in our analysis they are fixed at their \ac{ML} estimates, $\hat{\boldsymbol\theta}$. The distance prior is given by a user-selected power of distance, ${D_\mathrm{L}}^m$, where $m=2$ for a prior that is uniform in volume, and $m=-1$ for a scale-invariant prior that is uniform in $\log D_\mathrm{L}$. The priors are bounded as follows:
+We have no explicit prior on the intrinsic parameters; in our analysis they are fixed at their \ac{ML} estimates, $\hat{\boldsymbol\theta}_\mathrm{in}$.
+
+The arrival time prior is connected to the origin of the detector coordinate system. Given the Earth-fixed coordinates of the detectors $\mathbf{n}_i$ and the arrival times $\tau_i$, we compute their averages weighted by the timing uncertainty formula:
 %
-\marginpar{Need to discuss $D_{\mathrm{L},\mathrm{min}}$, $D_{\mathrm{L},\mathrm{max}}$, and how they are selected automatically if the user does not provide them.}%
+\begin{equation*}
+    \langle \mathbf{n} \rangle = \frac{
+        \displaystyle
+        \sum_i \frac{\mathbf{n}_i}{\hat\rho_i \omega_{\mathrm{rms},i}}
+    }{
+        \displaystyle
+        \sum_i \frac{1}{\hat\rho_i \omega_{\mathrm{rms},i}}
+    },
+    \qquad
+    \langle \hat\tau \rangle = \frac{
+        \displaystyle
+        \sum_i \frac{\hat\tau_i}{\hat\rho_i \omega_{\mathrm{rms},i}}
+    }{
+        \displaystyle
+        \sum_i \frac{1}{\hat\rho_i \omega_{\mathrm{rms},i}}
+    }.
+\end{equation*}
 %
-\begin{eqnarray*}
-	D_\mathrm{L} &\in& [D_{\mathrm{L},\mathrm{min}}, D_{\mathrm{L},\mathrm{max}}] \\
-	t_\oplus &\in& [-\infty, \infty] \\
-	u &\in& [-1, 1] \\
-	\psi &\in& [0, \pi/2)
-\end{eqnarray*}
+Then, we subtract off these means:
+%
+\begin{equation*}
+    \mathbf{n}_i \leftarrow \mathbf{n}_i - \langle \mathbf{n} \rangle,
+    \qquad
+    \hat\tau_i \leftarrow \hat\tau_i - \langle \hat\tau \rangle.
+\end{equation*}
+%
+In these coordinates relative to the weighted detector array barycenter, the arrival time prior is uniform in $-T \leq t \leq T$, with $T = \max\limits_i |\mathbf{n}_i| / c + 5\,\textrm{ms}$.
+
+The distance prior is a user-selected power of distance,
+%
+\begin{equation*}
+    p(D_\mathrm{L}) \propto \cases{
+        {D_\mathrm{L}}^m & if $D_{\mathrm{L},\mathrm{min}} < D_\mathrm{L} < D_{\mathrm{L},\mathrm{max}}$ \\
+        0 & otherwise
+    }
+\end{equation*}
+%
+where $m=2$ for a prior that is uniform in volume, and $m=-1$. If a distance prior is not specified, the default is uniform in volume out to the maximum SNR=4 horizon distance:
+%
+\begin{equation*}
+    m = 2,
+    \qquad
+    D_{\mathrm{L},\mathrm{min}} = 0,
+    \qquad
+    D_{\mathrm{L},\mathrm{max}} = \frac{1}{4} \max_i D_{1,i}.
+\end{equation*}
+
+Finally, the prior is uniform in $-1 \leq \cos\iota \leq 1$ and $0 \leq \psi < 2\pi$.
 
 \subsection{Adaptive resolution}
 
