@@ -5,7 +5,6 @@ import numpy as np
 import scipy.integrate
 import scipy.interpolate
 import scipy.special
-import multiprocessing
 import itertools
 from lalinference.bayestar import filter
 from lalinference.bayestar import timing
@@ -23,7 +22,6 @@ signal_model = timing.SignalModel(mass1, mass2, S, f_low,
     *timing.get_approximant_and_orders_from_string('TaylorF2threePointFivePN'))
 w1 = signal_model.get_sn_moment(1)
 w2 = signal_model.get_sn_moment(2)
-crlb1 = 1 / np.sqrt(w2 - np.square(w1))
 
 # Compute 1 second of autocorrelation sequence.
 # FIXME: make this the longest lag that we are going to integrate over.
@@ -94,18 +92,9 @@ def map_nested(map, func, *iterables):
     return np.reshape(results, [len(iterable) for iterable in iterables])
 
 if __name__ == '__main__':
-    from matplotlib import pyplot as plt
+    import json
+    import multiprocessing
 
-    # t = np.linspace(-1, 1, 32768)
-    # plt.plot(t, abs2(acor(t)), label=r'$\gamma\gamma$')
-    # plt.plot(t, np.imag(np.conj(acor(t)) * acor_deriv(t))/w1, label=r'$\gamma\tau$')
-    # plt.plot(t, -np.real(np.conj(acor(t)) * acor_deriv2(t))/w2, label=r'$\tau\tau$')
-    # plt.legend()
-    # plt.xlim(-0.01, 0.01)
-    # plt.savefig('integrand.pdf')
-
-    fig = plt.figure()
-    ax = fig.add_subplot(111, aspect=1)
     snrs = np.logspace(-1, np.log10(30), 100)
     durations = [0.001, 0.01, 0.1, 1.]
     integrands = [num_gamma_gamma, num_tau_tau, num_gamma_tau]
@@ -115,23 +104,11 @@ if __name__ == '__main__':
             pool.map, fisher_integral, durations, integrands, snrs)
     finally:
         pool.terminate()
-
-    fig = plt.figure()
-    ax = fig.add_subplot(111, aspect=1)
-    ax.set_xscale('log')
-    ax.set_yscale('log')
-    ax.set_xlabel('SNR')
-    ax.set_ylabel('RMS timing error (ms)')
-    ax.set_ylim(1e-2, 10)
-    ax.grid()
-
-    for T, data in zip(durations, integrals):
-        F11, F22, F12 = data
-        std_tau = np.sqrt(F11 / (F11 * F22 - np.square(F12))) / snrs
-        ax.plot(snrs, 1e3 * std_tau, label=r'$T={0:g}$'.format(T))
-
-    snrs = np.asarray([1e-1, 1e2])
-    ax.plot(snrs, 1e3 * crlb1 / snrs, '--k', label=r'CRLB')
-
-    plt.legend(loc='upper right')
-    fig.savefig('autocorrelation_std_tau.pdf')
+    with open('autocorrelation_fisher_matrix.json', 'w') as outfile:
+        json.dump({
+            'snrs': snrs.tolist(),
+            'durations': durations,
+            'fisher_matrix_elements': (np.square(snrs) * integrals).tolist(),
+            'w1': w1,
+            'w2': w2
+        }, outfile)

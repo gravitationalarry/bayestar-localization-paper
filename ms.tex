@@ -552,6 +552,20 @@ In the limit of large SNR, our interpretation is that the point estimates $(\hat
 
 On the other hand, in the low SNR limit, the vanishing of $\textproto{D}_{ij}(\rho)$ reflects the fact that some information is lost when the full data $\mathbf{x}$ is discarded. Concretely, as the prior interval $T$ becomes large compared to 1/$\rho\omega_\mathrm{rms}$, the ML estimator becomes more and more prone to pick up a spurious noise fluctuation far from the true signal. Clearly, when the coincidence window $T$ is kept small as possible, more information is retained in the ML point estimates. Put another way, if $T$ is small, then the transition SNR $\rho_\mathrm{crit}$ is also small and fainter signals become useful for parameter estimation.
 
+\begin{figure}
+    \begin{center}
+        \includegraphics{crlb_tau}
+    \end{center}
+    \caption{\label{fig:crlb-tau}\ac{CRLB} on root\nobreakdashes-mean square timing uncertainty, using the likelihood for the full GW data (Equation~\ref{eq:gaussian-likelihood-spa}; dashed diagonal line) or the autocorrelation likelihood (Equation~\ref{eq:autocor-likelihood}; solid lines) with a selection of arrival time priors.}
+\end{figure}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics{fishfactor}
+    \end{center}
+    \caption{\label{fig:fishfactor}Ratio between Fisher matrix elements (solid: $\mathcal{I}_{\gamma\gamma}$, dashed: $\mathcal{I}_{\gamma\tau}$, dotted: $\mathcal{I}_{\tau\tau}$) for the the autocorrelation likelihood and the full GW data. Colors correspond to different arrival time priors as in Figure~\ref{fig:crlb-tau}.}
+\end{figure}
+
 \section{The \ac{BAYESTAR} algorithm}
 
 \subsection{Likelihood}
