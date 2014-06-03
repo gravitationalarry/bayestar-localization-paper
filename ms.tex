@@ -599,18 +599,20 @@ The arrival time prior is connected to the origin of the detector coordinate sys
 \begin{equation*}
     \langle \mathbf{n} \rangle = \frac{
         \displaystyle
-        \sum_i \frac{\mathbf{n}_i}{\hat\rho_i \omega_{\mathrm{rms},i}}
+        \sum_i \frac{\mathbf{n}_i}
+            {\left(\hat\rho_i \omega_{\mathrm{rms},i}\right)^2}
     }{
         \displaystyle
-        \sum_i \frac{1}{\hat\rho_i \omega_{\mathrm{rms},i}}
+        \sum_i \frac{1}{\left(\hat\rho_i \omega_{\mathrm{rms},i}\right)^2}
     },
     \qquad
     \langle \hat\tau \rangle = \frac{
         \displaystyle
-        \sum_i \frac{\hat\tau_i}{\hat\rho_i \omega_{\mathrm{rms},i}}
+        \sum_i \frac{\hat\tau_i}
+            {\left(\hat\rho_i \omega_{\mathrm{rms},i}\right)^2}
     }{
         \displaystyle
-        \sum_i \frac{1}{\hat\rho_i \omega_{\mathrm{rms},i}}
+        \sum_i \frac{1}{\left(\hat\rho_i \omega_{\mathrm{rms},i}\right)^2}
     }.
 \end{equation*}
 %
