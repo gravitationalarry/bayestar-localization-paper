@@ -9,7 +9,7 @@ Attention Mac users
 In order to build a PDF from this manuscript, make sure that you have installed the
 following packages with MacPorts:
 
-    $ sudo port install texlive-bibtex-extra texlive-humanities
+    $ sudo port install texlive-bibtex-extra texlive-fonts-extra texlive-humanities
 
 Git submodules
 --------------
