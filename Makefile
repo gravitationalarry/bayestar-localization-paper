@@ -5,6 +5,7 @@ all: ms.pdf
 
 FIGURES = \
 	crlb_tau.pdf \
+	crlb_gamma.pdf \
 	fishfactor.pdf \
 	inclination_integral_convergence.pdf \
 	polarization_angle_integral_convergence.pdf \
@@ -35,6 +36,9 @@ autocorrelation_fisher_matrix.json: scripts/autocorrelation_fisher_matrix.py
 	python $<
 
 crlb_tau.pdf: scripts/crlb_tau.py matplotlibrc autocorrelation_fisher_matrix.json
+	python $<
+
+crlb_gamma.pdf: scripts/crlb_gamma.py matplotlibrc autocorrelation_fisher_matrix.json
 	python $<
 
 fishfactor.pdf: scripts/fishfactor.py matplotlibrc autocorrelation_fisher_matrix.json
