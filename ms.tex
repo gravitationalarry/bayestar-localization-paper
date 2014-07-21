@@ -4,6 +4,7 @@
 \usepackage{amsopn}
 \usepackage{iopams}
 \usepackage{graphicx}
+\usepackage{mathrsfs}
 \usepackage{bib/aas_macros}
 \usepackage[colorlinks]{hyperref}
 \usepackage{protosem}
@@ -187,7 +188,7 @@ The \ac{ML} point estimates of the signal parameters, $\mathrm{MLE}(\mathbf{x}) 
         \hat{\boldsymbol\theta}_\mathrm{in}\right).
 \end{eqnarray}
 %
-A detection candidate consists of the set $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\boldsymbol\theta}_\mathrm{in}\}$. There are various ways to characterize the significance of a detection candidate, but in Gaussian noise the combined SNR $\hat\rho_\mathrm{c}$ suffices,
+A detection candidate consists of $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\boldsymbol\theta}_\mathrm{in}\}$. There are various ways to characterize the significance of a detection candidate, but in Gaussian noise the combined SNR $\hat\rho_\mathrm{c}$ suffices,
 %
 \marginpar{What is the least that I can get away with saying about false alarm rate estimation and likelihood ratios?}%
 %
@@ -242,7 +243,7 @@ To treat the ML estimates as measurements in and of themselves, we need to work 
     \, d\mathbf{x}
 \end{equation}
 %
-The integral above could be written in terms of the matched filter signals $\left\{y_i\right\}_i$, such that $y_i\left(\hat\tau_i, \hat{\boldsymbol\theta}_\mathrm{in}\right) = \hat\rho_i e^{\hat\gamma_i}$ and $\forall t$, $\left|y_i(t, \boldsymbol\theta_\mathrm{in})\right| \leq \hat\rho_i$. The combination of the nontrivial integration limits and the Fourier transform in the matched filter seem like a problem for direct evaluation.
+The integral above could be written in terms of the matched filter signals $\left\{y_i\right\}_i$, such that $y_i\left(\hat\tau_i, \hat{\boldsymbol\theta}_\mathrm{in}\right) = \hat\rho_i e^{i \hat\gamma_i}$ and $\forall t$, $\left|y_i(t, \boldsymbol\theta_\mathrm{in})\right| \leq \hat\rho_i$. The combination of the nontrivial integration limits and the Fourier transform in the matched filter seem like a problem for direct evaluation.
 
 However, even without directly evaluating the distribution of the \ac{ML} estimator, we know many of its properties. The \ac{CRLB} gives its covariance in the asymptotic limit of high \ac{SNR}. The \ac{CRLB} has been widely applied in \ac{GW} data analysis \cite{fairhurst:2009}. We will momentarily consider the likelihood for a single detector:
 %
@@ -408,7 +409,7 @@ If we assume that $\hat{\boldsymbol\theta}_\mathrm{in} = \boldsymbol\theta_\math
 %
 with $\tilde{\gamma}_i = \hat\gamma_i - \gamma_i$, $\tilde{\tau}_i = \hat\tau_i - \tau_i$, and the template's autocorrelation function $a_i(t; \boldsymbol\theta_\mathrm{in})$ defined as
 %
-\begin{equation}
+\begin{equation}\label{eq:autocorrelation-function}
     a_i(t; \boldsymbol\theta_\mathrm{in}) := \frac{1}{{{\sigma_i}^2(\boldsymbol\theta_\mathrm{in})}} \int_0^\infty \frac{\left| h(\omega; \hat{\boldsymbol\theta}_\mathrm{in})\right|^2}{S_i(\omega)} e^{i \omega t} \,d\omega.
 \end{equation}
 
@@ -422,19 +423,6 @@ To assemble the joint likelihood for the whole network, we just form the product
         \right\}
     \right].
 \end{equation}
-%
-To marginalize over the coalescence phase, we can insert an arbitrary nuisance phase $\eta$ by making the replacement $\tilde{\gamma}_i \rightarrow \tilde{\gamma}_i + \eta$. Then integrating over $\eta$ from $0$ to $2\pi$ and suppressing normalization factors, we get the \ac{BAYESTAR} likelihood
-%
-\marginpar{Different symbol? Is $\mathcal{L}_\mathrm{BAYESTAR}$ too grandiose?}
-%
-\begin{equation}
-    \mathcal{L}_\mathrm{BAYESTAR} = \exp \left[ - \frac{1}{2} \sum_i {\rho_i}^2 \right] I_0 \left[
-        \left| \sum_i \hat\rho_i \rho_i e^{i \tilde{\gamma}_i} a_i^*(\tilde{\tau}_i)
-        \right|
-    \right],
-\end{equation}
-%
-where $I_0$ is a modified Bessel function of the first kind.
 
 \subsection{Properties}
 
@@ -489,7 +477,7 @@ We can compute the Fisher matrix elements for the autocorrelation likelihood giv
     }.
 \end{eqnarray}
 %
-Matrix elements that are not listed have values that are implied by the symmetry of the Fisher matrix. Note that the minus signs are correct but a little confusing: despite them, $\mathcal{I}_{\gamma\gamma}, \mathcal{I}_{\tau\tau} \geq 0$ and $\mathcal{I}_{\gamma\tau} \leq 0$. The time integration limits $[-T, T]$ constitute a flat prior on arrival time, the time coincidence window between detectors.
+The notation $I_k$ denotes a modified Bessel function of the first kind. Matrix elements that are not listed have values that are implied by the symmetry of the Fisher matrix. Note that the minus signs are correct but a little confusing: despite them, $\mathcal{I}_{\gamma\gamma}, \mathcal{I}_{\tau\tau} \geq 0$ and $\mathcal{I}_{\gamma\tau} \leq 0$. The time integration limits $[-T, T]$ constitute a flat prior on arrival time, the time coincidence window between detectors.
 
 If we can show that the weighting function $w(t; \rho)$ approaches a Dirac delta function as $\rho \rightarrow \infty$, then the Fisher matrix for the autocorrelation likelihood approaches the Fisher matrix for the full GW data, \Eref{eq:fisher-matrix}, as $\rho \rightarrow \infty$. The Bessel functions asymptotically approach:
 %
@@ -570,29 +558,14 @@ On the other hand, in the low SNR limit, the diminishing value of $\textproto{D}
 
 \section{The \ac{BAYESTAR} algorithm}
 
-\subsection{Inputs}
+Here we describe the numerical implementation of \ac{BAYESTAR}.
 
-\begin{itemize}
-    \item Discuss single-detector SNR threshold
-    \item $\hat\rho_i, \hat\gamma_i, \hat\tau_i$
-    \item Sampled PSD
-    \item Waveform?
-    \item Masses $\hat m_1, \hat m_2$
-\end{itemize}
+\subsection{Prior and problem setup}
 
-\subsection{Autocorrelation series}
+The detection pipeline supplies a candidate $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\boldsymbol\theta}_\mathrm{in}\}$, and discretely sampled noise \acp{PSD} $S_i(\omega_j)$ for all detectors. \marginpar{Discuss single-detector threshold here?}
 
-\marginpar{This part may be too technical.}%
-%
-To calculate the autocorrelation sequence, we need to compute the inverse DFT of the autopower spectral density of the template. A BNS signal remains in the Advanced LIGO sensitive band for thousands of seconds, but we will only be interested in $\sim 10$\,ms of the autocorrelation sequence. If we have a sequence of length $N$, and we only need the first $M$ samples of the inverse DFT, where $M$ divides $N$ and $cM = N$, then we may make use of the following identity to compute the DFT with a speedup of $\log N/M$:
-%
-\begin{eqnarray*}
-    x[n] &=& \sum_{k=0}^{N-1} \exp \left[ \frac{2 \pi i k n}{N} \right] Y[k] \\
-    &=& \sum_{j=0}^{c-1} \sum_{m=0}^{M-1} \exp \left[ \frac{2 \pi i (m c + j) n}{c M} \right] Y[m c + j] \\
-    &=& \sum_{j=0}^{c-1} \exp \left[ \frac{2 \pi i j n}{N} \right] \sum_{m=0}^{M-1} \exp \left[ \frac{2 \pi i m n}{M} \right] Y[m c + j].
-\end{eqnarray*}
-
-\subsection{Prior}
+We compute the GW signal for a source with intrinsic parameters equal to the detection pipeline's estimate, $h(\omega; \hat{\boldsymbol\theta}_\mathrm{in})$.
+Then we find the SNR=1 horizon distance $D_{1,i}$ for each detector by numerically integrating \Eref{eq:horizon}.
 
 We have no explicit prior on the intrinsic parameters; in our analysis they are fixed at their \ac{ML} estimates, $\hat{\boldsymbol\theta}_\mathrm{in}$.
 
@@ -649,48 +622,52 @@ where $m=2$ for a prior that is uniform in volume, and $m=-1$. If a distance pri
 
 Finally, the prior is uniform in $-1 \leq \cos\iota \leq 1$ and $0 \leq \psi < 2\pi$.
 
-\subsection{Adaptive resolution}
+We compute the autocorrelation function for each detector from $t = 0$ to $t = T$ at intervals of $\Delta t = 1/f_s$, where $f_s$ is the smallest power of two that is greater than or equal to the Nyquist rate. Because BNS signals typically terminate at about 1500\,Hz, a typical value for $\Delta t$ is $(4096\,\textrm{Hz})^{-1}$. We use a pruned \ac{FFT} because for BNS systems, the GW signal remains in LIGO's sensitive band for $\sim$100\nobreakdashes--1000\,s, whereas $T \sim 10$\,ms.\footnote{See \url{http://www.fftw.org/pruned.html} for a discussion of methods for computing the first $K$ samples of an \ac{FFT} of length $N$.}
 
-The \ac{TOA}\nobreakdashes-only posterior in \Eref{eq:toa-posterior} is numerically trivial to evaluate because it involves no numerical integrals. However, as we will see in the next section, the \ac{SNR}\nobreakdashes-only posterior is numerically expensive.
+\subsection{Marginal posterior}
 
-\marginpar{Clumsy prose.}%
-We evaluate the \ac{TOA}\nobreakdashes-only posterior at the centers of \ac{HEALPix} pixels at the lowest possible resolution. Then, we increase the resolution until 99.99\% of the \ac{TOA}\nobreakdashes-only posterior is contained within at least 3072 pixels. The numerically expensive \ac{SNR} integrals are done only for the pixels that comprise the 99.99th percentile at this resolution. All other pixels are set to zero.
-
-\subsection{Posterior}
-
+The marginal posterior as a function of sky location is
+%
 \begin{eqnarray}
-    p(
-        \mathbf{n} |
-        \hat{\tau}_1, \hat{\tau}_2, &\dots, \hat{\tau}_N,
-        \hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N) \nonumber\\
-    &= p(\mathbf{n} |
-        \hat{\tau}_1, \hat{\tau}_2, \dots, \hat{\tau}_N) \nonumber\\
-        &\times
-        p(\mathbf{n} |
-        \hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N
-    )
-\end{eqnarray}
-%
-where
-%
-\begin{equation*}
-    \fl
-    p(\mathbf{n} |
-    \hat{\rho}_1, \hat{\rho}_2, \dots, \hat{\rho}_N)
-    \propto
-    \int_0^\frac{\pi}{2}
-    \int_0^1
+    \fl f(\alpha, \delta) \propto
+    \int_{0}^{\pi}
+    \int_{-1}^{1}
+    \int_{-T}^{T}
     \int_{D_{\mathrm{L},\mathrm{min}}}^{D_{\mathrm{L},\mathrm{max}}}
-    \exp \left[
-            -\frac{1}{2} \sum_{i=1}^N \left(\hat{\rho}_i - \rho_i(\mathbf{n}, D_\mathrm{L}, u, \psi) \right)^2
-        \right]
-    {D_\mathrm{L}}^m
-    \,dD_\mathrm{L}
-    \,du
-    \,d\psi.
-\end{equation*}
+    \int_{0}^{2\pi} \\
+    %
+    \exp \left[ - \frac{1}{2} \sum_i {\rho_i}^2
+        + \sum_i \hat\rho_i \rho_i \Re \left\{ e^{i \tilde{\gamma}_i}
+        a^*(\tilde{\tau}_i)
+        \right\}
+    \right] {D_\mathrm{L}}^k \, dt_\oplus \, d\phi_c dD_\mathrm{L} \, d\cos{\iota} \, d\psi.
+\end{eqnarray}
 
-The marginalization over $D_\mathrm{L}$, $u$, and $\psi$ must be done numerically. The outermost integration is over $u$ and $\psi$, and is done with Newton\nobreakdashes--Cotes by evaluating $\mathcal{L}_\mathrm{SNR}$ on a regular lattice in $u$ and $\psi$.
+To marginalize over the coalescence phase, we can insert an arbitrary nuisance phase $\eta$ by making the replacement $\tilde{\gamma}_i \rightarrow \tilde{\gamma}_i + \eta$. Then integrating over $\eta$ from $0$ to $2\pi$ and suppressing normalization factors, we get
+%
+\begin{eqnarray}
+    \fl f(\alpha, \delta) \rightarrow
+    \int_{0}^{\pi}
+    \int_{-1}^{1}
+    \int_{-T}^{T}
+    \int_{D_{\mathrm{L},\mathrm{min}}}^{D_{\mathrm{L},\mathrm{max}}} \\
+    %
+    \exp \left[ - \frac{1}{2} \sum_i {\rho_i}^2 \right] I_0 \left[
+            \left| \sum_i \hat\rho_i \rho_i e^{i \tilde{\gamma}_i} a_i^*(\tilde{\tau}_i)
+            \right|
+    \right]
+    {D_\mathrm{L}}^k dD_\mathrm{L} \, dt_\oplus \, d\cos{\iota} \, d\psi.
+\end{eqnarray}
+
+\subsubsection{Integral over angles and time}
+
+The integrand is periodic in $\psi$, so simple Newton-Cotes quadrature over $\psi$ exhibits extremely rapid convergence. We therefore sample the posterior on a regular grid of 10 points from 0 to $\pi$.
+
+The integral over $\cos\iota$ converges with just as rapidly with Gauss-Legendre quadrature, so we use a 10\nobreakdashes-point Gauss-Legendre rule for integration over $\cos\iota$.
+
+We sample $t_\oplus$ regularly from $-T$ to $T$ at intervals of $\Delta t$. This is typically $\sim 2 (10\,\mathrm{ms})(4096\,\mathrm{Hz}) \approx 80$\,samples. We use Catmull\nobreakdashes-Rom cubic splines to interpolate the real and imaginary parts of the autocorrelation functions between samples.
+
+\subsubsection{Integral over distance: adaptive Gaussian quadrature method}
 
 \begin{figure}
     \caption{\label{fig:radial_integrand}Illustration of initial subdivisions for distance integration scheme. Distance increases from left to right. In the color version, the left\nobreakdashes-hand tail, the left\nobreakdashes- and right\nobreakdashes-hand sides of the maximum likelihood peak, and the right\nobreakdashes-hand tail, are colored cyan, red, green, and blue, respectively.}
@@ -699,13 +676,18 @@ The marginalization over $D_\mathrm{L}$, $u$, and $\psi$ must be done numericall
     \end{center}
 \end{figure}
 
-The innermost integration is over $D_\mathrm{L}$ and is performed using adaptive Gaussian quadrature, but with a twist that speeds up convergence. As in many parameter estimation problems, the integrand may be sharply peaked, and any generic adaptive integration scheme may take a long time to find the peak. Before evaluating each inner integral over $D_\mathrm{L}$, the quantities $A=-\frac{1}{2} \sum_i {\rho_i}^2$ and $B=\sum_i \rho_i \hat\rho_i$ are pre\nobreakdashes-calculated so that the integrand can be written as
+The innermost integral over $D_\mathrm{L}$ is a little bit more challenging. The distance integrand has both a sharp maximum\nobreakdashes-likelihood peak and an extended power\nobreakdashes-law prior\nobreakdashes-dominated tail. At any values of the other parameters, either the peak or the tail might dominate. If the peak dominates, it may not be successfully resolved by any general\nobreakdashes-purpose fixed\nobreakdashes-order quadrature scheme. Any general adaptive integrator may take a long time to find the peak.
+
+We found several efficient ways to evaluate the distance integral. The first method is to use adaptive Gaussian quadrature, but with an educated choice of initial subdivisions. The integrand can be written as
 %
 \begin{equation*}
+    \exp\left(\frac{A}{{D_\mathrm{L}}^2}\right)
+    I_0 \left(\frac{B}{D_\mathrm{L}}\right) {D_\mathrm{L}}^m
+    \sim
     \exp\left(\frac{A}{{D_\mathrm{L}}^2} + \frac{B}{D_\mathrm{L}}\right) {D_\mathrm{L}}^m.
 \end{equation*}
 %
-Then, we see that the likelihood $\exp(A {D_\mathrm{L}}^{-2} + B {D_\mathrm{L}}^{-1})$ is maximized when $D_\mathrm{L} = D_{\mathrm{L},0} = -2A/B$. The likelihood takes on a factor $\eta$ (say, $\eta=0.01$) of its maximum value when
+Then, we see that the approximate likelihood $\exp(A {D_\mathrm{L}}^{-2} + B {D_\mathrm{L}}^{-1})$ is maximized when $D_\mathrm{L} = D_{\mathrm{L},0} = -2A/B$. The likelihood takes on a factor $\eta$ (say, $\eta=0.01$) of its maximum value when
 %
 \begin{equation}
     D_\mathrm{L} = D_{\mathrm{L},\pm} = \left(\frac{1}{D_{\mathrm{L},0}} \mp \sqrt{\frac{\log\eta}{A}}\right)^{-1}.
@@ -728,9 +710,41 @@ We have now identified up to five breakpoints that partition the distance integr
     \leq D_{\mathrm{L},\mathrm{max}}\}.
 \end{equation}
 %
-We use these breakpoints as initial subdivision in an adaptive Gaussian quadrature algorithm. Specifically, we use the GNU Scientific Library's \verb|gsl_integrate_qagp|\footnote{\url{http://www.gnu.org/software/gsl/manual/html_node/QAGP-adaptive-integration-with-known-singular-points.html}} function, which is designed to integrate functions with known singular points (though, of course, or integrand has no singular points). This function estimates the integral over each subdivision and each interval's contribution to the total error, then subdivides the interval whose error contribution is largest. Subdivisions continue until a fixed total fractional error is reached. In this way, most integrand evaluations are expended on the most important distance interval, whether that happens to be the tails (when the posterior is dominated by the prior) or the peak (when the posterior is dominated by the observations).
+We use these breakpoints as initial subdivisions in an adaptive Gaussian quadrature algorithm\footnote{for instance, \ac{GSL}'s \texttt{gsl\_integrate\_qagp} function, \url{http://www.gnu.org/software/gsl/manual/html_node/QAGP-adaptive-integration-with-known-singular-points.html}}. This function estimates the integral over each subdivision and each interval's contribution to the total error, then subdivides the interval whose error contribution is largest. Subdivisions continue until a fixed total fractional error is reached. In this way, most integrand evaluations are expended on the most important distance interval, whether that happens to be the tails (when the posterior is dominated by the prior) or the peak (when the posterior is dominated by the observations).
 
-\subsection{Implementation}
+\subsubsection{Integral over distance: importance sampling method}
+
+Let's say that we want to evaluate an integral
+%
+\begin{equation}\label{eq:importance-sampling-difficult-integral}
+    \mathscr{F}(x_1, x_2) = \int_{x_1}^{x_2} f(x') dx'
+\end{equation}
+%
+Suppose that this integral is resistant to direct application of standard quadrature techniques, but we have another function $g(x)$ that we can integrate analytically or at least numerically with relative ease,
+%
+\begin{equation}
+    \mathscr{G}(x) = G(x) - G(x_0) = \int_{x_0}^x g(x') dx'.
+\end{equation}
+%
+There is an \emph{ultimate}, though tautological, change of variables that makes it trivial to evaluate $\mathscr{G}(x)$,
+%
+\begin{equation}
+    \mathscr{G}(x) = \int_0^{\mathrlap{\mathscr{G}(x)}} dG.
+\end{equation}
+%
+If we apply the same change of variables to \Eref{eq:importance-sampling-difficult-integral}, we get
+%
+\begin{equation}\label{eq:importance-sampling}
+    \mathscr{F}(x_1, x_2) = \int_{\mathscr{G}(x_1)}^{\mathscr{G}(x_2)} \frac{f(\mathscr{G}^{-1}(G))}{g(\mathscr{G}^{-1}(G))} dG.
+\end{equation}
+%
+If $f(x)$ and $g(x)$ have sufficiently similar behavior, then their quotient $f/g$ will be better behaved than $f$ itself, and more amenable to any given quadrature technique. When the transformed integral \Eref{eq:importance-sampling} is evaluated using Monte Carlo integration, this technique is referred to as importance sampling.
+
+We use the same kind of change of variables with fixed\nobreakdashes-order Gaussian quadrature.
+
+\subsection{Adaptive resolution}
+
+The \ac{TOA}\nobreakdashes-only posterior in \Eref{eq:toa-posterior} is numerically trivial to evaluate because it involves no numerical integrals. However, as we will see in the next section, the \ac{SNR}\nobreakdashes-only posterior is numerically expensive.
 
 \marginpar{Talk briefly about C implementation, OpenMP, and Python wrapper that interfaces with search pipelines.}%
 The \ac{SNR} marginalization integrals for different pixels may be evaluated in parallel. In our C language implementation, the loop over pixels is parallelized with OpenMP\footnote{http://openmp.org/}.
