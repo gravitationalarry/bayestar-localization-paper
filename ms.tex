@@ -84,7 +84,7 @@ A \ac{CBC} source is specified by a vector of extrinsic parameters describing it
             \begin{array}{c}
                 \alpha \\
                 \delta \\
-                D_\mathrm{L} \\
+                r \\
                 t_\oplus \\
                 \iota \\
                 \psi \\
@@ -101,7 +101,7 @@ A \ac{CBC} source is specified by a vector of extrinsic parameters describing it
                 \begin{array}{p{4cm}}
                     right ascension \\
                     declination \\
-                    luminosity distance \\
+                    distance \\
                     arrival time at geocenter \\
                     inclination angle \\
                     polarization angle \\
@@ -137,7 +137,7 @@ Then, we can write the signal model in a way that isolates all dependence on the
 %
 \begin{equation}\label{eq:full-signal-model}
     h_i(\omega; \boldsymbol\theta) = \e^{-i \omega t_\oplus}
-    \frac{D_{1,i}}{D_\mathrm{L}}
+    \frac{r_{1,i}}{r}
     \e^{2 i \phi_c}
     \left[
     \frac{1}{2} \left(1 + \cos^2 \iota\right) \Re \left\{z\right\} - i
@@ -155,12 +155,12 @@ for $\omega \geq 0$, where
     \right).
 \end{equation}
 %
-The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector antenna factors, defined such that $0 \leq {F_{+,i}}^2 + {F_{\times,i}} \leq 1$. They depend on the orientation of detector $i$ as well as the sky location and sidereal time of the event, and are derived in~\cite{PhysRevD.63.042003}. The quantity $D_{1,i}$ is a fiducial distance at which detector $i$ would register SNR=1 for an optimally oriented binary (face\nobreakdashes-on, and in a direction perpendicular to the interferometer's arms),
+The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector antenna factors, defined such that $0 \leq {F_{+,i}}^2 + {F_{\times,i}} \leq 1$. They depend on the orientation of detector $i$ as well as the sky location and sidereal time of the event, and are derived in~\cite{PhysRevD.63.042003}. The quantity $r_{1,i}$ is a fiducial distance at which detector $i$ would register SNR=1 for an optimally oriented binary (face\nobreakdashes-on, and in a direction perpendicular to the interferometer's arms),
 %
 \marginpar{I seem to have dropped a factor of 2 here...}%
 %
 \begin{equation}\label{eq:horizon}
-D_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|h(\omega; \mathbf \theta)\right|^2}{S_i(\omega)} \,d\omega.
+r_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|h(\omega; \mathbf \theta)\right|^2}{S_i(\omega)} \,d\omega.
 \end{equation}
 
 More succinctly, we can write the signal received by detector $i$ in terms of observable extrinsic parameters $\boldsymbol\theta_i = (\rho_i, \gamma_i, \tau_i)$, the amplitude $\rho_i$, phase $\gamma_i$, and time delay $\tau_i$ on arrival at detector $i$,
@@ -565,7 +565,7 @@ Here we describe the numerical implementation of \ac{BAYESTAR}.
 The detection pipeline supplies a candidate $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\boldsymbol\theta}_\mathrm{in}\}$, and discretely sampled noise \acp{PSD} $S_i(\omega_j)$ for all detectors. \marginpar{Discuss single-detector threshold here?}
 
 We compute the GW signal for a source with intrinsic parameters equal to the detection pipeline's estimate, $h(\omega; \hat{\boldsymbol\theta}_\mathrm{in})$.
-Then we find the SNR=1 horizon distance $D_{1,i}$ for each detector by numerically integrating \Eref{eq:horizon}.
+Then we find the SNR=1 horizon distance $r_{1,i}$ for each detector by numerically integrating \Eref{eq:horizon}.
 
 We have no explicit prior on the intrinsic parameters; in our analysis they are fixed at their \ac{ML} estimates, $\hat{\boldsymbol\theta}_\mathrm{in}$.
 
@@ -604,8 +604,8 @@ In these coordinates relative to the weighted detector array barycenter, the arr
 The distance prior is a user-selected power of distance,
 %
 \begin{equation*}
-    p(D_\mathrm{L}) \propto \cases{
-        {D_\mathrm{L}}^m & if $D_{\mathrm{L},\mathrm{min}} < D_\mathrm{L} < D_{\mathrm{L},\mathrm{max}}$ \\
+    p(r) \propto \cases{
+        r^m & if $r_\mathrm{min} < r < r_\mathrm{max}$ \\
         0 & otherwise
     }
 \end{equation*}
@@ -615,9 +615,9 @@ where $m=2$ for a prior that is uniform in volume, and $m=-1$. If a distance pri
 \begin{equation*}
     m = 2,
     \qquad
-    D_{\mathrm{L},\mathrm{min}} = 0,
+    r_\mathrm{min} = 0,
     \qquad
-    D_{\mathrm{L},\mathrm{max}} = \frac{1}{4} \max_i D_{1,i}.
+    r_\mathrm{max} = \frac{1}{4} \max_i r_{1,i}.
 \end{equation*}
 
 Finally, the prior is uniform in $-1 \leq \cos\iota \leq 1$ and $0 \leq \psi < 2\pi$.
@@ -633,14 +633,14 @@ The marginal posterior as a function of sky location is
     \int_{0}^{\pi}
     \int_{-1}^{1}
     \int_{-T}^{T}
-    \int_{D_{\mathrm{L},\mathrm{min}}}^{D_{\mathrm{L},\mathrm{max}}}
+    \int_{r_\mathrm{min}}^{r_\mathrm{max}}
     \int_{0}^{2\pi} \\
     %
     \exp \left[ - \frac{1}{2} \sum_i {\rho_i}^2
         + \sum_i \hat\rho_i \rho_i \Re \left\{ e^{i \tilde{\gamma}_i}
         a^*(\tilde{\tau}_i)
         \right\}
-    \right] {D_\mathrm{L}}^k \, dt_\oplus \, d\phi_c dD_\mathrm{L} \, d\cos{\iota} \, d\psi.
+    \right] r^m \, dt_\oplus \, d\phi_c dr \, d\cos{\iota} \, d\psi.
 \end{eqnarray}
 
 To marginalize over the coalescence phase, we can insert an arbitrary nuisance phase $\eta$ by making the replacement $\tilde{\gamma}_i \rightarrow \tilde{\gamma}_i + \eta$. Then integrating over $\eta$ from $0$ to $2\pi$ and suppressing normalization factors, we get
@@ -650,13 +650,13 @@ To marginalize over the coalescence phase, we can insert an arbitrary nuisance p
     \int_{0}^{\pi}
     \int_{-1}^{1}
     \int_{-T}^{T}
-    \int_{D_{\mathrm{L},\mathrm{min}}}^{D_{\mathrm{L},\mathrm{max}}} \\
+    \int_{r_\mathrm{min}}^{r_\mathrm{max}} \\
     %
     \exp \left[ - \frac{1}{2} \sum_i {\rho_i}^2 \right] I_0 \left[
             \left| \sum_i \hat\rho_i \rho_i e^{i \tilde{\gamma}_i} a_i^*(\tilde{\tau}_i)
             \right|
     \right]
-    {D_\mathrm{L}}^k dD_\mathrm{L} \, dt_\oplus \, d\cos{\iota} \, d\psi.
+    r^m dr \, dt_\oplus \, d\cos{\iota} \, d\psi.
 \end{eqnarray}
 
 \subsubsection{Integral over angles and time}
@@ -676,45 +676,64 @@ We sample $t_\oplus$ regularly from $-T$ to $T$ at intervals of $\Delta t$. This
     \end{center}
 \end{figure}
 
-The innermost integral over $D_\mathrm{L}$ is a little bit more challenging. The distance integrand has both a sharp maximum\nobreakdashes-likelihood peak and an extended power\nobreakdashes-law prior\nobreakdashes-dominated tail. At any values of the other parameters, either the peak or the tail might dominate. If the peak dominates, it may not be successfully resolved by any general\nobreakdashes-purpose fixed\nobreakdashes-order quadrature scheme. Any general adaptive integrator may take a long time to find the peak.
+The innermost integral over $r$ is a little bit more challenging. The distance integrand has both a sharp maximum\nobreakdashes-likelihood peak and an extended power\nobreakdashes-law prior\nobreakdashes-dominated tail. At any values of the other parameters, either the peak or the tail might dominate. If the peak dominates, it may not be successfully resolved by any general\nobreakdashes-purpose fixed\nobreakdashes-order quadrature scheme. Any general adaptive integrator may take a long time to find the peak.
 
-We found several efficient ways to evaluate the distance integral. The first method is to use adaptive Gaussian quadrature, but with an educated choice of initial subdivisions. The integrand can be written as
+We found two efficient ways to evaluate the distance integral. The first method is to use adaptive Gaussian quadrature, but with an educated choice of initial subdivisions. The distance integral can be written as
 %
-\begin{equation*}
-    \exp\left(\frac{A}{{D_\mathrm{L}}^2}\right)
-    I_0 \left(\frac{B}{D_\mathrm{L}}\right) {D_\mathrm{L}}^m
-    \sim
-    \exp\left(\frac{A}{{D_\mathrm{L}}^2} + \frac{B}{D_\mathrm{L}}\right) {D_\mathrm{L}}^m.
-\end{equation*}
+\begin{eqnarray}\label{eq:distance-integral}
+    \mathscr{F} &=&
+        \int_{\mathrlap{r_\mathrm{min}}}^{\mathrlap{r_\mathrm{max}}}
+        \exp\left[-\frac{p^2}{r^2}\right]
+        I_0\left[\frac{b}{r}\right] r^m dr \nonumber \\
+    &=&
+        \int_{\mathrlap{r_\mathrm{min}}}^{\mathrlap{r_\mathrm{max}}}
+        \exp\left[-\frac{p^2}{r^2}+\frac{b}{r}\right]
+        \overline{I}_0\left[\frac{b}{r}\right] r^m dr
+\end{eqnarray}
 %
-Then, we see that the approximate likelihood $\exp(A {D_\mathrm{L}}^{-2} + B {D_\mathrm{L}}^{-1})$ is maximized when $D_\mathrm{L} = D_{\mathrm{L},0} = -2A/B$. The likelihood takes on a factor $\eta$ (say, $\eta=0.01$) of its maximum value when
+where
+%
+\begin{eqnarray*}
+    p^2 &=& \frac{1}{2} r^2 \sum_i {\rho_i}^2 \\
+    b &=& r \left| \sum_i \hat\rho_i \rho_i e^{i \tilde{\gamma}_i}
+        a_i^*(\tilde{\tau}_i) \right| \\
+    \overline{I}_0(x) &=& \exp(-|x|) I_0(x).
+\end{eqnarray*}
+%
+The coefficients $p^2$ and $b$ are nonnegative and independent of distance. The symbol $\overline{I}_0$ denotes an exponentially scaled Bessel function. In the limit of large argument, $I_0(|x|) \sim \exp(|x|) / \sqrt{2 \pi |x|}$ \cite{Olver:2010:NHMF}\footnote{\url{http://dlmf.nist.gov/10.40.E1}}. The scaled Bessel is useful for evaluation on a computer because it has a relatively small range $(0, 1]$ and varies slowly in proportion to $x^{1/2}$. If we neglect both the Bessel function and the $r^m$ prior, then the approximate likelihood $\exp(-p^2/r^2 + b/r)$ is maximized when
+%
+\begin{equation}\label{eq:ml-distance}
+    r = r_0 = 2p^2/b.
+\end{equation}
+%
+The likelihood takes on a factor $\eta$ (say, $\eta=0.01$) of its maximum value when
 %
 \begin{equation}
-    D_\mathrm{L} = D_{\mathrm{L},\pm} = \left(\frac{1}{D_{\mathrm{L},0}} \mp \sqrt{\frac{\log\eta}{A}}\right)^{-1}.
+    r = r_\pm = \left(\frac{1}{r_0} \mp \frac{\sqrt{-\log\eta}}{p}\right)^{-1}.
 \end{equation}
 %
 We have now identified up to five breakpoints that partition the distance integrand into up to four intervals with quantitatively distinct behavior. These intervals are depicted in Figure~\ref{fig:radial_integrand} with distance increasing from left to right. There is a left\nobreakdashes-hand or small distance tail in which the integrand is small and monotonically increasing, a left\nobreakdashes- and right\nobreakdashes-hand side of the maximum likelihood peak, and a right\nobreakdashes-hand tail in which the integrand is small and monotonically decreasing. These breakpoints are:
 %
 \begin{equation}
-    D_{\mathrm{L},\mathrm{break}} = \{ D_\mathrm{L} \in
+    r_\mathrm{break} = \{ r \in
     \left\{
     \begin{array}{c}
-    D_{\mathrm{L},\mathrm{min}} \\
-    D_{\mathrm{L},-} \\
-    D_{\mathrm{L},0} \\
-    D_{\mathrm{L},+} \\
-    D_{\mathrm{L},\mathrm{max}}
+    r_\mathrm{min} \\
+    r_- \\
+    r_0 \\
+    r_+ \\
+    r_\mathrm{max}
     \end{array}
     \right\} :
-    D_{\mathrm{L},\mathrm{min}} \leq D_\mathrm{L}
-    \leq D_{\mathrm{L},\mathrm{max}}\}.
+    r_\mathrm{min} \leq r
+    \leq r_\mathrm{max}\}.
 \end{equation}
 %
 We use these breakpoints as initial subdivisions in an adaptive Gaussian quadrature algorithm\footnote{for instance, \ac{GSL}'s \texttt{gsl\_integrate\_qagp} function, \url{http://www.gnu.org/software/gsl/manual/html_node/QAGP-adaptive-integration-with-known-singular-points.html}}. This function estimates the integral over each subdivision and each interval's contribution to the total error, then subdivides the interval whose error contribution is largest. Subdivisions continue until a fixed total fractional error is reached. In this way, most integrand evaluations are expended on the most important distance interval, whether that happens to be the tails (when the posterior is dominated by the prior) or the peak (when the posterior is dominated by the observations).
 
 \subsubsection{Integral over distance: importance sampling method}
 
-Let's say that we want to evaluate an integral
+The second method of evaluating the distance integral, and the one used in practice, is similar to importance sampling. Let's say that we want to evaluate an integral
 %
 \begin{equation}\label{eq:importance-sampling-difficult-integral}
     \mathscr{F}(x_1, x_2) = \int_{x_1}^{x_2} f(x') dx'
@@ -740,14 +759,77 @@ If we apply the same change of variables to \Eref{eq:importance-sampling-difficu
 %
 If $f(x)$ and $g(x)$ have sufficiently similar behavior, then their quotient $f/g$ will be better behaved than $f$ itself, and more amenable to any given quadrature technique. When the transformed integral \Eref{eq:importance-sampling} is evaluated using Monte Carlo integration, this technique is referred to as importance sampling.
 
-We use the same kind of change of variables with fixed\nobreakdashes-order Gaussian quadrature.
+We use the same kind of change of variables with fixed\nobreakdashes-order Gaussian quadrature. We first find the approximate \ac{ML} distance $r_0$ using \Eref{eq:ml-distance}. If $r_0 < r_\mathrm{min}$ or $r_0 > r_\mathrm{max}$, then the ML peak lies outside of the limits of integration and the original integrand behaves like a low-order power law. In this case, we use 10\nobreakdashes-point Gaussian quadrature to evaluate \Eref{eq:distance-integral}.
 
-\subsection{Adaptive resolution}
+If, on the other hand, $r_\mathrm{min} \leq r_0 \leq r_\mathrm{max}$, then the integrand contains a sharp peak that we can smooth out with importance sampling. We first re-scale the distance integral \Eref{eq:distance-integral} so that the peak value of the integrand is $\sim 1$:
+%
+\begin{equation}
+    \mathscr{F} = \exp\left(\frac{b^2}{4p^2}\right)
+        {r_0}^m
+        \int_{r_\mathrm{min}}^{r_\mathrm{max}}
+        \exp\left[-\left(\frac{p}{r} - \frac{b}{2p}\right)^2\right]
+        \left[\frac{r}{r_0}\right]^m
+        dr.
+\end{equation}
+%
+The importance sampling integrand $g(r)$ is
+%
+\begin{equation}
+    g(r) = \exp\left[-\left(\frac{p}{r} - \frac{b}{2p}\right)^2\right]
+        \frac{1}{r^2}
+\end{equation}
+%
+with definite integral
+%
+\begin{equation}
+    \mathscr{G}(r) = \frac{\sqrt{\pi}}{p}
+        Q\left[\sqrt{2}\left(\frac{p}{r} - \frac{b}{2p}\right)\right]
+\end{equation}
+%
+where $Q$ is the cumulative distribution function for the upper tail of the standard normal distribution,
+%
+\begin{equation}
+    Q(x) = \int_x^\infty \frac{1}{\sqrt{2\pi}} \exp \left[-\frac{{x'}^2}{2}\right] dx'.
+\end{equation}
+%
+Its inverse is
+%
+\begin{equation}
+    \mathscr{G}^{-1}(G) = \left[\frac{1}{r_0} + \frac{1}{\sqrt{2}p}
+    Q^{-1}\left(\frac{p G}{\sqrt{\pi}}\right)\right]^{-1}.
+\end{equation}
+%
+The transformed integral is
+%
+\begin{equation}
+    \mathscr{F} = \exp\left(\frac{b^2}{4p^2}\right)
+        {r_0}^m
+        \int_{\mathscr{G}(r_\mathrm{min})}^{\mathscr{G}(r_\mathrm{max})}
+        \overline{I}_0\left[\frac{b}{r}\right]
+        \left[\frac{r}{r_0}\right]^m r^2
+        \Bigg|_{r = \mathscr{G}^{-1}(G)}
+        dG.
+\end{equation}
+%
+This integral is evaluated numerically with a 10\nobreakdashes-point Gauss-Legendre rule.
 
-The \ac{TOA}\nobreakdashes-only posterior in \Eref{eq:toa-posterior} is numerically trivial to evaluate because it involves no numerical integrals. However, as we will see in the next section, the \ac{SNR}\nobreakdashes-only posterior is numerically expensive.
+Last, there are a few special cases where \Eref{eq:distance-integral} can be evaluated exactly. If $p^2=0$ (which implies $b = 0$), then the integral may be expressed in terms of logarithms. If $b = 0$ but $p^2 \neq 0$, then the integral may be expressed in terms of the exponential integral function,
+%
+\begin{equation}
+    E_n(x) = \int_1^\infty \frac{\exp (-xt)}{t^n} dt.
+\end{equation}
 
-\marginpar{Talk briefly about C implementation, OpenMP, and Python wrapper that interfaces with search pipelines.}%
-The \ac{SNR} marginalization integrals for different pixels may be evaluated in parallel. In our C language implementation, the loop over pixels is parallelized with OpenMP\footnote{http://openmp.org/}.
+The distance integral, therefore, takes either one or ten function evaluations.
+
+\subsection{Adaptive mesh refinement}
+
+We have explained how we evaluate the marginal posterior at a given sky location. Now we must specify where we choose to evaluate it.
+
+Our sampling of the sky is relies completely on the \acl{HEALPix} (\acs{HEALPix}), a special data structure designed for all\nobreakdashes-sky maps. \ac{HEALPix} divides the sky into equal\nobreakdashes-area pixels. There is a hierarchy of \ac{HEALPix} resolutions. A HEALPix resolution may be designated by its order $N$. The $N=0$th order or base tiling has 12 pixels. At every successive order, each tile is subdivided into four new tiles. A resolution may also be referred to by the number of subdivisions along each side of the base tiles, $N_\mathrm{side} = N^2$. There are $N^\mathrm{pix} = 12 {N_\mathrm{side}}^2$ pixels at any given resolution. The \ac{HEALPix} projection uniquely specifies the coordinates of the center of each pixel by providing a mapping from the resolution and pixel index $(N_\mathrm{side}, i_\mathrm{pix})$ to right ascension and declination $(\alpha, \delta)$.
+
+We begin by evaluating the posterior probability density at the center of each of the $N_{\mathrm{pix},0} = 768$ pixels of an $N_{\mathrm{side},0}=8$ \ac{HEALPix} grid. At this resolution, each pixel has an area of 54\,deg$^2$. We then rank the pixels by contained probability (assuming constant probability density within a pixel), and subdivide the most probable $N_{\mathrm{pix},0}/4$ pixels into $N_{\mathrm{pix},0}$ new pixels. We then evaluate the posterior again at the pixels that we subdivided, sort again, and repeat eight times, so that we have evaluated the posterior probability density a total of $8 N_{\mathrm{pix},0}$ times. On \emph{most} iterations, we descend one level deeper in \ac{HEALPix} resolution. The resulting map is a tree structure that consists of a mix of several resolutions. We traverse the tree and flatten it into the highest resolution represented. The highest possible resolution is $N_\mathrm{side}=2^{11}$, with an area of 1.7\,deg$^2$ per pixel.\footnote{Although the resulting sky map contains $N_\mathrm{pix}=24\,576$ pixels, at most $4\,800$ pixels have distinct values. For the purpose of delivery to observers, therefore, the output is always \texttt{gzip}\nobreakdashes-compressed with a ratio of $\sim 5:1$.}
+
+Within each iteration, all of the marginalization integrals may be evaluated in parallel. In our C language implementation, the inner loop over pixels is parallelized with OpenMP\footnote{http://openmp.org/}.
 
 
 \ack \marginpar{This URL is not specific enough.}Source code for \ac{BAYESTAR} is available on the \ac{LIGO} \acl{DASWG} web site at \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/lalsuite.html}.
