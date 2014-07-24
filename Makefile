@@ -9,7 +9,8 @@ FIGURES = \
 	fishfactor.pdf \
 	inclination_integral_convergence.pdf \
 	polarization_angle_integral_convergence.pdf \
-	radial_integrand.pdf
+	radial_integrand.pdf \
+	pp.pdf
 
 PREREQS = ms.tex \
 	bib/aas_macros.sty \
@@ -42,6 +43,9 @@ crlb_gamma.pdf: scripts/crlb_gamma.py matplotlibrc autocorrelation_fisher_matrix
 	python $<
 
 fishfactor.pdf: scripts/fishfactor.py matplotlibrc autocorrelation_fisher_matrix.json
+	python $<
+
+pp.pdf: scripts/pp.py matplotlibrc 2015_subset/found_injections.out 2016_subset/found_injections.out
 	python $<
 
 clean:

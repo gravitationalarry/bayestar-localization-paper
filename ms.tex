@@ -831,6 +831,14 @@ We begin by evaluating the posterior probability density at the center of each o
 
 Within each iteration, all of the marginalization integrals may be evaluated in parallel. In our C language implementation, the inner loop over pixels is parallelized with OpenMP\footnote{http://openmp.org/}.
 
+\section{Results}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics{pp}
+    \end{center}
+    \caption{\label{fig:pp}$P-P$ plot.}
+\end{figure}
 
 \ack \marginpar{This URL is not specific enough.}Source code for \ac{BAYESTAR} is available on the \ac{LIGO} \acl{DASWG} web site at \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/lalsuite.html}.
 
