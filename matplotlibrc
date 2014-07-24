@@ -10,3 +10,4 @@ figure.dpi: 300
 axes.linewidth: 0.5
 grid.linewidth: 0.25
 lines.linewidth: 0.5
+legend.fontsize: small
