@@ -667,73 +667,11 @@ The integral over $\cos\iota$ converges with just as rapidly with Gauss-Legendre
 
 We sample $t_\oplus$ regularly from $-T$ to $T$ at intervals of $\Delta t$. This is typically $\sim 2 (10\,\mathrm{ms})(4096\,\mathrm{Hz}) \approx 80$\,samples. We use Catmull\nobreakdashes-Rom cubic splines to interpolate the real and imaginary parts of the autocorrelation functions between samples.
 
-\subsubsection{Integral over distance: adaptive Gaussian quadrature method}
-
-\begin{figure}
-    \caption{\label{fig:radial_integrand}Illustration of initial subdivisions for distance integration scheme. Distance increases from left to right. In the color version, the left\nobreakdashes-hand tail, the left\nobreakdashes- and right\nobreakdashes-hand sides of the maximum likelihood peak, and the right\nobreakdashes-hand tail, are colored cyan, red, green, and blue, respectively.}
-    \begin{center}
-        \includegraphics{radial_integrand}
-    \end{center}
-\end{figure}
+\subsubsection{Integral over distance}
 
 The innermost integral over $r$ is a little bit more challenging. The distance integrand has both a sharp maximum\nobreakdashes-likelihood peak and an extended power\nobreakdashes-law prior\nobreakdashes-dominated tail. At any values of the other parameters, either the peak or the tail might dominate. If the peak dominates, it may not be successfully resolved by any general\nobreakdashes-purpose fixed\nobreakdashes-order quadrature scheme. Any general adaptive integrator may take a long time to find the peak.
 
-We found two efficient ways to evaluate the distance integral. The first method is to use adaptive Gaussian quadrature, but with an educated choice of initial subdivisions. The distance integral can be written as
-%
-\begin{eqnarray}\label{eq:distance-integral}
-    \mathscr{F} &=&
-        \int_{\mathrlap{r_\mathrm{min}}}^{\mathrlap{r_\mathrm{max}}}
-        \exp\left[-\frac{p^2}{r^2}\right]
-        I_0\left[\frac{b}{r}\right] r^m dr \nonumber \\
-    &=&
-        \int_{\mathrlap{r_\mathrm{min}}}^{\mathrlap{r_\mathrm{max}}}
-        \exp\left[-\frac{p^2}{r^2}+\frac{b}{r}\right]
-        \overline{I}_0\left[\frac{b}{r}\right] r^m dr
-\end{eqnarray}
-%
-where
-%
-\begin{eqnarray*}
-    p^2 &=& \frac{1}{2} r^2 \sum_i {\rho_i}^2 \\
-    b &=& r \left| \sum_i \hat\rho_i \rho_i e^{i \tilde{\gamma}_i}
-        a_i^*(\tilde{\tau}_i) \right| \\
-    \overline{I}_0(x) &=& \exp(-|x|) I_0(x).
-\end{eqnarray*}
-%
-The coefficients $p^2$ and $b$ are nonnegative and independent of distance. The symbol $\overline{I}_0$ denotes an exponentially scaled Bessel function. In the limit of large argument, $I_0(|x|) \sim \exp(|x|) / \sqrt{2 \pi |x|}$ \cite{Olver:2010:NHMF}\footnote{\url{http://dlmf.nist.gov/10.40.E1}}. The scaled Bessel is useful for evaluation on a computer because it has a relatively small range $(0, 1]$ and varies slowly in proportion to $x^{1/2}$. If we neglect both the Bessel function and the $r^m$ prior, then the approximate likelihood $\exp(-p^2/r^2 + b/r)$ is maximized when
-%
-\begin{equation}\label{eq:ml-distance}
-    r = r_0 = 2p^2/b.
-\end{equation}
-%
-The likelihood takes on a factor $\eta$ (say, $\eta=0.01$) of its maximum value when
-%
-\begin{equation}
-    r = r_\pm = \left(\frac{1}{r_0} \mp \frac{\sqrt{-\log\eta}}{p}\right)^{-1}.
-\end{equation}
-%
-We have now identified up to five breakpoints that partition the distance integrand into up to four intervals with quantitatively distinct behavior. These intervals are depicted in Figure~\ref{fig:radial_integrand} with distance increasing from left to right. There is a left\nobreakdashes-hand or small distance tail in which the integrand is small and monotonically increasing, a left\nobreakdashes- and right\nobreakdashes-hand side of the maximum likelihood peak, and a right\nobreakdashes-hand tail in which the integrand is small and monotonically decreasing. These breakpoints are:
-%
-\begin{equation}
-    r_\mathrm{break} = \{ r \in
-    \left\{
-    \begin{array}{c}
-    r_\mathrm{min} \\
-    r_- \\
-    r_0 \\
-    r_+ \\
-    r_\mathrm{max}
-    \end{array}
-    \right\} :
-    r_\mathrm{min} \leq r
-    \leq r_\mathrm{max}\}.
-\end{equation}
-%
-We use these breakpoints as initial subdivisions in an adaptive Gaussian quadrature algorithm\footnote{for instance, \ac{GSL}'s \texttt{gsl\_integrate\_qagp} function, \url{http://www.gnu.org/software/gsl/manual/html_node/QAGP-adaptive-integration-with-known-singular-points.html}}. This function estimates the integral over each subdivision and each interval's contribution to the total error, then subdivides the interval whose error contribution is largest. Subdivisions continue until a fixed total fractional error is reached. In this way, most integrand evaluations are expended on the most important distance interval, whether that happens to be the tails (when the posterior is dominated by the prior) or the peak (when the posterior is dominated by the observations).
-
-\subsubsection{Integral over distance: importance sampling method}
-
-The second method of evaluating the distance integral, and the one used in practice, is similar to importance sampling. Let's say that we want to evaluate an integral
+Let's say that we want to evaluate an integral
 %
 \begin{equation}\label{eq:importance-sampling-difficult-integral}
     \mathscr{F}(x_1, x_2) = \int_{x_1}^{x_2} f(x') dx'
