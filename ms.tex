@@ -1,8 +1,8 @@
-\documentclass{iopart}
-\usepackage{arydshln}
+\documentclass[amsmath,amssymb,aps,prx,reprint,nopreprintnumbers,nofootinbib]{revtex4-1}
 \usepackage{multirow}
-\usepackage{amsopn}
-\usepackage{iopams}
+\usepackage{bigdelim}
+\usepackage{multirow}
+\usepackage{bm}
 \usepackage{graphicx}
 \usepackage{mathrsfs}
 \usepackage{bib/aas_macros}
@@ -11,10 +11,10 @@
 \input{ligo-acronyms/acronyms}
 
 % From http://www.f.kth.se/~ante/latex.php
-\setlength{\marginparwidth}{1.2in}
+\setlength{\marginparwidth}{0.5in}
 \let\oldmarginpar\marginpar
-\renewcommand\marginpar[1]{\-\oldmarginpar[\raggedleft\footnotesize #1]%
-{\raggedright\footnotesize #1}}
+\renewcommand\marginpar[1]{\-\oldmarginpar[\raggedleft\scriptsize #1]%
+{\raggedright\scriptsize #1}}
 
 \DeclareMathOperator{\cov}{cov}
 \DeclareMathOperator{\std}{std}
@@ -36,14 +36,18 @@
 
 \title[Rapid-response Bayesian sky localization]{WHOOMP! (There It Is) \\
 Rapid Bayesian position reconstruction for gravitational\nobreakdashes-wave transients}
-\author{Leo Singer and Larry R. Price}
-\address{\acs{LIGO} Laboratory, California Institute of Technology, Pasadena, CA 91125, USA}
-\ead{\mailto{leo.singer@ligo.org}, \mailto{larryp@caltech.edu}}
+\author{Leo P. Singer}
+\email{leo.singer@ligo.org}
+\author{Larry R. Price}
+\email{larryp@caltech.edu}
+\affiliation{\acs{LIGO} Laboratory, California Institute of Technology, Pasadena, CA 91125, USA}
 
 \begin{abstract}
 \marginpar{Wrong emphasis? I like Larry's idea of having this paper discuss several different tiers of sky localization with increasing accuracy and latency.}%
 Timely \acl{EM} follow\nobreakdashes-up of \acl{CBC} events detected by \acl{aLIGO} requires rapidly inferring the sky location from the \ac{GW} observations. Calculation of the posterior distribution of the sky location and intrinsic source parameters given the \ac{GW} strain takes hours with state\nobreakdashes-of\nobreakdashes-the\nobreakdashes-art \ac{MCMC} parameter estimation codes. By taking as the measurement not the \ac{GW} strain itself but the amplitude and \acl{TOA} of the putative signal at each detector, and by fixing the intrinsic source parameters, we have constructed a non-\ac{MCMC}, fully deterministic Bayesian parameter estimation algorithm that takes just seconds to produce sky maps of posterior probability.
 \end{abstract}
+
+\maketitle
 
 Ground-based \ac{GW} interferometers are entering the advanced detector era, positioning themselves to make profound discoveries about the universe. The \ac{aLIGO} and Vigo detectors will be part of a worldwide network that also includes KAGRA and hopefully LIGO-India. Coalescing neutron star binaries are among the most likely sources, with 0.4\nobreakdashes--400 detections per year~\cite{rates}. In addition to being an efficient source of \acp{GW}, the \ac{NS} may be tidally shredded before merging, providing fuel for an electromagnetic counterpart. The short-lived accretion flow may power a collimated relativistic jet, resulting in a short \ac{GRB} and an X-ray afterglow if it is aligned with the line of sight. An optical afterglow may follow minutes to hours later as the jet plows into the interstellar medium. As surrounding neutron-rich ejecta decay radioactively, an optical `kilonova' may be visible after $\sim$1 day \cite{metzger:2010}. Finally, as the ejecta plow into the interstellar medium, a faint radio afterglow could occur on a timescale of weeks to years \cite{Nakar:2011cw}.
 
@@ -61,64 +65,39 @@ In this paper we present a rapid and accurate method of sky localization that ma
 In the frequency domain, the strain observed by a single \ac{GW} interferometer is
 %
 \begin{equation}\label{eq:signal-model}
-    x_i (\omega) = h_i (\omega; \boldsymbol\theta) + n_i (\omega),
+    x_i (\omega) = h_i (\omega; \bm\theta) + n_i (\omega),
 \end{equation}
 %
-where $h_i (\omega; \boldsymbol\theta)$ is the \ac{GW} signal given a parameter vector $\boldsymbol\theta$ that describes the \ac{GW} source, and $n_i (\omega)$ is that detector's \ac{WSS} Gaussian noise with one\nobreakdashes-sided \ac{PSD} $S_i(\omega) = E\left[\left|n_i(\omega)\right|^2\right] + E\left[\left|n_i(-\omega)\right|^2\right] = 2 E\left[\left|n_i(\omega)\right|^2\right]$. We shall denote the combined observation from a network of detectors as $\mathbf x (\omega) \equiv \{x_i (\omega)\}_i$.
+where $h_i (\omega; \bm\theta)$ is the \ac{GW} signal given a parameter vector $\bm\theta$ that describes the \ac{GW} source, and $n_i (\omega)$ is that detector's \ac{WSS} Gaussian noise with one\nobreakdashes-sided \ac{PSD} $S_i(\omega) = E\left[\left|n_i(\omega)\right|^2\right] + E\left[\left|n_i(-\omega)\right|^2\right] = 2 E\left[\left|n_i(\omega)\right|^2\right]$. We shall denote the combined observation from a network of detectors as $\mathbf x (\omega) \equiv \{x_i (\omega)\}_i$.
 
-The likelihood, or the probability of obtaining the observation $\mathbf x$ conditioned on the value of $\boldsymbol\theta$, is a product of Gaussian distributions:
+The likelihood, or the probability of obtaining the observation $\mathbf x$ conditioned on the value of $\bm\theta$, is a product of Gaussian distributions:
 %
-\begin{equation}\label{eq:gaussian-likelihood}
-    \mathcal{L}(\mathbf x; \boldsymbol\theta) = \prod_i p(x_i | \boldsymbol\theta)
-        \propto \exp \left[
+\begin{multline}\label{eq:gaussian-likelihood}
+    \mathcal{L}(\mathbf x; \bm\theta) = \prod_i p(x_i | \bm\theta)
+        \\ \propto \exp \left[
         - \frac{1}{2} \sum_i \int_0^\infty \frac{\left|x_i (\omega)
-            - h_i(\omega; \boldsymbol\theta) \right|^2}{S_i(\omega)} \, d\omega
+            - h_i(\omega; \bm\theta) \right|^2}{S_i(\omega)} \, d\omega
     \right].
-\end{equation}
+\end{multline}
 
 A \ac{CBC} source is specified by a vector of extrinsic parameters describing its position and orientation and intrinsic parameters describing the physical properties of the binary components:
 %
 \begin{equation}
-    \boldsymbol\theta = \begin{array}{l@{}l}
-            \left[
-            \begin{array}{c}
-                \alpha \\
-                \delta \\
-                r \\
-                t_\oplus \\
-                \iota \\
-                \psi \\
-                \phi_c \\
-                \hdashline[1pt/1pt]
-                m_1 \\
-                m_2 \\
-                \mathbf S_1 \\
-                \mathbf S_2
-            \end{array}
-            \right] &
-            \begin{array}{l}
-                \left.
-                \begin{array}{p{4cm}}
-                    right ascension \\
-                    declination \\
-                    distance \\
-                    arrival time at geocenter \\
-                    inclination angle \\
-                    polarization angle \\
-                    coalescence phase \\
-                    \hdashline[1pt/1pt]
-                \end{array}
-                \quad \right\} \textnormal{extrinsic parameters}, \boldsymbol\theta_\mathrm{ex} \\
-                \left.
-                \begin{array}{p{4cm}}
-                    first component's mass \\
-                    second component's mass \\
-                    first component's spin \\
-                    second component's spin
-                \end{array}
-                \quad \right\} \textnormal{intrinsic parameters}, \boldsymbol\theta_\mathrm{in}
-            \end{array}
-        \end{array}
+    \bm\theta = \left[
+    \begin{array}{cl@{\quad}p{4cm}lp{3.75cm}}
+        \alpha & \rdelim]{11}{0mm} & right ascension & \rdelim\}{7}{1mm} & \multirow{7}{2cm}{extrinsic parameters, $\bm\theta_\mathrm{ex}$} \\
+        \delta && declination & \\
+        r && distance & \\
+        t_\oplus && arrival time at geocenter & \\
+        \iota && inclination angle & \\
+        \psi && polarization angle & \\
+        \phi_c && coalescence phase & \\
+        \cline{1-1}\cline{3-3}
+        m_1 && first component's mass & \rdelim\}{4}{1mm} & \multirow{4}{2cm}{intrinsic parameters, $\bm\theta_\mathrm{in}$.}\\
+        m_2 && second component's mass & \\
+        \mathbf S_1 && first component's spin & \\
+        \mathbf S_2 && second component's spin & \\
+    \end{array}\right.
 \end{equation}
 %
 This list of parameters involves some simplifying assumptions. Eccentricity is omitted: although it does play a major role in the evolution and waveforms of \ac{NSBH} and \ac{BBH} sources formed by dynamical capture~\cite{PhysRevD.87.043004}, \ac{BNS} systems formed by binary stellar evolution should circularize due to tidal interaction~\cite{0004-637X-572-1-407} and later \ac{GW} emission~\cite{PhysRev.136.B1224} long before the inspiral enters \ac{LIGO}'s frequency range of $\sim$10\nobreakdashes--1000~kHz. Tidal deformabilities of the \acp{NS} are omitted because the signal imprinted by the companions' material properties is so small that it will only be detectable by an Einstein Telescope\nobreakdashes-class \ac{GW} observatory~\cite{PhysRevD.81.123016}. Furthermore, in \ac{GW} detection efforts, especially those focused on \ac{BNS} systems, the component spins $\mathbf{S}_1$ and $\mathbf{S}_2$ are often assumed to be nonprecessing and aligned with the system's total angular momentum and condensed to a single scalar parameter $\chi$, or even neglected entirely, $\mathbf{S}_1 = \mathbf{S}_2 = 0$.
@@ -127,24 +106,24 @@ Assuming circular orbits and no spin precession, we can write the \ac{GW} signal
 %
 \begin{equation}
     h_{\pi/2}(\omega) = h_0(\omega) \cdot
-    \cases{
-        -i & if $\omega \geq 0$ \\
-        i & if $\omega < 0$
-    }.
+    \begin{cases}
+        -i & \text{if } \omega \geq 0 \\
+        i & \text{if } \omega < 0
+    \end{cases}.
 \end{equation}
 %
-Then, we can write the signal model in a way that isolates all dependence on the extrinsic parameters $\boldsymbol\theta_\mathrm{ex}$ into the coefficients and all dependence on the intrinsic parameters $\boldsymbol\theta_\mathrm{in}$ into the basis waveform, by taking the Fourier transform of Equation~(2.8) of \cite{PhysRevD.83.084002}:
+Then, we can write the signal model in a way that isolates all dependence on the extrinsic parameters $\bm\theta_\mathrm{ex}$ into the coefficients and all dependence on the intrinsic parameters $\bm\theta_\mathrm{in}$ into the basis waveform, by taking the Fourier transform of Equation~(2.8) of \cite{PhysRevD.83.084002}:
 %
-\begin{equation}\label{eq:full-signal-model}
-    h_i(\omega; \boldsymbol\theta) = \e^{-i \omega t_\oplus}
+\begin{multline}\label{eq:full-signal-model}
+    h_i(\omega; \bm\theta) = e^{-i \omega t_\oplus}
     \frac{r_{1,i}}{r}
-    \e^{2 i \phi_c}
+    e^{2 i \phi_c} \\
     \left[
     \frac{1}{2} \left(1 + \cos^2 \iota\right) \Re \left\{z\right\} - i
     \left(\cos\iota\right) \Im z
     \right]
-    h(\omega; \boldsymbol\theta_\mathrm{in})
-\end{equation}
+    h(\omega; \bm\theta_\mathrm{in})
+\end{multline}
 %
 for $\omega \geq 0$, where
 %
@@ -163,32 +142,32 @@ The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector anten
 r_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|h(\omega; \mathbf \theta)\right|^2}{S_i(\omega)} \,d\omega.
 \end{equation}
 
-More succinctly, we can write the signal received by detector $i$ in terms of observable extrinsic parameters $\boldsymbol\theta_i = (\rho_i, \gamma_i, \tau_i)$, the amplitude $\rho_i$, phase $\gamma_i$, and time delay $\tau_i$ on arrival at detector $i$,
+More succinctly, we can write the signal received by detector $i$ in terms of observable extrinsic parameters $\bm\theta_i = (\rho_i, \gamma_i, \tau_i)$, the amplitude $\rho_i$, phase $\gamma_i$, and time delay $\tau_i$ on arrival at detector $i$,
 %
 \begin{equation}\label{eq:signal-model}
-    h_i (\omega; \boldsymbol\theta_i, \boldsymbol\theta_\mathrm{in}) = h_i (\omega; \rho_i, \gamma_i, \tau_i, \boldsymbol\theta_\mathrm{in}) = \frac{\rho_i}{\sigma_i} e^{i (\gamma_i - \omega \tau_i)} h(\omega; \boldsymbol\theta_\mathrm{in}).
+    h_i (\omega; \bm\theta_i, \bm\theta_\mathrm{in}) = h_i (\omega; \rho_i, \gamma_i, \tau_i, \bm\theta_\mathrm{in}) = \frac{\rho_i}{\sigma_i} e^{i (\gamma_i - \omega \tau_i)} h(\omega; \bm\theta_\mathrm{in}).
 \end{equation}
 
-The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from the likelihood in \Eref{eq:gaussian-likelihood} and the signal model in \Eref{eq:signal-model}. Concretely, this results in a bank of matched filters, or the cross-correlation between a template waveform and the incoming data stream,
+The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from the likelihood in Equation~(\ref{eq:gaussian-likelihood}) and the signal model in Equation~(\ref{eq:signal-model}). Concretely, this results in a bank of matched filters, or the cross-correlation between a template waveform and the incoming data stream,
 %
 \begin{equation}
-y_i(\tau_i;\boldsymbol\theta_\mathrm{in}) = \frac{1}{\sigma_i (\boldsymbol\theta_\mathrm{in})} \int_0^\infty \frac{h^*(\omega; \boldsymbol\theta_\mathrm{in}) x_i(\omega) e^{i \omega \tau_i}}{S_i(\omega)} \,d\omega.
+y_i(\tau_i;\bm\theta_\mathrm{in}) = \frac{1}{\sigma_i (\bm\theta_\mathrm{in})} \int_0^\infty \frac{h^*(\omega; \bm\theta_\mathrm{in}) x_i(\omega) e^{i \omega \tau_i}}{S_i(\omega)} \,d\omega.
 \end{equation}
 %
-The \ac{ML} point estimates of the signal parameters, $\mathrm{MLE}(\mathbf{x}) = \{\{ \hat{\boldsymbol\theta}_i \}_i, \hat{\boldsymbol\theta}_\mathrm{in}\} = \{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\boldsymbol\theta}_\mathrm{in}\}$, are given by
+The \ac{ML} point estimates of the signal parameters, $\mathrm{MLE}(\mathbf{x}) = \{\{ \hat{\bm\theta}_i \}_i, \hat{\bm\theta}_\mathrm{in}\} = \{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\bm\theta}_\mathrm{in}\}$, are given by
 %
 \begin{eqnarray}
-    \hat{\boldsymbol\theta}_\mathrm{in}, \{\hat\tau_i\}_i
-        &=& \argmax_{\boldsymbol\theta_\mathrm{in}, \{\hat\tau_i\}_i}
+    \hat{\bm\theta}_\mathrm{in}, \{\hat\tau_i\}_i
+        &=& \argmax_{\bm\theta_\mathrm{in}, \{\hat\tau_i\}_i}
         \sum_i \left| y_i\left(\tau_i;
-        \boldsymbol\theta_\mathrm{in}\right) \right|^2, \\
+        \bm\theta_\mathrm{in}\right) \right|^2, \\
     \hat\rho_i &=& \left| y_i\left(\hat\tau_i;
-        \hat{\boldsymbol\theta}_\mathrm{in}\right) \right|, \\
+        \hat{\bm\theta}_\mathrm{in}\right) \right|, \\
     \hat\gamma_i &=& \arg y_i\left(\hat\tau_i;
-        \hat{\boldsymbol\theta}_\mathrm{in}\right).
+        \hat{\bm\theta}_\mathrm{in}\right).
 \end{eqnarray}
 %
-A detection candidate consists of $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\boldsymbol\theta}_\mathrm{in}\}$. There are various ways to characterize the significance of a detection candidate, but in Gaussian noise the combined SNR $\hat\rho_\mathrm{c}$ suffices,
+A detection candidate consists of $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\bm\theta}_\mathrm{in}\}$. There are various ways to characterize the significance of a detection candidate, but in Gaussian noise the combined SNR $\hat\rho_\mathrm{c}$ suffices,
 %
 \marginpar{What is the least that I can get away with saying about false alarm rate estimation and likelihood ratios?}%
 %
@@ -198,23 +177,23 @@ A detection candidate consists of $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_
 
 \subsection{Bayesian probability and parameter estimation}
 
-In the Bayesian framework, the parameters are inferred from the data by forming the posterior distribution, $p(\boldsymbol\theta|\mathbf x)$, which describes the probability of the parameters given the observations. Bayes' rule relates the likelihood $p(\mathbf x|\boldsymbol\theta)$ to the posterior $p(\boldsymbol\theta|\mathbf x)$,
+In the Bayesian framework, the parameters are inferred from the data by forming the posterior distribution, $p(\bm\theta|\mathbf x)$, which describes the probability of the parameters given the observations. Bayes' rule relates the likelihood $p(\mathbf x|\bm\theta)$ to the posterior $p(\bm\theta|\mathbf x)$,
 %
 \begin{equation}\label{bayes}
-p(\boldsymbol\theta|\mathbf x) = \frac{p(\mathbf x|\boldsymbol\theta) p(\boldsymbol\theta)}{p(\mathbf x)},
+p(\bm\theta|\mathbf x) = \frac{p(\mathbf x|\bm\theta) p(\bm\theta)}{p(\mathbf x)},
 \end{equation}
 %
-introducing the prior distribution $p(\boldsymbol\theta)$ which encapsulates previous information about the paramters (for example, arising from earlier observations or from known physical bounds on the parameters), and the evidence $p(\mathbf x)$ which can be thought of as a normalization factor or as describing the parsimoniousness of the model.
+introducing the prior distribution $p(\bm\theta)$ which encapsulates previous information about the paramters (for example, arising from earlier observations or from known physical bounds on the parameters), and the evidence $p(\mathbf x)$ which can be thought of as a normalization factor or as describing the parsimoniousness of the model.
 
 The choice of prior is open to one's astrophysical preconceptions, but during \ac{S6} when \ac{LIGO}'s Bayesian \ac{CBC} parameter estimation pipelines were pioneered, the prior was taken to be isotropic in sky location and binary orientation, and uniform in volume, arrival time, and the component masses~\cite{2013arXiv1304.1775T}.
 
-In Bayesian inference, although it is often easy to write down the likelihood or even the full posterior in closed form, usually one is interested in only a subset $\boldsymbol\beta$ of all of the model's parameters, the others $\boldsymbol\lambda$ being nuisance parameters. In this case, we integrate away the nuisance parameters, forming the marginal posterior
+In Bayesian inference, although it is often easy to write down the likelihood or even the full posterior in closed form, usually one is interested in only a subset $\bm\beta$ of all of the model's parameters, the others $\bm\lambda$ being nuisance parameters. In this case, we integrate away the nuisance parameters, forming the marginal posterior
 %
 \begin{equation}\label{eq:marginal-posterior}
-    p(\boldsymbol\beta|\mathbf x) = \int \frac{p(\mathbf x|\boldsymbol\beta,\boldsymbol\lambda) p(\boldsymbol\beta,\boldsymbol\lambda)}{p(\mathbf x)} \,d\boldsymbol\lambda
+    p(\bm\beta|\mathbf x) = \int \frac{p(\mathbf x|\bm\beta,\bm\lambda) p(\bm\beta,\bm\lambda)}{p(\mathbf x)} \,d\bm\lambda
 \end{equation}
 %
-with $\boldsymbol\theta = (\boldsymbol\beta, \boldsymbol\lambda)$. For instance, for the purpose of locating a \ac{GW} source on the sky, all parameters but $(\alpha, \delta)$ are nuisance parameters.
+with $\bm\theta = (\bm\beta, \bm\lambda)$. For instance, for the purpose of locating a \ac{GW} source on the sky, all parameters but $(\alpha, \delta)$ are nuisance parameters.
 
 Bayesian parameter estimation has many advantages, including broad generality and the ability to make probabilistically meaningful statements even with very low \ac{SNR} measurements. However, in problems of even modest complexity, the marginalization step involves many-dimensional, ill-behaved integrals. The powerful \ac{MCMC} integration technique has become almost synonymous with Bayesian inference. Though powerful, \ac{MCMC} is inherently non-deterministic and resistant to parallelization, as well as (at least historically) slow. With the most sophisticated \ac{CBC} parameter estimation codes, it still takes days to process a single event. This delay is undesirable for planning targeted \ac{EM} follow\nobreakdashes-up searches of \ac{LIGO} events.
 
@@ -222,7 +201,7 @@ In what follows, we propose a complementary rapid parameter estimation scheme th
 
 \section{Measurement uncertainty}
 
-For the purpose of rapid sky localization, we assume that we do not have access to the \ac{GW} data $\mathbf{x}$ itself, and that our only contact with it is through the ML parameter estimates $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\boldsymbol\theta}_\mathrm{in}\}$. Although this is a significant departure from conventional GW parameter estimation techniques, we can still apply the full Bayesian machinery of \Eref{eq:marginal-posterior} to compute a posterior distribution for the sky location.
+For the purpose of rapid sky localization, we assume that we do not have access to the \ac{GW} data $\mathbf{x}$ itself, and that our only contact with it is through the ML parameter estimates $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\bm\theta}_\mathrm{in}\}$. Although this is a significant departure from conventional GW parameter estimation techniques, we can still apply the full Bayesian machinery of Equation~(\ref{eq:marginal-posterior}) to compute a posterior distribution for the sky location.
 
 \marginpar{This paragraph might make more sense in a conclusion.}%
 %
@@ -233,41 +212,41 @@ There are many practical advantages of doing so. For one, there are difficulties
 To treat the ML estimates as measurements in and of themselves, we need to work out their likelihood, marginalized over the GW signal $\mathbf{x}$,
 %
 \begin{equation}\label{eq:detection-candidate-likelihood}
-    p\left(\{\hat{\boldsymbol\theta}_i\}_i,
-        \hat{\boldsymbol\theta}_\mathrm{in}
-    \middle| \boldsymbol\theta\right)
+    p\left(\{\hat{\bm\theta}_i\}_i,
+        \hat{\bm\theta}_\mathrm{in}
+    \middle| \bm\theta\right)
     \propto \int\limits_{\mathclap{\mathbf{x} | \mathrm{MLE}(\mathbf{x}) =
-        \{\{\hat{\boldsymbol\theta}_i\}_i,
-        \hat{\boldsymbol\theta}_\mathrm{in}\}}}
-    p(\mathbf{x} | \boldsymbol\theta) \, p(\boldsymbol\theta)
+        \{\{\hat{\bm\theta}_i\}_i,
+        \hat{\bm\theta}_\mathrm{in}\}}}
+    p(\mathbf{x} | \bm\theta) \, p(\bm\theta)
     \, d\mathbf{x}
 \end{equation}
 %
-The integral above could be written in terms of the matched filter signals $\left\{y_i\right\}_i$, such that $y_i\left(\hat\tau_i, \hat{\boldsymbol\theta}_\mathrm{in}\right) = \hat\rho_i e^{i \hat\gamma_i}$ and $\forall t$, $\left|y_i(t, \boldsymbol\theta_\mathrm{in})\right| \leq \hat\rho_i$. The combination of the nontrivial integration limits and the Fourier transform in the matched filter seem like a problem for direct evaluation.
+The integral above could be written in terms of the matched filter signals $\left\{y_i\right\}_i$, such that $y_i\left(\hat\tau_i, \hat{\bm\theta}_\mathrm{in}\right) = \hat\rho_i e^{i \hat\gamma_i}$ and $\forall t$, $\left|y_i(t, \bm\theta_\mathrm{in})\right| \leq \hat\rho_i$. The combination of the nontrivial integration limits and the Fourier transform in the matched filter seem like a problem for direct evaluation.
 
 However, even without directly evaluating the distribution of the \ac{ML} estimator, we know many of its properties. The \ac{CRLB} gives its covariance in the asymptotic limit of high \ac{SNR}. The \ac{CRLB} has been widely applied in \ac{GW} data analysis \cite{fairhurst:2009}. We will momentarily consider the likelihood for a single detector:
 %
-\begin{equation}\label{eq:gaussian-likelihood-spa}
+\begin{multline}\label{eq:gaussian-likelihood-spa}
     \mathcal{L}\left(x_i; \rho_i, \gamma_i, \tau_i,
-        \boldsymbol\theta_\mathrm{in}\right)
+        \bm\theta_\mathrm{in}\right) \\
     \propto \exp \left[
         - \frac{1}{2} \int_0^\infty \frac{\left|x_i (\omega)
             - h_i\left(x_i; \rho_i, \gamma_i, \tau_i,
-                \boldsymbol\theta_\mathrm{in}\right)
+                \bm\theta_\mathrm{in}\right)
         \right|^2}{S_i(\omega)} \, d\omega
     \right],
-\end{equation}
+\end{multline}
 %
-with $h_i(\omega; \rho_i, \gamma_i, \tau_i, \boldsymbol\theta_\mathrm{in})$ given by \Eref{eq:signal-model}.
+with $h_i(\omega; \rho_i, \gamma_i, \tau_i, \bm\theta_\mathrm{in})$ given by Equation~(\ref{eq:signal-model}).
 
-The Fisher information matrix for a measurement $x$ described by the unknown parameter vector $\boldsymbol{\theta}$ is
+The Fisher information matrix for a measurement $x$ described by the unknown parameter vector $\bm{\theta}$ is
 %
 \begin{equation}\label{eq:general-fisher-matrix}
     \mathcal{I}_{jk} = \mathrm{E} \, \left[
         -\frac{\partial^2 \log
-            \mathcal{L}(x_i ; \boldsymbol\theta)}
+            \mathcal{L}(x_i ; \bm\theta)}
             {\partial \theta_j \theta_k}
-    \middle| \boldsymbol\theta
+    \middle| \bm\theta
     \right].
 \end{equation}
 %
@@ -293,10 +272,10 @@ the Fisher matrix for the signal in the $i$th detector is
 \begin{equation}
     \mathcal{I}_i = \left(
         \begin{array}{cc}
-            \mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_i} &
-            \mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_\mathrm{in}} \\
-            {\mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_\mathrm{in}}}^\intercal &
-            {\rho_i}^2 \mathcal{I}_{\boldsymbol\theta_\mathrm{in},\boldsymbol\theta_\mathrm{in}}
+            \mathcal{I}_{\bm\theta_i,\bm\theta_i} &
+            \mathcal{I}_{\bm\theta_i,\bm\theta_\mathrm{in}} \\
+            {\mathcal{I}_{\bm\theta_i,\bm\theta_\mathrm{in}}}^\intercal &
+            {\rho_i}^2 \mathcal{I}_{\bm\theta_\mathrm{in},\bm\theta_\mathrm{in}}
         \end{array}
     \right)
 \end{equation}
@@ -304,7 +283,7 @@ the Fisher matrix for the signal in the $i$th detector is
 where
 %
 \begin{equation}\label{eq:fisher-matrix}
-    \mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_i} = \bordermatrix{
+    \mathcal{I}_{\bm\theta_i,\bm\theta_i} = \bordermatrix{
         ~ & \rho_i & \gamma_i & \tau_i \cr
         \rho_i & 1 & 0 & 0 \cr
         \gamma_i & 0 & {\rho_i}^2 & -{\rho_i}^2 {\overline{\omega}}_i \cr
@@ -312,15 +291,15 @@ where
     }.
 \end{equation}
 %
-(See also \cite{Grover:2013}.) To lowest post\nobreakdashes-Newtonian order, the intrinsic parameters affect the phase evolution but not the amplitude evolution, so for BNS systems we can assume $\mathcal{I}_{\rho_i,\boldsymbol\theta_\mathrm{in}} \approx 0$.
+(See also \cite{Grover:2013}.) To lowest post\nobreakdashes-Newtonian order, the intrinsic parameters affect the phase evolution but not the amplitude evolution, so for BNS systems we can assume $\mathcal{I}_{\rho_i,\bm\theta_\mathrm{in}} \approx 0$.
 %
 \marginpar{Show this?}%
 %
-When we form the Fisher matrix for the whole network, if the detectors all have the same noise \acp{PSD}, $S_1(\omega) = S_2(\omega) = \cdots = S_n(\omega) \equiv S(\omega)$, then we can change variables from phases and times on arrival $\left\{\gamma_i, \tau_i\right\}_i$ to appropriate differences between them, in order to cancel out all off-diagonal terms between the intrinsic and extrinsic parameters. Because all existing ground-based GW detectors have similar bandpasses, we restrict all of our further attention to just the extrinsic part of the Fisher matrix, $\mathcal{I}_{\boldsymbol\theta_i,\boldsymbol\theta_i}$.
+When we form the Fisher matrix for the whole network, if the detectors all have the same noise \acp{PSD}, $S_1(\omega) = S_2(\omega) = \cdots = S_n(\omega) \equiv S(\omega)$, then we can change variables from phases and times on arrival $\left\{\gamma_i, \tau_i\right\}_i$ to appropriate differences between them, in order to cancel out all off-diagonal terms between the intrinsic and extrinsic parameters. Because all existing ground-based GW detectors have similar bandpasses, we restrict all of our further attention to just the extrinsic part of the Fisher matrix, $\mathcal{I}_{\bm\theta_i,\bm\theta_i}$.
 
 \subsection{\ac{CRLB} and physical interpretation}
 
-If $\hat{\boldsymbol\theta}$ is an unbiased estimator of $\boldsymbol\theta$, $\tilde{\boldsymbol\theta} = \hat{\boldsymbol\theta} - \boldsymbol\theta$ is the measurement error, and $\Sigma = \mathrm{E} \, [\tilde{\boldsymbol\theta}\tilde{\boldsymbol\theta}^\intercal]$ is the covariance of the measurement error, then the \ac{CRLB} says that $\Sigma \geq \mathcal{I}^{-1}$, in the sense that $\left(\Sigma - \mathcal{I}^{-1}\right)$ is positive semi\nobreakdashes-definite. Specifically, for our likelihood, the \ac{CRLB} implies that
+If $\hat{\bm\theta}$ is an unbiased estimator of $\bm\theta$, $\tilde{\bm\theta} = \hat{\bm\theta} - \bm\theta$ is the measurement error, and $\Sigma = \mathrm{E} \, [\tilde{\bm\theta}\tilde{\bm\theta}^\intercal]$ is the covariance of the measurement error, then the \ac{CRLB} says that $\Sigma \geq \mathcal{I}^{-1}$, in the sense that $\left(\Sigma - \mathcal{I}^{-1}\right)$ is positive semi\nobreakdashes-definite. Specifically, for our likelihood, the \ac{CRLB} implies that
 %
 \begin{equation}\label{eq:covariance-matrix}
     \cov{
@@ -346,7 +325,7 @@ where ${\omega_{\mathrm{rms},i}}^2 = {\overline{\omega^2}}_i - {{\overline{\omeg
     \std \left(\hat{\tau}_i - \tau_i \right) \geq \sqrt{\left(\mathcal{I}^{-1}\right)_{\tau\tau}} = \frac{\rho_i}{\omega_{\mathrm{rms},i}}.
 \end{equation}
 %
-Furthermore, the Fisher matrix in \Eref{eq:fisher-matrix} is block diagonal, which implies that estimation errors in the signal amplitude $\rho$ are uncorrelated with the phase $\gamma$ and time $\tau$. A sequence of two changes of variables lends some physical interpretation to the nature of the coupled estimation errors in $\gamma$ and $\tau$.
+Furthermore, the Fisher matrix in Equation~(\ref{eq:fisher-matrix}) is block diagonal, which implies that estimation errors in the signal amplitude $\rho$ are uncorrelated with the phase $\gamma$ and time $\tau$. A sequence of two changes of variables lends some physical interpretation to the nature of the coupled estimation errors in $\gamma$ and $\tau$.
 
 First, we put the phase and time on the same footing by measuring the time in units of $1 / \sqrt{\overline{\omega^2}}$ with a change of variables from $\tau$ to $\gamma_\tau = \sqrt{\overline{\omega^2}} \tau$:
 %
@@ -374,29 +353,29 @@ Thus, in the appopriate time units, the \textit{sum and difference} of the phase
 
 \section{The \ac{BAYESTAR} likelihood}
 
-Although we may not be able to compute the detection candidate likelihood, \Eref{eq:detection-candidate-likelihood}, directly, we can make an educated guess that has many properties in common with it. Any valid approximate likelihood must have the same Fisher matrix \Eref{eq:fisher-matrix-extrinsic-one-detector}. It must also have the same limiting behavior: it should be periodic in the phase error $\tilde{\gamma}_i$ and go to zero as $\tilde{\tau}_i \rightarrow \pm \infty$, $\hat{\rho}_i \rightarrow 0$, or $\hat{\rho}_i \rightarrow \infty$. Additionally, when $\tilde{\tau}_i = 0$, the distribution of ${\hat{\rho}_i}^2$ should reduce to a noncentral $\chi^2$ distribution with two degrees of freedom, centered about ${\rho_i}^2$, because the complex matched filter time series $y_i(t)$ is Gaussian.
+Although we may not be able to compute the detection candidate likelihood, Equation~(\ref{eq:detection-candidate-likelihood}), directly, we can make an educated guess that has many properties in common with it. Any valid approximate likelihood must have the same Fisher matrix Equation~(\ref{eq:fisher-matrix-extrinsic-one-detector}). It must also have the same limiting behavior: it should be periodic in the phase error $\tilde{\gamma}_i$ and go to zero as $\tilde{\tau}_i \rightarrow \pm \infty$, $\hat{\rho}_i \rightarrow 0$, or $\hat{\rho}_i \rightarrow \infty$. Additionally, when $\tilde{\tau}_i = 0$, the distribution of ${\hat{\rho}_i}^2$ should reduce to a noncentral $\chi^2$ distribution with two degrees of freedom, centered about ${\rho_i}^2$, because the complex matched filter time series $y_i(t)$ is Gaussian.
 
 These conditions could be satisfied by realizing a multivariate Gaussian distribution with covariance matrix $\Sigma = \mathcal{I}^\intercal$, and then replacing individual terms of the form $-\tilde{\theta}^2/2$ with $\cos{\tilde{\theta}}$.
 
 \marginpar{Actually, this does not give exactly the same Fisher matrix. Explain.}%
 %
-Another way is to plug the signal model from \Eref{eq:signal-model} \emph{evaluated at the ML parameter estimates} into the single-detector likelihood in \Eref{eq:gaussian-likelihood-spa}:
+Another way is to plug the signal model from Equation~(\ref{eq:signal-model}) \emph{evaluated at the ML parameter estimates} into the single-detector likelihood in Equation~(\ref{eq:gaussian-likelihood-spa}):
 %
 \begin{eqnarray*}
-    \fl p\left(\hat{\boldsymbol\theta}_i \middle| \boldsymbol\theta \right)
+    p\left(\hat{\bm\theta}_i \middle| \bm\theta \right)
     &:=&
-    p\left(x_i(\omega) = h_i(\omega; \hat{\boldsymbol\theta}_i)
-        \middle| \boldsymbol\theta \right)
-    \\\fl
+    p\left(x_i(\omega) = h_i(\omega; \hat{\bm\theta}_i)
+        \middle| \bm\theta \right)
+    \\
     &\propto& \exp \left[
         - \frac{1}{2} \int_0^\infty \frac{\left|
-            \frac{\hat{\rho}_i}{\sigma_i(\hat{\boldsymbol\theta}_\mathrm{in})} e^{i (\hat\gamma_i - \omega \hat\tau_i)} h(\omega; \hat{\boldsymbol\theta}_\mathrm{in})
-            - \frac{\rho_i}{\sigma_i(\boldsymbol\theta_\mathrm{in})} e^{i (\gamma_i - \omega \tau_i)} h(\omega; \boldsymbol\theta_\mathrm{in})
+            \frac{\hat{\rho}_i}{\sigma_i(\hat{\bm\theta}_\mathrm{in})} e^{i (\hat\gamma_i - \omega \hat\tau_i)} h(\omega; \hat{\bm\theta}_\mathrm{in})
+            - \frac{\rho_i}{\sigma_i(\bm\theta_\mathrm{in})} e^{i (\gamma_i - \omega \tau_i)} h(\omega; \bm\theta_\mathrm{in})
         \right|^2}{S_i(\omega)} \, d\omega
     \right].
 \end{eqnarray*}
 %
-If we assume that $\hat{\boldsymbol\theta}_\mathrm{in} = \boldsymbol\theta_\mathrm{in}$, then this reduces to
+If we assume that $\hat{\bm\theta}_\mathrm{in} = \bm\theta_\mathrm{in}$, then this reduces to
 %
 \begin{equation}\label{eq:autocor-likelihood}
     p\left(\hat\rho_i, \hat\gamma_i, \hat\tau_i
@@ -407,26 +386,26 @@ If we assume that $\hat{\boldsymbol\theta}_\mathrm{in} = \boldsymbol\theta_\math
     \right]
 \end{equation}
 %
-with $\tilde{\gamma}_i = \hat\gamma_i - \gamma_i$, $\tilde{\tau}_i = \hat\tau_i - \tau_i$, and the template's autocorrelation function $a_i(t; \boldsymbol\theta_\mathrm{in})$ defined as
+with $\tilde{\gamma}_i = \hat\gamma_i - \gamma_i$, $\tilde{\tau}_i = \hat\tau_i - \tau_i$, and the template's autocorrelation function $a_i(t; \bm\theta_\mathrm{in})$ defined as
 %
 \begin{equation}\label{eq:autocorrelation-function}
-    a_i(t; \boldsymbol\theta_\mathrm{in}) := \frac{1}{{{\sigma_i}^2(\boldsymbol\theta_\mathrm{in})}} \int_0^\infty \frac{\left| h(\omega; \hat{\boldsymbol\theta}_\mathrm{in})\right|^2}{S_i(\omega)} e^{i \omega t} \,d\omega.
+    a_i(t; \bm\theta_\mathrm{in}) := \frac{1}{{{\sigma_i}^2(\bm\theta_\mathrm{in})}} \int_0^\infty \frac{\left| h(\omega; \hat{\bm\theta}_\mathrm{in})\right|^2}{S_i(\omega)} e^{i \omega t} \,d\omega.
 \end{equation}
 
 To assemble the joint likelihood for the whole network, we just form the product from the individual detectors:
 %
-\begin{equation}
-    \fl p\left(\left\{\hat\rho_i, \hat\gamma_i, \hat\tau_i\right\}_i
-        \middle| \left\{\rho_i, \gamma_i, \tau_i\right\}_i \right) \propto
+\begin{multline}
+    p\left(\left\{\hat\rho_i, \hat\gamma_i, \hat\tau_i\right\}_i
+        \middle| \left\{\rho_i, \gamma_i, \tau_i\right\}_i \right) \\ \propto
     \exp \left[ - \frac{1}{2} \sum_i {\hat\rho_i}^2 - \frac{1}{2} \sum_i {\rho_i}^2
         + \sum_i \hat\rho_i \rho_i \Re \left\{ e^{i \tilde{\gamma}_i} a^*(\tilde{\tau}_i)
         \right\}
     \right].
-\end{equation}
+\end{multline}
 
 \subsection{Properties}
 
-First, observe that at the true parameter values, $\hat{\boldsymbol\theta}_i = \boldsymbol\theta_i$, the logarithms of \Eref{eq:autocor-likelihood} and \Eref{eq:gaussian-likelihood-spa} have the same Jacobian. This is because the derivatives of the autocorrelation function are
+First, observe that at the true parameter values, $\hat{\bm\theta}_i = \bm\theta_i$, the logarithms of Equation~(\ref{eq:autocor-likelihood}) and Equation~(\ref{eq:gaussian-likelihood-spa}) have the same Jacobian. This is because the derivatives of the autocorrelation function are
 %
 \begin{equation*}
     a^{(n)}(t) = i^n \overline{\omega^n};
@@ -442,7 +421,7 @@ for instance,
     a''(0) = -\overline{\omega^2}.
 \end{equation*}
 
-We can compute the Fisher matrix elements for the autocorrelation likelihood given by \Eref{eq:autocor-likelihood}, with detector subscript suppressed:
+We can compute the Fisher matrix elements for the autocorrelation likelihood given by Equation~(\ref{eq:autocor-likelihood}), with detector subscript suppressed:
 %
 \begin{eqnarray}
     \nonumber
@@ -479,7 +458,7 @@ We can compute the Fisher matrix elements for the autocorrelation likelihood giv
 %
 The notation $I_k$ denotes a modified Bessel function of the first kind. Matrix elements that are not listed have values that are implied by the symmetry of the Fisher matrix. Note that the minus signs are correct but a little confusing: despite them, $\mathcal{I}_{\gamma\gamma}, \mathcal{I}_{\tau\tau} \geq 0$ and $\mathcal{I}_{\gamma\tau} \leq 0$. The time integration limits $[-T, T]$ constitute a flat prior on arrival time, the time coincidence window between detectors.
 
-If we can show that the weighting function $w(t; \rho)$ approaches a Dirac delta function as $\rho \rightarrow \infty$, then the Fisher matrix for the autocorrelation likelihood approaches the Fisher matrix for the full GW data, \Eref{eq:fisher-matrix}, as $\rho \rightarrow \infty$. The Bessel functions asymptotically approach:
+If we can show that the weighting function $w(t; \rho)$ approaches a Dirac delta function as $\rho \rightarrow \infty$, then the Fisher matrix for the autocorrelation likelihood approaches the Fisher matrix for the full GW data, Equation~(\ref{eq:fisher-matrix}), as $\rho \rightarrow \infty$. The Bessel functions asymptotically approach:
 %
 \begin{equation*}
     I_0(x), I_1(x) \rightarrow \frac{e^x}{\sqrt{2 \pi x}}
@@ -562,12 +541,12 @@ Here we describe the numerical implementation of \ac{BAYESTAR}.
 
 \subsection{Prior and problem setup}
 
-The detection pipeline supplies a candidate $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\boldsymbol\theta}_\mathrm{in}\}$, and discretely sampled noise \acp{PSD} $S_i(\omega_j)$ for all detectors. \marginpar{Discuss single-detector threshold here?}
+The detection pipeline supplies a candidate $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\bm\theta}_\mathrm{in}\}$, and discretely sampled noise \acp{PSD} $S_i(\omega_j)$ for all detectors. \marginpar{Discuss single-detector threshold here?}
 
-We compute the GW signal for a source with intrinsic parameters equal to the detection pipeline's estimate, $h(\omega; \hat{\boldsymbol\theta}_\mathrm{in})$.
-Then we find the SNR=1 horizon distance $r_{1,i}$ for each detector by numerically integrating \Eref{eq:horizon}.
+We compute the GW signal for a source with intrinsic parameters equal to the detection pipeline's estimate, $h(\omega; \hat{\bm\theta}_\mathrm{in})$.
+Then we find the SNR=1 horizon distance $r_{1,i}$ for each detector by numerically integrating Equation~(\ref{eq:horizon}).
 
-We have no explicit prior on the intrinsic parameters; in our analysis they are fixed at their \ac{ML} estimates, $\hat{\boldsymbol\theta}_\mathrm{in}$.
+We have no explicit prior on the intrinsic parameters; in our analysis they are fixed at their \ac{ML} estimates, $\hat{\bm\theta}_\mathrm{in}$.
 
 The arrival time prior is connected to the origin of the detector coordinate system. Given the Earth-fixed coordinates of the detectors $\mathbf{n}_i$ and the arrival times $\tau_i$, we compute their averages weighted by the timing uncertainty formula:
 %
@@ -604,10 +583,10 @@ In these coordinates relative to the weighted detector array barycenter, the arr
 The distance prior is a user-selected power of distance,
 %
 \begin{equation*}
-    p(r) \propto \cases{
-        r^m & if $r_\mathrm{min} < r < r_\mathrm{max}$ \\
-        0 & otherwise
-    }
+    p(r) \propto \begin{cases}
+        r^m & \text{if } r_\mathrm{min} < r < r_\mathrm{max} \\
+        0 & \text{otherwise}
+    \end{cases}
 \end{equation*}
 %
 where $m=2$ for a prior that is uniform in volume, and $m=-1$ for a prior that is uniform in the logarithm of the distance. If a distance prior is not specified, the default is uniform in volume out to the maximum SNR=4 horizon distance:
@@ -628,8 +607,8 @@ We compute the autocorrelation function for each detector from $t = 0$ to $t = T
 
 The marginal posterior as a function of sky location is
 %
-\begin{eqnarray}
-    \fl f(\alpha, \delta) \propto
+\begin{multline}
+    f(\alpha, \delta) \propto
     \int_{0}^{\pi}
     \int_{-1}^{1}
     \int_{-T}^{T}
@@ -640,13 +619,14 @@ The marginal posterior as a function of sky location is
         + \sum_i \hat\rho_i \rho_i \Re \left\{ e^{i \tilde{\gamma}_i}
         a^*(\tilde{\tau}_i)
         \right\}
-    \right] r^m \, dt_\oplus \, d\phi_c dr \, d\cos{\iota} \, d\psi.
-\end{eqnarray}
+    \right] \\
+    r^m \, dt_\oplus \, d\phi_c dr \, d\cos{\iota} \, d\psi.
+\end{multline}
 
 To marginalize over the coalescence phase, we can insert an arbitrary nuisance phase $\eta$ by making the replacement $\tilde{\gamma}_i \rightarrow \tilde{\gamma}_i + \eta$. Then integrating over $\eta$ from $0$ to $2\pi$ and suppressing normalization factors, we get
 %
-\begin{eqnarray}
-    \fl f(\alpha, \delta) \rightarrow
+\begin{multline}
+    f(\alpha, \delta) \rightarrow
     \int_{0}^{\pi}
     \int_{-1}^{1}
     \int_{-T}^{T}
@@ -655,9 +635,9 @@ To marginalize over the coalescence phase, we can insert an arbitrary nuisance p
     \exp \left[ - \frac{1}{2} \sum_i {\rho_i}^2 \right] I_0 \left[
             \left| \sum_i \hat\rho_i \rho_i e^{i \tilde{\gamma}_i} a_i^*(\tilde{\tau}_i)
             \right|
-    \right]
-    r^m dr \, dt_\oplus \, d\cos{\iota} \, d\psi.
-\end{eqnarray}
+    \right] \\
+    r^m dr dt_\oplus \, d\cos{\iota} \, d\psi.
+\end{multline}
 
 \subsubsection{Integral over angles and time}
 
@@ -689,17 +669,17 @@ There is an \emph{ultimate}, though tautological, change of variables that makes
     \mathscr{G}(x) = \int_0^{\mathrlap{\mathscr{G}(x)}} dG.
 \end{equation}
 %
-If we apply the same change of variables to \Eref{eq:importance-sampling-difficult-integral}, we get
+If we apply the same change of variables to Equation~(\ref{eq:importance-sampling-difficult-integral}), we get
 %
 \begin{equation}\label{eq:importance-sampling}
     \mathscr{F}(x_1, x_2) = \int_{\mathscr{G}(x_1)}^{\mathscr{G}(x_2)} \frac{f(\mathscr{G}^{-1}(G))}{g(\mathscr{G}^{-1}(G))} dG.
 \end{equation}
 %
-If $f(x)$ and $g(x)$ have sufficiently similar behavior, then their quotient $f/g$ will be better behaved than $f$ itself, and more amenable to any given quadrature technique. When the transformed integral \Eref{eq:importance-sampling} is evaluated using Monte Carlo integration, this technique is referred to as importance sampling.
+If $f(x)$ and $g(x)$ have sufficiently similar behavior, then their quotient $f/g$ will be better behaved than $f$ itself, and more amenable to any given quadrature technique. When the transformed integral Equation~(\ref{eq:importance-sampling}) is evaluated using Monte Carlo integration, this technique is referred to as importance sampling.
 
-We use the same kind of change of variables with fixed\nobreakdashes-order Gaussian quadrature. We first find the approximate \ac{ML} distance $r_0$ using \Eref{eq:ml-distance}. If $r_0 < r_\mathrm{min}$ or $r_0 > r_\mathrm{max}$, then the ML peak lies outside of the limits of integration and the original integrand behaves like a low-order power law. In this case, we use 10\nobreakdashes-point Gaussian quadrature to evaluate \Eref{eq:distance-integral}.
+We use the same kind of change of variables with fixed\nobreakdashes-order Gaussian quadrature. We first find the approximate \ac{ML} distance $r_0$ using Equation~(\ref{eq:ml-distance}). If $r_0 < r_\mathrm{min}$ or $r_0 > r_\mathrm{max}$, then the ML peak lies outside of the limits of integration and the original integrand behaves like a low-order power law. In this case, we use 10\nobreakdashes-point Gaussian quadrature to evaluate Equation~(\ref{eq:distance-integral}).
 
-If, on the other hand, $r_\mathrm{min} \leq r_0 \leq r_\mathrm{max}$, then the integrand contains a sharp peak that we can smooth out with importance sampling. We first re-scale the distance integral \Eref{eq:distance-integral} so that the peak value of the integrand is $\sim 1$:
+If, on the other hand, $r_\mathrm{min} \leq r_0 \leq r_\mathrm{max}$, then the integrand contains a sharp peak that we can smooth out with importance sampling. We first re-scale the distance integral Equation~(\ref{eq:distance-integral}) so that the peak value of the integrand is $\sim 1$:
 %
 \begin{equation}
     \mathscr{F} = \exp\left(\frac{b^2}{4p^2}\right)
@@ -751,7 +731,7 @@ The transformed integral is
 %
 This integral is evaluated numerically with a 10\nobreakdashes-point Gauss-Legendre rule.
 
-Last, there are a few special cases where \Eref{eq:distance-integral} can be evaluated exactly. If $p^2=0$ (which implies $b = 0$), then the integral may be expressed in terms of logarithms. If $b = 0$ but $p^2 \neq 0$, then the integral may be expressed in terms of the exponential integral function,
+Last, there are a few special cases where Equation~(\ref{eq:distance-integral}) can be evaluated exactly. If $p^2=0$ (which implies $b = 0$), then the integral may be expressed in terms of logarithms. If $b = 0$ but $p^2 \neq 0$, then the integral may be expressed in terms of the exponential integral function,
 %
 \begin{equation}
     E_n(x) = \int_1^\infty \frac{\exp (-xt)}{t^n} dt.
@@ -778,15 +758,14 @@ Within each iteration, all of the marginalization integrals may be evaluated in 
     \caption{\label{fig:pp}$P-P$ plot.}
 \end{figure}
 
-\ack \marginpar{This URL is not specific enough.}Source code for \ac{BAYESTAR} is available on the \ac{LIGO} \acl{DASWG} web site at \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/lalsuite.html}.
+\begin{acknowledgements}
+\marginpar{This URL is not specific enough.}Source code for \ac{BAYESTAR} is available on the \ac{LIGO} \acl{DASWG} web site at \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/lalsuite.html}.
 
 Some of the results in this paper have been derived using \ac{HEALPix} \cite{healpix}.
 
 \ac{LIGO} was constructed by the California Institute of Technology and Massachusetts Institute of Technology with funding from the \ac{NSF} and operates under cooperative agreement PHY\nobreakdashes-0107417. Some results were produced on the NEMO computing cluster operated by the Center for Gravitation and Cosmology at University of Wisconsin\nobreakdashes--Milwaukee under \ac{NSF} Grants PHY\nobreakdashes-0923409 and PHY\nobreakdashes-0600953. This research is supported by the \ac{NSF} through a Graduate Research Fellowship to L.S. This paper has \ac{LIGO} Document Number \ac{LIGO}\nobreakdashes-PXXXXXXX\nobreakdashes-vX.
+\end{acknowledgements}
 
-
-\section*{References}
-\bibliographystyle{iopart-num}
 \bibliography{apj-jour,bib/telescope,ms}
 
 \end{document}

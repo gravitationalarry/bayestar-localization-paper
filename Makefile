@@ -1,5 +1,5 @@
-TEX = env TEXINPUTS=:$(CURDIR)/iopart: pdflatex -file-line-error -halt-on-error
-BIBTEX = env BIBINPUTS=:$(CURDIR)/astronat/apj: TEXINPUTS=:$(CURDIR)/iopart: bibtex
+TEX = pdflatex -file-line-error -halt-on-error
+BIBTEX = env BIBINPUTS=:$(CURDIR)/astronat/apj: bibtex
 
 all: ms.pdf
 
@@ -49,4 +49,4 @@ pp.pdf: scripts/pp.py matplotlibrc 2015_subset/found_injections.out 2016_subset/
 	python $<
 
 clean:
-	rm -f ms.{aux,log,out,bbl,blg,pdf} $(FIGURES)
+	rm -f ms.{aux,log,out,bbl,blg,pdf} msNotes.bib $(FIGURES)

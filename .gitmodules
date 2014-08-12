@@ -1,6 +1,3 @@
-[submodule "iopart"]
-	path = iopart
-	url = git@github.com:gravitationalarry/iopart.git
 [submodule "ligo-acronyms"]
 	path = ligo-acronyms
 	url = git@github.com:gravitationalarry/ligo-acronyms.git
