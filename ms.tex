@@ -67,9 +67,9 @@ In the frequency domain, the strain observed by a single \ac{GW} interferometer 
     y_i (\omega) = x_i (\omega; \bm\theta) + n_i (\omega),
 \end{equation}
 %
-where $x_i (\omega; \bm\theta)$ is the \ac{GW} signal given a parameter vector $\bm\theta$ that describes the \ac{GW} source, and $n_i (\omega)$ is that detector's \ac{WSS} Gaussian noise with one\nobreakdashes-sided \ac{PSD} $S_i(\omega) = E\left[\left|n_i(\omega)\right|^2\right] + E\left[\left|n_i(-\omega)\right|^2\right] = 2 E\left[\left|n_i(\omega)\right|^2\right]$. We shall denote the combined observation from a network of detectors as $\mathbf y (\omega) \equiv \{y_i (\omega)\}_i$.
+where $x_i (\omega; \bm\theta)$ is the \ac{GW} signal given a parameter vector $\bm\theta$ that describes the \ac{GW} source, and $n_i (\omega)$ is that detector's Gaussian noise with one\nobreakdashes-sided \ac{PSD} $S_i(\omega) = E\left[\left|n_i(\omega)\right|^2\right] + E\left[\left|n_i(-\omega)\right|^2\right] = 2 E\left[\left|n_i(\omega)\right|^2\right]$. We shall denote the combined observation from a network of detectors as $\mathbf y (\omega) \equiv \{y_i (\omega)\}_i$.
 
-The likelihood, or the probability of obtaining the observation $\mathbf y$ conditioned on the value of $\bm\theta$, is a product of Gaussian distributions:
+The likelihood, or the probability of the observation $\mathbf y$ conditioned on the value of $\bm\theta$, is a product of Gaussian distributions:
 %
 \begin{multline}\label{eq:gaussian-likelihood}
     \mathcal{L}(\mathbf y; \bm\theta) = \prod_i p(y_i | \bm\theta)
@@ -520,14 +520,13 @@ In the limit of large SNR, our interpretation is that the point estimates $(\hat
 
 On the other hand, in the low SNR limit, the diminishing value of $\textproto{D}_{ij}(\rho)$ reflects the fact that some information is lost when the full data $\mathbf{x}$ is discarded. Concretely, as the prior interval $T$ becomes large compared to 1/$\rho\omega_\mathrm{rms}$, the ML estimator becomes more and more prone to pick up a spurious noise fluctuation far from the true signal. Clearly, when the coincidence window $T$ is kept small as possible, more information is retained in the ML point estimates. Put another way, if $T$ is small, then the transition SNR $\rho_\mathrm{crit}$ is also small and fainter signals become useful for parameter estimation.
 
-\begin{figure}
+\begin{figure*}
     \begin{center}
         \includegraphics{crlb_tau}
-
         \includegraphics{crlb_gamma}
     \end{center}
     \caption{\label{fig:crlb-tau}\ac{CRLB} on root\nobreakdashes-mean square timing uncertainty, using the likelihood for the full GW data (Equation~\ref{eq:gaussian-likelihood-spa}; dashed diagonal line) or the autocorrelation likelihood (Equation~\ref{eq:autocor-likelihood}; solid lines) with a selection of arrival time priors.}
-\end{figure}
+\end{figure*}
 
 \begin{figure}
     \begin{center}
