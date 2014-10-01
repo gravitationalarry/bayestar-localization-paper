@@ -1,4 +1,5 @@
 \documentclass[amsmath,amssymb,aps,prx,reprint,nopreprintnumbers,nofootinbib]{revtex4-1}
+\usepackage[nolist]{acronym}
 \usepackage{multirow}
 \usepackage{bigdelim}
 \usepackage{multirow}
@@ -8,7 +9,6 @@
 \usepackage{bib/aas_macros}
 \usepackage[colorlinks]{hyperref}
 \usepackage{protosem}
-\input{ligo-acronyms/acronyms}
 
 % From http://www.f.kth.se/~ante/latex.php
 \setlength{\marginparwidth}{0.5in}
@@ -760,6 +760,8 @@ Within each iteration, all of the marginalization integrals may be evaluated in 
     \end{center}
     \caption{\label{fig:pp}$P-P$ plot.}
 \end{figure}
+
+\input{ligo-acronyms/acronyms}
 
 \begin{acknowledgements}
 Source code for \ac{BAYESTAR} is available as part of LALInference, the open source LIGO/Virgo parameter estimation toolchain. See \url{http://www.lsc-group.phys.uwm.edu/daswg/projects/lalsuite.html} for further details.
