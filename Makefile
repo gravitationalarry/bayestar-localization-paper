@@ -10,7 +10,8 @@ FIGURES = \
 	inclination_integral_convergence.pdf \
 	polarization_angle_integral_convergence.pdf \
 	radial_integrand.pdf \
-	pp.pdf
+	pp.pdf \
+	runtimes.pdf
 
 PREREQS = ms.tex \
 	bib/aas_macros.sty \
@@ -46,6 +47,9 @@ fishfactor.pdf: scripts/fishfactor.py matplotlibrc autocorrelation_fisher_matrix
 	python $<
 
 pp.pdf: scripts/pp.py matplotlibrc 2015_subset/found_injections.out 2016_subset/found_injections.out
+	python $<
+
+runtimes.pdf: plot_runtimes.py 2015_runtimes.npy 2016_runtimes.npy matplotlibrc
 	python $<
 
 clean:
