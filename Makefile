@@ -11,12 +11,14 @@ FIGURES = \
 	polarization_angle_integral_convergence.pdf \
 	radial_integrand.pdf \
 	pp.pdf \
-	runtimes.pdf
+	runtimes.pdf \
+	illustration.pdf
 
 PREREQS = ms.tex \
 	bib/aas_macros.sty \
 	ligo-acronyms/acronyms.tex \
 	bib/telescope.bib \
+	ms.bib \
 	$(FIGURES)
 
 ms.pdf: $(PREREQS)
