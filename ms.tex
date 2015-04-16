@@ -10,6 +10,18 @@
 \usepackage[colorlinks]{hyperref}
 \usepackage{protosem}
 
+\usepackage{listings}
+\lstset{ %
+    basicstyle=\footnotesize\ttfamily,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    keepspaces,
+    frame=tb,
+    commentstyle=\color{red},
+    keywordstyle=\color{blue}
+}
+
 % From http://www.f.kth.se/~ante/latex.php
 \setlength{\marginparwidth}{0.5in}
 \let\oldmarginpar\marginpar
@@ -212,10 +224,12 @@ A detection candidate consists of $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_
 %
 this, therefore, is the simplest useful candidate ranking statistic.
 
-\section{Uncertainty and the Fisher matrix}
+\subsection{Uncertainty and the Fisher matrix}
 \label{sec:fisher}
 
-We can predict the uncertainty in the \ac{ML} estimates without working out its full distribution. The \ac{CRLB} gives its covariance in the asymptotic limit of high \ac{SNR}. The \ac{CRLB} has been widely applied in \ac{GW} data analysis to estimate parameter estimation uncertainty (for example, \cite{1996PhRvD..53.3033B,FairhurstTriangulation,2009PhRvD..79h4032A,WenLocalizationAdvancedLIGO,LIGOObservingScenarios,FairhurstLIGOIndia})\footnote{The Fisher matrix is also used in construction of \ac{CBC} matched filter banks. The common procedure is to place templates uniformly according to the determinant of the signal space metric, which is the Fisher matrix. This is equivalent to uniformly sampling the Jeffreys prior. In practice, this is done either by constructing a hexagonal lattice \citep{PhysRevD.76.102004} or sampling stochastically \citep{2009PhRvD..80j4014H,2009PhRvD..80b4009V,SBank,2010PhRvD..81b4004M,2014PhRvD..89b4003P}}. We will momentarily consider the likelihood for a single detector:
+We can predict the uncertainty in the detection pipeline's \ac{ML} estimates using the \ac{CRLB}. The \ac{CRLB} has been widely applied in \ac{GW} data analysis to estimate parameter estimation uncertainty (for example, \cite{1996PhRvD..53.3033B,FairhurstTriangulation,2009PhRvD..79h4032A,WenLocalizationAdvancedLIGO,LIGOObservingScenarios,FairhurstLIGOIndia})\footnote{The Fisher matrix is also used in construction of \ac{CBC} matched filter banks. The common procedure is to place templates uniformly according to the determinant of the signal space metric, which is the Fisher matrix. This is equivalent to uniformly sampling the Jeffreys prior. In practice, this is done either by constructing a hexagonal lattice \citep{PhysRevD.76.102004} or sampling stochastically \citep{2009PhRvD..80j4014H,2009PhRvD..80b4009V,SBank,2010PhRvD..81b4004M,2014PhRvD..89b4003P}.}.
+
+We will momentarily consider the likelihood for a single detector:
 %
 \begin{multline}\label{eq:gaussian-likelihood-spa}
     \mathcal{L}\left(Y_i; \rho_i, \gamma_i, \tau_i,
@@ -244,7 +258,9 @@ The Fisher information matrix for a measurement $y$ described by the unknown par
     \middle| \bm\theta
     \right].
 \end{equation}
-%
+
+The Fisher matrix describes how strongly the likelihood depends, on average, on the parameters. Furthermore, it provides an estimate of the mean-square error in the parameters. If $\hat{\bm\theta}$ is an unbiased estimator of $\bm\theta$, $\tilde{\bm\theta} = \hat{\bm\theta} - \bm\theta$ is the measurement error, and $\Sigma = \mathrm{E} \, [\tilde{\bm\theta}\tilde{\bm\theta}\transpose]$ is the covariance of the measurement error, then the \ac{CRLB} says that $\Sigma \geq \mathcal{I}^{-1}$, in the sense that $\left(\Sigma - \mathcal{I}^{-1}\right)$ is positive semi\nobreakdashes-definite.
+
 Note that if $\log\mathcal{L}$ is twice differentiable in terms of $\bm\theta$, then the Fisher matrix can also be written in terms of second derivatives as
 %
 \begin{equation}\label{eq:general-fisher-matrix-second-derivatives}
@@ -255,8 +271,6 @@ Note that if $\log\mathcal{L}$ is twice differentiable in terms of $\bm\theta$, 
     \middle| \bm\theta
     \right].
 \end{equation}
-%
-In this form, we can recognize the Fisher matrix as the expectation value, conditioned upon the true parameter values, of the Hessian matrix of the log likelihood. It describes how strongly the likelihood depends, on average, on the parameters. If $\hat{\bm\theta}$ is an unbiased estimator of $\bm\theta$, $\tilde{\bm\theta} = \hat{\bm\theta} - \bm\theta$ is the measurement error, and $\Sigma = \mathrm{E} \, [\tilde{\bm\theta}\tilde{\bm\theta}\transpose]$ is the covariance of the measurement error, then the \ac{CRLB} says that $\Sigma \geq \mathcal{I}^{-1}$, in the sense that $\left(\Sigma - \mathcal{I}^{-1}\right)$ is positive semi\nobreakdashes-definite.
 
 When (as in our assumptions) the likelihood is Gaussian, Equation~(\ref{eq:general-fisher-matrix}) simplifies to
 %
@@ -278,6 +292,7 @@ This form is useful because it involves manipulating the signal $X_i (\omega)$ r
 the Fisher matrix for the signal in the $i$th detector is
 %
 \begin{equation}
+    \label{eq:single-detector-block-fisher-matrix}
     \mathcal{I}_i = \left(
         \begin{array}{cc}
             \mathcal{I}_{\bm\theta_i,\bm\theta_i} &
@@ -285,10 +300,10 @@ the Fisher matrix for the signal in the $i$th detector is
             {\mathcal{I}_{\bm\theta_i,\bm\theta_\mathrm{in}}}\transpose &
             {\rho_i}^2 \mathcal{I}_{\bm\theta_\mathrm{in},\bm\theta_\mathrm{in}}
         \end{array}
-    \right)
+    \right).
 \end{equation}
 %
-where
+The top-left block describes only the extrinsic parameters, and is given by
 %
 \begin{equation}\label{eq:fisher-matrix}
     \mathcal{I}_{\bm\theta_i,\bm\theta_i} = \bordermatrix{
@@ -299,7 +314,39 @@ where
     }.
 \end{equation}
 %
-(This is equivalent to an expression given in \citealt{Grover:2013}.) The information matrix elements that relate to the intrinsic parameters can also be expressed as linear combinations of the angular frequency moments. However, as we will see in the next section, we need not compute these matrix elements if we are only interested in sky localization accuracy.
+(This is equivalent to an expression given in \cite{Grover:2013}.) The bottom row and right column of Equation~(\ref{eq:single-detector-block-fisher-matrix}) describe the intrinsic parameters and how they are coupled to the extrinsic parameters. We show in Appendix~\ref{sec:independence-intrinsic-extrinsic} that we need not consider the intrinsic parameters at all if we are concerned only with sky localization.
+
+The Fisher matrix has been much maligned within the \ac{GW} literature because the \ac{CRLB} is a good description of the parameter covariance in the limit of high \ac{SNR}, and can be abused by applying it in low-\ac{SNR} conditions, or close to the boundaries of the parameter space \cite{UseAbuseFisherMatrix}. However, we will put the \ac{CRLB} to good use to improve our qualitative understanding of the likelihood. Furthermore, the Fisher matrix in its own right---independent of its suitability to describe the parameter covariance---is a well-defined property of any likelihood function, and we will exploit it as such in Section~\ref{sec:bayestar-likelihood}.
+
+For our likelihood, the \ac{CRLB} implies that
+%
+\begin{equation}\label{eq:covariance-matrix}
+    \cov{
+        \left(
+        \begin{array}{c}
+            \tilde{\rho}_i \\
+            \tilde{\gamma}_i \\
+            \tilde{\tau}_i
+        \end{array}
+        \right)
+    } \geq \mathcal{I}^{-1} = \left(
+        \begin{array}{ccc}
+            1 & 0 & 0 \\
+            0 & {\rho_i}^2 {\overline{\omega^2}}_i/{\omega_{\mathrm{rms},i}}^2 & {\rho_i}^2 {\overline{\omega}}_i/{\omega_{\mathrm{rms},i}}^2 \\
+            0 & {\rho_i}^2 {\overline{\omega}}_i/{\omega_{\mathrm{rms},i}}^2 & {\rho_i}^2/{\omega_{\mathrm{rms},i}}^2
+        \end{array}
+    \right),
+\end{equation}
+%
+where ${\omega_{\mathrm{rms},i}}^2 = {\overline{\omega^2}}_i - {{\overline{\omega}}_i}^2$. This structure implies that errors in \ac{SNR} are uncorrelated with errors in time and phase, and that there is a particular sum and difference of the times and phases that are measured independently (see Appendix~\ref{sec:interpretation-of-errors}).
+
+Reading off the $\tau \tau$ element of the covariance matrix reproduces the timing accuracy in Equation~(24) of \cite{FairhurstTriangulation},
+%
+\begin{equation}\label{eq:timing-crlb}
+    \std \left(\hat{\tau}_i - \tau_i \right) \geq \sqrt{\left(\mathcal{I}^{-1}\right)_{\tau\tau}} = \frac{\rho_i}{\omega_{\mathrm{rms},i}}.
+\end{equation}
+%
+\citet{FairhurstTriangulation} goes on to frame the characteristic position reconstruction accuracy of a \ac{GW} detector network in terms of time delay triangulation, with the above formula describing the time of arrival uncertainty for each detector. In Appendix~\ref{sec:position-resolution}, we show how to extend this formalism to include the phases and amplitudes on arrival as well.
 
 \section{Bayesian probability and parameter estimation}
 \label{sec:parameter-estimation}
@@ -593,11 +640,6 @@ We compute the autocorrelation function for each detector from $t = 0$ to $t = T
 \section{Marginal posterior}
 \label{sec:marginal-posterior}
 
-\begin{figure*}
-    \includegraphics[width=\textwidth]{illustration}
-    \caption{\label{fig:adaptive-illustration}Illustration of the \ac{BAYESTAR} adaptive mesh refinement scheme.}
-\end{figure*}
-
 The marginal posterior as a function of sky location is
 %
 \begin{multline}
@@ -754,6 +796,11 @@ The transformed integral is
 %
 This integral is evaluated numerically with a 10\nobreakdashes-point Gauss\nobreakdashes--Legendre rule.
 
+\begin{figure}
+    \includegraphics[width=\columnwidth]{importance-sampling}
+    \caption{\label{fig:importance-sampling}Illustration of importance sampling scheme. The top-left panel shows the original integrand $f(r)$, the proposal integrand $g(r)$, and the limits of integration $r = r_\mathrm{min}$ and $r = r_\mathrm{max}$. The area of the dark shaded region is the integral of interest. The bottom-left panel shows the integral $\mathscr{G}(r) = \int_0^r g(r) dr$. The new variable of integration is $G = \mathscr{G}(r)$, from $G_\mathrm{min} = \mathscr{G}(r_\mathrm{min})$ to $G_\mathrm{max} = \mathscr{G}(r_\mathrm{max})$. The bottom-right panel shows the transformed integrand, $f(\mathscr{G}^{-1}(G))/g(\mathscr{G}^{-1}(G))$. The dark shaded region has the same area as in the top-left figure.}
+\end{figure}
+
 Last, there are a few special cases where Equation~(\ref{eq:distance-integral}) can be evaluated exactly. If $p^2=0$ (which implies $b = 0$), then the integral may be expressed in terms of logarithms. If $b = 0$ but $p^2 \neq 0$, then the integral may be expressed in terms of the exponential integral function,
 %
 \begin{equation}
@@ -767,7 +814,12 @@ The distance integral, therefore, takes either one or ten function evaluations.
 
 We have explained how we evaluate the marginal posterior at a given sky location. Now we must specify where we choose to evaluate it.
 
-Our sampling of the sky is relies completely on the \acl{HEALPix} (\acs{HEALPix}), a special data structure designed for all\nobreakdashes-sky maps. \ac{HEALPix} divides the sky into equal\nobreakdashes-area pixels. There is a hierarchy of \ac{HEALPix} resolutions. A \ac{HEALPix} resolution may be designated by its order $N$. The $N=0$th order or base tiling has 12 pixels. At every successive order, each tile is subdivided into four new tiles. A resolution may also be referred to by the number of subdivisions along each side of the base tiles, $N_\mathrm{side} = 2^N$. There are $N^\mathrm{pix} = 12 {N_\mathrm{side}}^2$ pixels at any given resolution. The \ac{HEALPix} projection uniquely specifies the coordinates of the center of each pixel by providing a mapping from the resolution and pixel index $(N_\mathrm{side}, i_\mathrm{pix})$ to right ascension and declination $(\alpha, \delta)$.
+\begin{figure*}
+    \includegraphics[width=\textwidth]{illustration}
+    \caption{\label{fig:adaptive-illustration}Illustration of the \ac{BAYESTAR} adaptive HEALPix sampling scheme.}
+\end{figure*}
+
+Our sampling of the sky relies completely on the \acl{HEALPix} (\acs{HEALPix}), a special data structure designed for all\nobreakdashes-sky maps. \ac{HEALPix} divides the sky into equal\nobreakdashes-area pixels. There is a hierarchy of \ac{HEALPix} resolutions. A \ac{HEALPix} resolution may be designated by its order $N$. The $N=0$th order or base tiling has 12 pixels. At every successive order, each tile is subdivided into four new tiles. A resolution may also be referred to by the number of subdivisions along each side of the base tiles, $N_\mathrm{side} = 2^N$. There are $N^\mathrm{pix} = 12 {N_\mathrm{side}}^2$ pixels at any given resolution. The \ac{HEALPix} projection uniquely specifies the coordinates of the center of each pixel by providing a mapping from the resolution and pixel index $(N_\mathrm{side}, i_\mathrm{pix})$ to right ascension and declination $(\alpha, \delta)$.
 
 We begin by evaluating the posterior probability density at the center of each of the $N_{\mathrm{pix},0} = 3072$ pixels of an $N_{\mathrm{side},0}=16$ \ac{HEALPix} grid. At this resolution, each pixel has an area of 13.4~deg$^2$. We then rank the pixels by contained probability (assuming constant probability density within a pixel), and subdivide the most probable $N_{\mathrm{pix},0}/4$ pixels into $N_{\mathrm{pix},0}$ new pixels. We then evaluate the posterior again at the pixels that we subdivided, sort again, and repeat seven times, so that we have evaluated the posterior probability density a total of $8 N_{\mathrm{pix},0}$ times. On \emph{most} iterations, we descend one level deeper in \ac{HEALPix} resolution. The resulting map is a tree structure that consists of a mix of several resolutions. We traverse the tree and flatten it into the highest resolution represented. The highest possible resolution is $N_\mathrm{side}=2^{11}$, with an area of $\approx 10^{-3}$~deg$^2$ per pixel.\footnote{Although the resulting sky map contains $N_\mathrm{pix} \approx 5\times10^6$ pixels, at most $\approx 2\times10^4$ pixels have distinct values. For the purpose of delivery to observers, therefore, the output is always \texttt{gzip}\nobreakdashes-compressed with a ratio of $\approx 250:1$.}
 
@@ -776,7 +828,7 @@ Within each iteration, all of the marginalization integrals may be evaluated in 
 \section{Run time}
 \label{sec:run-time}
 
-Since \ac{BAYESTAR} is designed as one of the final steps in the real\nobreakdashes-time \ac{BNS} search, it is important to characterize how long it takes to calculate a sky map. We compiled \ac{BAYESTAR} with the Intel~C~Compiler~(\texttt{icc}) at the highest architecture\nobreakdashes-specific optimization setting (\texttt{-xhost}). We timed it under Scientific~Linux~6 on a Supermicro~1027GR\nobreakdashes-TRFT system with dual Intel Xeon E5-2670 CPUs clocked at 2.60GHz, providing a total of 16 cores and capable of executing 32 threads simultaneously (with hyperthreading). In Figure~\ref{fig:runtimes}, we show how long it took to calculate a localization with \ac{BAYESTAR} as the number of OpenMP threads was varied from 1 to 32. This is a violin plot, a smoothed vertical histogram. The red surface shows run times for a two\nobreakdashes-detector network (HL) modeled on the first scheduled Advanced \ac{LIGO} observing run in 2015, and the blue surface shows run times for a three\nobreakdashes-detector network (HLV) based on the second planned observing run in 2016. These are the two observing scenarios that will be discussed at length in the following chapter.
+Since \ac{BAYESTAR} is designed as one of the final steps in the real\nobreakdashes-time \ac{BNS} search, it is important to characterize how long it takes to calculate a sky map. We compiled \ac{BAYESTAR} with the Intel~C~Compiler~(\texttt{icc}) at the highest architecture\nobreakdashes-specific optimization setting (\texttt{-xhost}). We timed it under Scientific~Linux~6 on a Supermicro~1027GR\nobreakdashes-TRFT system with dual Intel Xeon E5-2670 CPUs clocked at 2.60GHz, providing a total of 16 cores and capable of executing 32 threads simultaneously (with hyperthreading). In Figure~\ref{fig:runtimes}, we show how long it took to calculate a localization with \ac{BAYESTAR} as the number of OpenMP threads was varied from 1 to 32. This is a violin plot, a smoothed vertical histogram. The red surface shows run times for a two\nobreakdashes-detector network (HL) modeled on the first scheduled Advanced \ac{LIGO} observing run in 2015, and the blue surface shows run times for a three\nobreakdashes-detector network (HLV) based on the second planned observing run in 2016. These are the two observing scenarios that are discussed in \cite{FirstTwoYears}.
 
 Several features are apparent. First, at any number of threads, the two configurations have similar run times, although the 2016 events contain a subpopulation of outliers that take about 2.5 times as long as the 2015 events. These are probably due to taking one of the more expensive code branches in the distance integral. Second, the run times decrease proportionally to the number of threads. A slight flattening at 32 threads may be due to increasing use of hyperthreading. Based on experiences running \ac{BAYESTAR} on the 32\nobreakdashes-core (64 threads with hyperthreading) cluster login machine, we expect the almost ideal parallel speedup to continue on machines with more threads. With just one thread, the \ac{BAYESTAR} analysis takes 500\nobreakdashes--1500~s, already orders of magnitude faster than the full parameter estimation. With 32 threads, \ac{BAYESTAR} takes just 20\nobreakdashes--60~s. This latency is comparable to the other stages (data aggregation, trigger generation, alert distribution) in the real\nobreakdashes-time \ac{BNS} analysis. The 32\nobreakdashes-thread configuration is representative of how \ac{BAYESTAR} might be deployed in early Advanced \ac{LIGO}.\footnote{\ac{BAYESTAR} has been successfully ported to the Intel's Many Integrated Core~(MIC) architecture and has been tested in a 500 thread configuration on a system with dual Intel Xeon Phi 5110P coprocessors.}
 
@@ -911,32 +963,7 @@ The transformed network Fisher matrix is block diagonal,
 The top\nobreakdashes-left block contains $N-1$ relative amplitudes, phases, and times on arrival, all potentially correlated with each other. The bottom\nobreakdashes-right block contains the average amplitudes, phases, and times, as well as the masses. The averages and the masses are correlated with each other, but are not correlated with the differences. Because only the differences are informative for sky localization, we drop the intrinsic parameters from the rest of the Fisher matrix calculations in this chapter.
 
 \section{Interpretation of phase and time errors}
-
-We take a brief digression to discuss the physical interpretation of the time and amplitude errors. For our likelihood, the \ac{CRLB} implies that
-%
-\begin{equation}\label{eq:covariance-matrix}
-    \cov{
-        \left(
-        \begin{array}{c}
-            \tilde{\rho}_i \\
-            \tilde{\gamma}_i \\
-            \tilde{\tau}_i
-        \end{array}
-        \right)
-    } \geq \mathcal{I}^{-1} = \left(
-        \begin{array}{ccc}
-            1 & 0 & 0 \\
-            0 & {\rho_i}^2 {\overline{\omega^2}}_i/{\omega_{\mathrm{rms},i}}^2 & {\rho_i}^2 {\overline{\omega}}_i/{\omega_{\mathrm{rms},i}}^2 \\
-            0 & {\rho_i}^2 {\overline{\omega}}_i/{\omega_{\mathrm{rms},i}}^2 & {\rho_i}^2/{\omega_{\mathrm{rms},i}}^2
-        \end{array}
-    \right),
-\end{equation}
-%
-where ${\omega_{\mathrm{rms},i}}^2 = {\overline{\omega^2}}_i - {{\overline{\omega}}_i}^2$. Reading off the $\tau \tau$ element of the covariance matrix reproduces the timing accuracy in Equation~(24) of \cite{FairhurstTriangulation},
-%
-\begin{equation}\label{eq:timing-crlb}
-    \std \left(\hat{\tau}_i - \tau_i \right) \geq \sqrt{\left(\mathcal{I}^{-1}\right)_{\tau\tau}} = \frac{\rho_i}{\omega_{\mathrm{rms},i}}.
-\end{equation}
+\label{sec:interpretation-of-errors}
 
 The Fisher matrix in Equation~(\ref{eq:fisher-matrix}) is block diagonal, which implies that estimation errors in the signal amplitude $\rho$ are uncorrelated with the phase $\gamma$ and time $\tau$. A sequence of two changes of variables lends some physical interpretation to the nature of the coupled estimation errors in $\gamma$~and~$\tau$.
 
@@ -965,6 +992,7 @@ The second change of variables, from $\gamma$ and $\gamma_\tau$ to $\gamma_\pm =
 Thus, in the appopriate time units, the \textit{sum and difference} of the phase and time of the signal are measured independently.
 
 \section{Position resolution}
+\label{sec:position-resolution}
 
 Finally, we will calculate the position resolution of a network of \ac{GW} detectors. We could launch directly into computing derivatives of the full signal model from Equation~(\ref{eq:full-signal-model}) with respect to all of the parameters, but this would result in a very complicated expression. Fortunately, we can take two shortcuts. First, since we showed in Section~\ref{sec:independence-intrinsic-extrinsic} that the intrinsic parameters are correlated only with an overall nuisance average arrival time, amplitude, and phase, we need not consider the derivatives with respect to mass at all. Second, we can reuse the extrinsic part of the single detector Fisher matrix from Equation~(\ref{eq:fisher-matrix}) by computing the much simpler Jacobian matrix to transform from the time, amplitude, and phase on arrival, to the parameters of interest.
 
@@ -1172,6 +1200,7 @@ gives us the information matrix marginalized over all parameters but $\delta\the
 
 How do we extract the dimensions of the localization from the Fisher matrix? If there are $N \leq 2$ detectors, then the Fisher matrix must be degenerate, because there are $3N$ measurements and 7 parameters:
 %
+\begin{widetext}
 \begin{equation*}
     \left\{
     \begin{array}{c}
@@ -1197,6 +1226,7 @@ How do we extract the dimensions of the localization from the Fisher matrix? If 
     \right\}
     \times N = 3N \text{ observables.}
 \end{equation*}
+\end{widetext}
 %
 Therefore, for $N=2$ detectors, the marginalized Fisher matrix $\mathcal{I}_\mathrm{marg}$ is singular. Its only nonzero eigenvalue $\lambda$ describes the width of an annulus on the sky. The width of the annulus that contains probability $p$ is given by
 %
@@ -1204,7 +1234,7 @@ Therefore, for $N=2$ detectors, the marginalized Fisher matrix $\mathcal{I}_\mat
     L_p = 2 \sqrt{2} \erf^{-1}(p) / \sqrt{\lambda}.
 \end{equation}
 %
-The prefactor $2 \sqrt{2} / \erf^{-1}(p)$ is the central interval of a normal distribution that contains a probability $p$, and is $\approx 3.3$ for $p = 0.9$. \emph{Caution:} for two\nobreakdashes-detector networks, priors play an important role in practical parameter estimation and areas can be much smaller than one would predict from the Fisher matrix (see Chapter~\ref{chap:first2years} for more discussion).
+The prefactor $2 \sqrt{2} / \erf^{-1}(p)$ is the central interval of a normal distribution that contains a probability $p$, and is $\approx 3.3$ for $p = 0.9$. \emph{Caution:} for two\nobreakdashes-detector networks, priors play an important role in practical parameter estimation and areas can be much smaller than one would predict from the Fisher matrix.
 
 For $N \geq 3$ detectors, the parameters are over\nobreakdashes-constrained by the data and the Fisher matrix describes the dimensions of an ellipse. Within a circle of radius $r$ centered on the origin, the enclosed probability $p$ is
 %
@@ -1240,9 +1270,7 @@ Using the above derivation, we arrive at a prediction for the sky resolution of 
     \item (Optionally, convert from (ste)radians to (square) degrees.)
 \end{enumerate}
 
-See code listing in Appendix~\ref{sec:fisher-matrix-code-listing}.
-
-
+See code listing in Appendix~A.6 of \cite{leo-singer-thesis}.
 
 \bibliography{apj-jour,bib/telescope,ms}
 
