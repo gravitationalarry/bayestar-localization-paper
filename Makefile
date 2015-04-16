@@ -12,7 +12,8 @@ FIGURES = \
 	radial_integrand.pdf \
 	pp.pdf \
 	runtimes.pdf \
-	illustration.pdf
+	illustration.pdf \
+	importance-sampling.pdf
 
 PREREQS = ms.tex \
 	bib/aas_macros.sty \
@@ -26,6 +27,9 @@ ms.pdf: $(PREREQS)
 	$(BIBTEX) $(patsubst %.pdf,%,$@)
 	$(TEX) -draftmode $(patsubst %.pdf,%,$@)
 	$(TEX) $(patsubst %.pdf,%,$@)
+
+importance-sampling.pdf: importance-sampling.py
+	python $<
 
 inclination_integral_convergence.pdf: scripts/inclination_integral_convergence.py matplotlibrc
 	python $<
