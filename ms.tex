@@ -389,7 +389,7 @@ The relevant likelihood is now the probability of the \ac{ML} estimates, conditi
     \, d\mathbf{Y}.
 \end{equation}
 %
-Although we may not be able to evaluate this equation directly, with some educated guesses we can create a likelihood that has many properties in common with it. Any valid approximate likelihood must have the same Fisher matrix as shown in Equation~(\ref{eq:fisher-matrix-extrinsic-one-detector}). It must also have the same limiting behavior: it should be periodic in the phase error $\tilde{\gamma}_i$ and go to zero as $\tilde{\tau}_i \rightarrow \pm \infty$, $\hat{\rho}_i \rightarrow 0$, or $\hat{\rho}_i \rightarrow \infty$. Additionally, when $\tilde{\tau}_i = 0$, the distribution of ${\hat{\rho}_i}^2$ should reduce to a noncentral $\chi^2$ distribution with two degrees of freedom, centered about ${\rho_i}^2$, because the complex matched filter time series $z_i(t)$ is Gaussian (under the ideal assumption the \ac{GW} strain time series is Gaussian).
+Although we may not be able to evaluate this equation directly, with some educated guesses we can create a likelihood that has many properties in common with it. Any valid approximate likelihood must have the same Fisher matrix as shown in Equation~(\ref{eq:single-detector-block-fisher-matrix}). It must also have the same limiting behavior: it should be periodic in the phase error $\tilde{\gamma}_i$ and go to zero as $\tilde{\tau}_i \rightarrow \pm \infty$, $\hat{\rho}_i \rightarrow 0$, or $\hat{\rho}_i \rightarrow \infty$. Additionally, when $\tilde{\tau}_i = 0$, the distribution of ${\hat{\rho}_i}^2$ should reduce to a noncentral $\chi^2$ distribution with two degrees of freedom, centered about ${\rho_i}^2$, because the complex matched filter time series $z_i(t)$ is Gaussian (under the ideal assumption the \ac{GW} strain time series is Gaussian).
 
 These conditions could be satisfied by realizing a multivariate Gaussian distribution with covariance matrix $\Sigma = \mathcal{I}^\intercal$, and then replacing individual quadratic terms in the exponent of the form $-\tilde{\theta}^2/2$ with $\cos{\tilde{\theta}}$.
 
@@ -430,7 +430,7 @@ with $\tilde{\gamma}_i = \hat\gamma_i - \gamma_i$, $\tilde{\tau}_i = \hat\tau_i 
 \begin{equation}\label{eq:autocorrelation-function}
     a_i(t; \bm\theta_\mathrm{in}) := \frac{1}{{{\sigma_i}^2(\bm\theta_\mathrm{in})}} \int_0^\infty \frac{\left| H(\omega; \hat{\bm\theta}_\mathrm{in})\right|^2}{S_i(\omega)} e^{i \omega t} \,d\omega.
 \end{equation}
-
+%
 To assemble the joint likelihood for the whole network, we form the product of the autocorrelation likelihoods from the individual detectors:
 %
 \begin{multline}
@@ -443,9 +443,13 @@ To assemble the joint likelihood for the whole network, we form the product of t
     \right].
 \end{multline}
 
+In the following section, we discuss some key properties of the autocorreltion likelihood.
+
 \subsection{Properties}
 
-First, observe that at the true parameter values, $\hat{\bm\theta}_i = \bm\theta_i$, the logarithms of Equation~(\ref{eq:autocor-likelihood}) and Equation~(\ref{eq:gaussian-likelihood-spa}) have the same Jacobian. This is because the derivatives of the autocorrelation function are
+First, the autocorrelation likelihood has the elegant feature that if we were to replace the autocorrelation function with the \ac{SNR} time series for the best-matching template, $z(\tau; \hat{\mathbf{\theta}}_\mathrm{in})$, we would recover the likelihood for the full \ac{GW} time series, evaluated at the \ac{ML} estimate of the intrinsic parameters. The numerical scheme that we will develop is thus equally applicable for rapid, coincidence-based localization, or as a fast extrinsic marginalization step for the full parameter estimation.
+
+Second, observe that at the true parameter values, $\hat{\bm\theta}_i = \bm\theta_i$, the logarithms of Equation~(\ref{eq:autocor-likelihood}) and Equation~(\ref{eq:gaussian-likelihood-spa}) have the same Jacobian. This is because the derivatives of the autocorrelation function are
 %
 \begin{equation*}
     a^{(n)}(t) = i^n \overline{\omega^n},
@@ -572,7 +576,7 @@ On the other hand, in the low \ac{SNR} limit, the diminishing value of $\textpro
     \caption[Ratio of Fisher matrix elements between autocorrelation likelihood and full \acs{GW} data]{\label{fig:fishfactor}Ratio between Fisher matrix elements (solid: $\textproto{D}_{\gamma\gamma}$, dashed: $\textproto{D}_{\gamma\tau}$, dotted: $\textproto{D}_{\tau\tau}$) for the autocorrelation likelihood and the full \ac{GW} data. Colors correspond to different arrival time priors as in Figure~\ref{fig:crlb-tau}.}
 \end{figure}
 
-In the following sections, we describe the numerical implementation of \ac{BAYESTAR}.
+In the following sections, we describe our prior and our numerical scheme to integrate over nuisance parameters, which amounts to the \ac{BAYESTAR} algorithm.
 
 \section{Prior and problem setup}
 \label{sec:prior}
@@ -821,11 +825,18 @@ We have explained how we evaluate the marginal posterior at a given sky location
 
 Our sampling of the sky relies completely on the \acl{HEALPix} (\acs{HEALPix}), a special data structure designed for all\nobreakdashes-sky maps. \ac{HEALPix} divides the sky into equal\nobreakdashes-area pixels. There is a hierarchy of \ac{HEALPix} resolutions. A \ac{HEALPix} resolution may be designated by its order $N$. The $N=0$th order or base tiling has 12 pixels. At every successive order, each tile is subdivided into four new tiles. A resolution may also be referred to by the number of subdivisions along each side of the base tiles, $N_\mathrm{side} = 2^N$. There are $N^\mathrm{pix} = 12 {N_\mathrm{side}}^2$ pixels at any given resolution. The \ac{HEALPix} projection uniquely specifies the coordinates of the center of each pixel by providing a mapping from the resolution and pixel index $(N_\mathrm{side}, i_\mathrm{pix})$ to right ascension and declination $(\alpha, \delta)$.
 
-We begin by evaluating the posterior probability density at the center of each of the $N_{\mathrm{pix},0} = 3072$ pixels of an $N_{\mathrm{side},0}=16$ \ac{HEALPix} grid. At this resolution, each pixel has an area of 13.4~deg$^2$. We then rank the pixels by contained probability (assuming constant probability density within a pixel), and subdivide the most probable $N_{\mathrm{pix},0}/4$ pixels into $N_{\mathrm{pix},0}$ new pixels. We then evaluate the posterior again at the pixels that we subdivided, sort again, and repeat seven times, so that we have evaluated the posterior probability density a total of $8 N_{\mathrm{pix},0}$ times. On \emph{most} iterations, we descend one level deeper in \ac{HEALPix} resolution. The resulting map is a tree structure that consists of a mix of several resolutions. We traverse the tree and flatten it into the highest resolution represented. The highest possible resolution is $N_\mathrm{side}=2^{11}$, with an area of $\approx 10^{-3}$~deg$^2$ per pixel.\footnote{Although the resulting sky map contains $N_\mathrm{pix} \approx 5\times10^6$ pixels, at most $\approx 2\times10^4$ pixels have distinct values. For the purpose of delivery to observers, therefore, the output is always \texttt{gzip}\nobreakdashes-compressed with a ratio of $\approx 250:1$.}
+We begin by evaluating the posterior probability density at the center of each of the $N_{\mathrm{pix},0} = 3072$ pixels of an $N_{\mathrm{side},0}=16$ \ac{HEALPix} grid. At this resolution, each pixel has an area of 13.4~deg$^2$. We then rank the pixels by contained probability (assuming constant probability density within a pixel), and subdivide the most probable $N_{\mathrm{pix},0}/4$ pixels into $N_{\mathrm{pix},0}$ new pixels. We then evaluate the posterior again at the pixels that we subdivided, sort again, and repeat seven times, so that we have evaluated the posterior probability density a total of $8 N_{\mathrm{pix},0}$ times. On \emph{most} iterations, we descend one level deeper in \ac{HEALPix} resolution. The resulting map is a tree structure that consists of a mix of several resolutions. This process is illustrated in Figure~\ref{fig:adaptive-illustration}.
+
+We traverse the tree and flatten it into the highest resolution represented. The highest possible resolution is $N_\mathrm{side}=2^{11}$, with an area of $\approx 10^{-3}$~deg$^2$ per pixel.\footnote{Although the resulting sky map contains $N_\mathrm{pix} \approx 5\times10^6$ pixels, at most $\approx 2\times10^4$ pixels have distinct values. For the purpose of delivery to observers, therefore, the output is always \texttt{gzip}\nobreakdashes-compressed with a ratio of $\approx 250:1$.}
 
 Within each iteration, all of the marginalization integrals may be evaluated in parallel. In our C language implementation, the inner loop over pixels is parallelized with OpenMP\footnote{http://openmp.org/}.
 
-\section{Run time}
+\section{Case study}
+\label{sec:case-study}
+
+We have completed our description of the \ac{BAYESTAR} algorithm. In the following chapter, we will describe the first results with \ac{BAYESTAR}, a detailed case study of the sky localization capabilities of the earliest configurations of Advanced \ac{LIGO} and Virgo. Because it is typically three orders of magnitude faster than the conventional \ac{MCMC} analysis, for the first time we are able to generate detailed sky maps for thousands of simulated \ac{GW} sources. With such a large sample, we can for the first time unambiguously describe areas and morphologies that should be typical of networks of just two detectors. This case study will be the subject of the next chapter.
+
+\subsection{Run time}
 \label{sec:run-time}
 
 Since \ac{BAYESTAR} is designed as one of the final steps in the real\nobreakdashes-time \ac{BNS} search, it is important to characterize how long it takes to calculate a sky map. We compiled \ac{BAYESTAR} with the Intel~C~Compiler~(\texttt{icc}) at the highest architecture\nobreakdashes-specific optimization setting (\texttt{-xhost}). We timed it under Scientific~Linux~6 on a Supermicro~1027GR\nobreakdashes-TRFT system with dual Intel Xeon E5-2670 CPUs clocked at 2.60GHz, providing a total of 16 cores and capable of executing 32 threads simultaneously (with hyperthreading). In Figure~\ref{fig:runtimes}, we show how long it took to calculate a localization with \ac{BAYESTAR} as the number of OpenMP threads was varied from 1 to 32. This is a violin plot, a smoothed vertical histogram. The red surface shows run times for a two\nobreakdashes-detector network (HL) modeled on the first scheduled Advanced \ac{LIGO} observing run in 2015, and the blue surface shows run times for a three\nobreakdashes-detector network (HLV) based on the second planned observing run in 2016. These are the two observing scenarios that are discussed in \cite{FirstTwoYears}.
@@ -837,12 +848,6 @@ Several features are apparent. First, at any number of threads, the two configur
     \includegraphics{runtimes}
     \caption[\acs{BAYESTAR} run time]{\label{fig:runtimes}Violin plot of \ac{BAYESTAR} run times as the number of OpenMP threads is varied from 1 to 32. The 2015 scenario is shown in red and the 2016 scenario in blue.}
 \end{figure}
-
-\section{Case study}
-\label{sec:case-study}
-
-We have completed our description of the \ac{BAYESTAR} algorithm. In the following chapter, we will describe the first results with \ac{BAYESTAR}, a detailed case study of the sky localization capabilities of the earliest configurations of Advanced \ac{LIGO} and Virgo. Because it is typically three orders of magnitude faster than the conventional \ac{MCMC} analysis, for the first time we are able to generate detailed sky maps for thousands of simulated \ac{GW} sources. With such a large sample, we can for the first time unambiguously describe areas and morphologies that should be typical of networks of just two detectors. This case study will be the subject of the next chapter.
-
 
 \input{ligo-acronyms/acronyms}
 
