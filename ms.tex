@@ -682,9 +682,9 @@ In the above equation, we need not distinguish between $\tilde{\gamma}_i$ and $\
 
 \subsection{Integral over angles and time}
 
-The integrand is periodic in $\psi$, so simple Newton\nobreakdashes--Cotes quadrature over $\psi$ exhibits extremely rapid convergence. We therefore sample the posterior on a regular grid of 10 points from 0 to $\pi$.
+The integrand is periodic in $\psi$, so simple Newton\nobreakdashes--Cotes quadrature over $\psi$ exhibits extremely rapid convergence (see Figure~\ref{fig:angle-convergence}). We therefore sample the posterior on a regular grid of 10 points from 0 to $\pi$.
 
-The integral over $\cos\iota$ converges just as rapidly with Gauss\nobreakdashes--Legendre quadrature, so we use a 10\nobreakdashes-point Gauss\nobreakdashes--Legendre rule for integration over $\cos\iota$.
+The integral over $\cos\iota$ converges just as rapidly with Gauss\nobreakdashes--Legendre quadrature (see Figure~\ref{fig:angle-convergence}), so we use a 10\nobreakdashes-point Gauss\nobreakdashes--Legendre rule for integration over $\cos\iota$.
 
 \begin{figure*}
     \begin{minipage}[t]{0.5\textwidth}
@@ -697,42 +697,14 @@ The integral over $\cos\iota$ converges just as rapidly with Gauss\nobreakdashes
         (b) Inclination angle \\
         \includegraphics{inclination_integral_convergence}
     \end{minipage}
-    \caption{\label{fig:convergence}Relative error in \ac{BAYESTAR} integration scheme as a function of }
+    \caption{\label{fig:angle-convergence}Relative error in \ac{BAYESTAR} integration scheme as a function of the number of Gaussian quadrature nodes. The two panels describe (a) the integral over the polarization angle $\psi$ and (b) the integral over inclination angle $\iota$.}
 \end{figure*}
 
 We sample $t_\oplus$ regularly from $-T$ to $T$ at intervals of $\Delta t$. This is typically $\sim 2 (10\,\mathrm{ms})(4096\,\mathrm{Hz}) \approx 80$~samples. We use Catmull\nobreakdashes--Rom cubic splines to interpolate the real and imaginary parts of the autocorrelation functions between samples.
 
 \subsection{Integral over distance}
 
-The innermost integral over $r$ is a little bit more challenging. The distance integrand has both a sharp maximum\nobreakdashes-likelihood peak and an extended power\nobreakdashes-law prior\nobreakdashes-dominated tail. At any values of the other parameters, either the peak or the tail might dominate. If the peak dominates, it may not be successfully resolved by any general\nobreakdashes-purpose fixed\nobreakdashes-order quadrature scheme. Any general adaptive integrator may take a long time to find the peak.
-
-Let's say that we want to evaluate an integral
-%
-\begin{equation}\label{eq:importance-sampling-difficult-integral}
-    \mathscr{F}(x_1, x_2) = \int_{x_1}^{x_2} f(x') dx'.
-\end{equation}
-%
-Suppose that this integral is resistant to direct application of standard quadrature techniques, but we have another function $g(x)$ that we can integrate analytically or at least numerically with relative ease,
-%
-\begin{equation}
-    \mathscr{G}(x) = G(x) - G(x_0) = \int_{x_0}^x g(x') dx'.
-\end{equation}
-%
-There is an \emph{ultimate}, though tautological, change of variables that makes it trivial to evaluate $\mathscr{G}(x)$,
-%
-\begin{equation}
-    \mathscr{G}(x) = \int_0^{\mathrlap{\mathscr{G}(x)}} dG.
-\end{equation}
-%
-If we apply the same change of variables to Equation~(\ref{eq:importance-sampling-difficult-integral}), we get
-%
-\begin{equation}\label{eq:importance-sampling}
-    \mathscr{F}(x_1, x_2) = \int_{\mathscr{G}(x_1)}^{\mathscr{G}(x_2)} \frac{f(\mathscr{G}^{-1}(G))}{g(\mathscr{G}^{-1}(G))} dG.
-\end{equation}
-%
-If $f(x)$ and $g(x)$ have sufficiently similar behavior, then their quotient $f/g$ will be better behaved than $f$ itself, and more amenable to any given quadrature technique. When the transformed integral Equation~(\ref{eq:importance-sampling}) is evaluated using Monte Carlo integration, this technique is referred to as importance sampling.
-
-We use the same kind of change of variables with fixed\nobreakdashes-order Gaussian quadrature. The distance integral can be written as
+The innermost integral over distance $r$ may be written as
 %
 \begin{align}\label{eq:distance-integral}
     \mathscr{F} &=
@@ -745,88 +717,104 @@ We use the same kind of change of variables with fixed\nobreakdashes-order Gauss
         \overline{I}_0\left[\frac{b}{r}\right] r^m dr
 \end{align}
 %
+or, completing the square,
+%
+\begin{align}
+    \mathscr{F} &= \exp\left[\frac{p^2}{{r_0}^2}\right]
+        \int_{\mathrlap{r_\mathrm{min}}}^{\mathrlap{r_\mathrm{max}}}
+        \exp\left[-\left(\frac{p}{r} - \frac{p}{r_0}\right)^2\right]
+        \overline{I}_0\left[\frac{2p^2}{r r_0}\right] r^m dr \\
+    &= \exp\left[\frac{p^2}{{r_0}^2}\right] \mathscr{G},
+\end{align}
+%
 where
 %
 \begin{align}
     p^2 &= \frac{1}{2} r^2 \sum_i {\rho_i}^2 \label{eq:likelihood-p-factor} \\
     b &= r \left| \sum_i \hat\rho_i \rho_i e^{i \tilde{\gamma}_i}
         a_i^*(\tilde{\tau}_i) \right| \label{eq:likelihood-b-factor} \\
+    r_0 &= 2 p^2 / b \\
     \overline{I}_0(x) &= \exp(-|x|) I_0(x).
 \end{align}
 %
-The coefficients $p^2$ and $b$ are nonnegative and independent of distance. The symbol $\overline{I}_0$ denotes an exponentially scaled Bessel function. In the limit of large argument, $I_0(|x|) \sim \exp(|x|) / \sqrt{2 \pi |x|}$ \citep{Olver:2010:NHMF,NIST:DLMF}\footnote{\url{http://dlmf.nist.gov/10.40.E1}}. The scaled Bessel is useful for evaluation on a computer because it has a relatively small range $(0, 1]$ and varies slowly in proportion to $x^{1/2}$. If we neglect both the Bessel function and the $r^m$ prior, then the approximate likelihood $\exp(-p^2/r^2 + b/r)$ is maximized when
-%
-\begin{equation}\label{eq:ml-distance}
-    r = r_0 \equiv 2p^2/b.
-\end{equation}
-%
-with $p$ and $b$ defined above in Equations~(\ref{eq:likelihood-p-factor},~\ref{eq:likelihood-b-factor}). If $r_0 < r_\mathrm{min}$ or $r_0 > r_\mathrm{max}$, then the ML peak lies outside of the limits of integration and the original integrand behaves like a low-order power law. In this case, we use 10\nobreakdashes-point Gaussian quadrature to evaluate Equation~(\ref{eq:distance-integral}).
-
-If, on the other hand, $r_\mathrm{min} \leq r_0 \leq r_\mathrm{max}$, then the integrand contains a sharp peak that we can smooth out with importance sampling. We first re-scale the distance integral Equation~(\ref{eq:distance-integral}) so that the peak value of the integrand is $\sim 1$:
-%
-\begin{multline}
-    \mathscr{F} = \exp\left(\frac{b^2}{4p^2}\right)
-        {r_0}^m
-        \int_{r_\mathrm{min}}^{r_\mathrm{max}} \\
-        \exp\left[-\left(\frac{p}{r} - \frac{b}{2p}\right)^2\right]
-        \overline{I}_0\left[\frac{b}{r}\right]
-        \left[\frac{r}{r_0}\right]^m
-        dr.
-\end{multline}
-%
-The importance sampling integrand $g(r)$ is
+The coefficients $p^2$ and $b$ are nonnegative and independent of distance. $p$ has a maximum value of
 %
 \begin{equation}
-    g(r) = \exp\left[-\left(\frac{p}{r} - \frac{b}{2p}\right)^2\right]
-        \frac{1}{r^2},
+    p_\mathrm{max} = \sqrt{\frac{1}{2} \sum_i \left(\frac{r_{1,i}}{r}\right)^2}.
 \end{equation}
 %
-with definite integral
-%
-\begin{equation}
-    \mathscr{G}(r) = \frac{\sqrt{\pi}}{p}
-        Q\left[\sqrt{2}\left(\frac{p}{r} - \frac{b}{2p}\right)\right],
-\end{equation}
-%
-where $Q$ is the cumulative distribution function for the upper tail of the standard normal distribution,
-%
-\begin{equation}
-    Q(x) = \int_x^\infty \frac{1}{\sqrt{2\pi}} \exp \left[-\frac{{x'}^2}{2}\right] dx'.
-\end{equation}
-%
-Its inverse is
-%
-\begin{equation}
-    \mathscr{G}^{-1}(G) = \left[\frac{1}{r_0} + \frac{1}{\sqrt{2}p}
-    Q^{-1}\left(\frac{p G}{\sqrt{\pi}}\right)\right]^{-1}.
-\end{equation}
-%
-The transformed integral is
-%
-\begin{equation}
-    \mathscr{F} = \exp\left(\frac{b^2}{4p^2}\right)
-        {r_0}^m
-        \int\limits_{\mathclap{\mathscr{G}(r_\mathrm{min})}}^{\mathclap{\mathscr{G}(r_\mathrm{max})}}
-        \overline{I}_0\left[\frac{b}{r}\right]
-        \left[\frac{r}{r_0}\right]^m r^2
-        \Bigg|_{\mathrlap{r = \mathscr{G}^{-1}(G)}}
-        dG.
-\end{equation}
-%
-This integral is evaluated numerically with a 10\nobreakdashes-point Gauss\nobreakdashes--Legendre rule.
+The symbol $\overline{I}_0$ denotes an exponentially scaled Bessel function. In the limit of large argument, $I_0(|x|) \sim \exp(|x|) / \sqrt{2 \pi |x|}$ \citep{Olver:2010:NHMF,NIST:DLMF}\footnote{\url{http://dlmf.nist.gov/10.40.E1}}. The scaled Bessel is useful for evaluation on a computer because it has a relatively small range $(0, 1]$ and varies slowly in proportion to $x^{1/2}$.
 
 \begin{figure}
-    \includegraphics[width=\columnwidth]{importance-sampling}
-    \caption{\label{fig:importance-sampling}Illustration of importance sampling scheme. The top-left panel shows the original integrand $f(r)$, the proposal integrand $g(r)$, and the limits of integration $r = r_\mathrm{min}$ and $r = r_\mathrm{max}$. The area of the dark shaded region is the integral of interest. The bottom-left panel shows the integral $\mathscr{G}(r) = \int_0^r g(r) dr$. The new variable of integration is $G = \mathscr{G}(r)$, from $G_\mathrm{min} = \mathscr{G}(r_\mathrm{min})$ to $G_\mathrm{max} = \mathscr{G}(r_\mathrm{max})$. The bottom-right panel shows the transformed integrand, $f(\mathscr{G}^{-1}(G))/g(\mathscr{G}^{-1}(G))$. The dark shaded region has the same area as in the top-left figure.}
+    \includegraphics{radial_integral_interpolant}
+    \caption{\label{fig:radial-integral-interpolant}Partition of the parameter space of the distance integral into three regions for (bi)cubic interpolation.}
 \end{figure}
 
-Last, there are a few special cases where Equation~(\ref{eq:distance-integral}) can be evaluated exactly. If $p^2=0$ (which implies $b = 0$), then the integral may be expressed in terms of logarithms. If $b = 0$ but $p^2 \neq 0$, then the integral may be expressed in terms of the exponential integral function,
+\subsubsection{Parameter grid}
+
+This integral is not particularly amenable to low-order Gaussian quadrature. However, luckily $\mathscr{G}$ is a very well-behaved function of $p$ and $r_0$, so we evaluate it using a lookup table and bicubic interpolation. The lookup table is produced in logarithmic coordinates
 %
 \begin{equation}
-    E_n(x) = \int_1^\infty \frac{\exp (-xt)}{t^n} dt.
+    x = \log p, \qquad y = \log r_0.
+\end{equation}
+%
+As shown in Figure~\ref{fig:radial-integral-interpolant}, the function basically consists of a plateau region in the upper-left half of the plane delimited by the lines $y = x$ and $x = \log p_0$, with
+%
+\begin{equation}
+    p_0 = \frac{1}{2}
+    \begin{cases}
+        r_\mathrm{max} & \text{if } m \geq 0 \\
+        r_\mathrm{min} & \text{if } m < 0.
+    \end{cases}
+\end{equation}
+%
+We tabulate $\mathscr{G}$ on a $400 \times 400$ regular grid spanning the range
+%
+\begin{align}
+    x_0 &= \log \min(p_0, p_\mathrm{max}) \\
+    x_\mathrm{min} &= x_0 - (1 + \sqrt{2}) \alpha \\
+    x_\mathrm{max} &= \log p_\mathrm{max} \\
+    y_\mathrm{min} &= 2 x_0 - \sqrt{2} \alpha - x_\mathrm{max} \\
+    y_\mathrm{max} &= x_0 + \alpha.
+\end{align}
+
+\subsubsection{Lookup table construction}
+
+The lookup table for $\mathscr{G}$ is populated as follows. If we neglect both the Bessel function and the $r^m$ prior, then the approximate likelihood $\exp(-(p/r-p/r_0)^2)$ is maximized when $r = r_0$. The likelihood takes on a factor $\eta$ (say, $\eta=0.01$) of its maximum value when
+%
+\begin{equation}
+    r = r_\pm = \left(\frac{1}{r_0} \mp \frac{\sqrt{-\log\eta}}{p}\right)^{-1}.
 \end{equation}
 
-The distance integral, therefore, takes either one or ten function evaluations.
+We have now identified up to five breakpoints that partition the distance integrand into up to four intervals with quantitatively distinct behavior. These intervals are depicted in Figure~\ref{fig:radial_integrand} with distance increasing from left to right. There is a left\nobreakdashes-hand or small distance tail in which the integrand is small and monotonically increasing, a left\nobreakdashes- and right\nobreakdashes-hand side of the maximum likelihood peak, and a right\nobreakdashes-hand tail in which the integrand is small and monotonically decreasing. These breakpoints are:
+%
+\begin{equation}
+    r_\mathrm{break} = \{ r \in
+    \left\{
+    \begin{array}{c}
+    r_\mathrm{min} \\
+    r_- \\
+    r_0 \\
+    r_+ \\
+    r_\mathrm{max}
+    \end{array}
+    \right\} :
+    r_\mathrm{min} \leq r
+    \leq r_\mathrm{max}\}.
+\end{equation}
+
+We use these breakpoints as initial subdivisions in an adaptive Gaussian quadrature algorithm\footnote{for instance, \ac{GSL}'s \texttt{gsl\_integrate\_qagp} function, \url{http://www.gnu.org/software/gsl/manual/html_node/QAGP-adaptive-integration-with-known-singular-points.html}}. This function estimates the integral over each subdivision and each interval's contribution to the total error, then subdivides the interval whose error contribution is largest. Subdivisions continue until a fixed total fractional error is reached. In this way, most integrand evaluations are expended on the most important distance interval, whether that happens to be the tails (when the posterior is dominated by the prior) or the peak (when the posterior is dominated by the observations).
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=\columnwidth]{radial_integrand}
+    \end{center}
+    \caption{\label{fig:radial_integrand}Illustration of initial subdivisions for distance integration scheme. Distance increases from left to right. In the color version, the left\nobreakdashes-hand tail, the left\nobreakdashes- and right\nobreakdashes-hand sides of the maximum likelihood peak, and the right\nobreakdashes-hand tail, are colored cyan, red, green, and blue, respectively.}
+\end{figure}
+
+\subsubsection{Interpolation}
+
+The interpolant is evaluated slightly differently depending on which of the three regions marked I, II, and II in Figure~\ref{fig:radial-integral-interpolant} contains the point of interest. In region I, we use bicubic interpolation in $x$ and $y$. In region II, we use univariate cubic interpolation in $x$, with the sample points taken from the horizontal boundary between regions I and II. In region III, we use univariate cubic interpolation in $u = (x - y) / 2$, with the sample points taken from the downward diagonal boundary between regions I and III. This entire lookup table scheme is accurate to an absolute error of about $10^{-5}$ in $\mathscr{G}$. Finally, the distance integral $\mathscr{F}$ is obtained by multiplying the interpolated value of $\mathscr{G}$ by $\exp\left(p^2/{r_0}^2\right)$.
 
 \section{Adaptive HEALPix sampling}
 \label{sec:adaptive-sampling}
