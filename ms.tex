@@ -445,6 +445,11 @@ To assemble the joint likelihood for the whole network, we form the product of t
 
 In the following section, we discuss some key properties of the autocorreltion likelihood.
 
+\begin{figure*}
+    \includegraphics[width=\textwidth]{autocorr-likelihood}
+    \caption{\label{fig:autocorr-likelihood}The autocorrelation likelihood for a $(1.4, 1.4)$\,$M_\odot$ binary as observed by four detector configurations: from top to bottom, the final sensitivity achieved by the \acs{LIGO} Hanford, \acs{LIGO} Livingston, and Virgo detectors in their ``initial'' configuration, and the final Advanced \acs{LIGO} design sensitivity. The left panels show the noise amplitude spectral densities. The middle panels show the absolute value of the autocorrelation function. The right panel shows the phase-marginalized autocorrelation likelihood for \ac{SNR}=1,~2,~4,~and~8. In the right panel, the time scale is normalized by \ac{SNR} so that one can see that as \ac{SNR} increases, a central parabola is approached (the logarithm of a Gaussian distribution with standard deviation given by the Fisher matrix).}
+\end{figure*}
+
 \subsection{Properties}
 
 First, the autocorrelation likelihood has the elegant feature that if we were to replace the autocorrelation function with the \ac{SNR} time series for the best-matching template, $z(\tau; \hat{\mathbf{\theta}}_\mathrm{in})$, we would recover the likelihood for the full \ac{GW} time series, evaluated at the \ac{ML} estimate of the intrinsic parameters. The numerical scheme that we will develop is thus equally applicable for rapid, coincidence-based localization, or as a fast extrinsic marginalization step for the full parameter estimation.

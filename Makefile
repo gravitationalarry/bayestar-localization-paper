@@ -13,7 +13,9 @@ FIGURES = \
 	pp.pdf \
 	runtimes.pdf \
 	illustration.pdf \
-	importance-sampling.pdf
+	radial_integrand.pdf \
+	radial_integral_interpolant.pdf \
+	autocorr-likelihood.pdf
 
 PREREQS = ms.tex \
 	bib/aas_macros.sty \
@@ -29,6 +31,9 @@ ms.pdf: $(PREREQS)
 	$(TEX) $(patsubst %.pdf,%,$@)
 
 importance-sampling.pdf: importance-sampling.py
+	python $<
+
+radial_integral_interpolant.pdf: scripts/radial_integral_interpolant.py matplotlibrc
 	python $<
 
 inclination_integral_convergence.pdf: scripts/inclination_integral_convergence.py matplotlibrc
