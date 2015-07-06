@@ -7,7 +7,7 @@ fig = plt.figure(figsize=(3.5, 2.5))
 ax = fig.add_subplot(111)
 
 np.random.seed(0)
-nruns = 10
+nruns = 20
 neval = np.unique(np.round(np.logspace(0, 2, 50)).astype(int))
 
 def integrand(u, a, b, c, d, e, f):
@@ -24,20 +24,21 @@ for irun in range(nruns):
     relerr = np.abs(approx - exact) / exact
     ax.plot(neval, relerr, '-k')
 
-def integrand(u, a, b, c, d, e, f):
-    v = 1 + np.square(u)
-    I0arg1 = np.sqrt(np.square(c * u) + np.square(d * v))
-    I0arg2 = np.sqrt(np.square(e * u) + np.square(f * v))
-    return np.exp(-(np.square(a * u) + np.square(b * v)) + I0arg1 + I0arg2) * scipy.special.i0e(I0arg1) * scipy.special.i0e(I0arg2)
-
-for irun in range(nruns):
-    args = tuple(np.random.randn(6).tolist())
-    exact, _ = scipy.integrate.quad(
-        integrand, 0, 1, args, epsabs=1e-14, epsrel=1e-14, limit=200)
-    approx = np.asarray([
-        scipy.integrate.fixed_quad(integrand, 0, 1, args, n)[0] for n in neval])
-    relerr = np.abs(approx - exact) / exact
-    ax.plot(neval, relerr, '--k')
+# TOA+SNR
+# def integrand(u, a, b, c, d, e, f):
+#     v = 1 + np.square(u)
+#     I0arg1 = np.sqrt(np.square(c * u) + np.square(d * v))
+#     I0arg2 = np.sqrt(np.square(e * u) + np.square(f * v))
+#     return np.exp(-(np.square(a * u) + np.square(b * v)) + I0arg1 + I0arg2) * scipy.special.i0e(I0arg1) * scipy.special.i0e(I0arg2)
+#
+# for irun in range(nruns):
+#     args = tuple(np.random.randn(6).tolist())
+#     exact, _ = scipy.integrate.quad(
+#         integrand, 0, 1, args, epsabs=1e-14, epsrel=1e-14, limit=200)
+#     approx = np.asarray([
+#         scipy.integrate.fixed_quad(integrand, 0, 1, args, n)[0] for n in neval])
+#     relerr = np.abs(approx - exact) / exact
+#     ax.plot(neval, relerr, '--k')
 
 ax.set_xscale('log')
 ax.set_yscale('log')
