@@ -502,6 +502,13 @@ Using Equation~(\ref{eq:general-fisher-matrix-second-derivatives}), we can compu
 %
 The notation $I_k$ denotes a modified Bessel function of the first kind. Matrix elements that are not listed have values that are implied by the symmetry of the Fisher matrix. Note that the minus signs are correct but a little confusing: despite them, $\mathcal{I}_{\gamma\gamma}, \mathcal{I}_{\tau\tau} \geq 0$ and $\mathcal{I}_{\gamma\tau} \leq 0$. The time integration limits $[-T, T]$ correspond to a flat prior on arrival time, or a time coincidence window between detectors.
 
+\begin{figure*}
+    \centering
+        \includegraphics[width=\columnwidth]{crlb_tau}
+        \includegraphics[width=\columnwidth]{crlb_gamma}
+    \caption[\acl{CRLB} on time and phase accuracy]{\label{fig:crlb-tau}\ac{CRLB} on \ac{RMS} timing uncertainty and phase error, using the likelihood for the full \ac{GW} data (Equation~\ref{eq:gaussian-likelihood-spa}; dashed diagonal line) or the autocorrelation likelihood (Equation~\ref{eq:autocor-likelihood}; solid lines) with a selection of arrival time priors.}
+\end{figure*}
+
 We can show that the weighting function $w(t; \rho)$ approaches a Dirac delta function as $\rho \rightarrow \infty$, so that the Fisher matrix for the autocorrelation likelihood approaches the Fisher matrix for the full \ac{GW} data, Equation~(\ref{eq:fisher-matrix}), as $\rho \rightarrow \infty$. The Bessel functions asymptotically approach:
 %
 \begin{equation*}
@@ -559,22 +566,15 @@ Now, the $\textproto{D}_{ij}$%
 %
 contain the integrals from Equations~(\ref{eq:fisher-autocor-gamma-gamma}, \ref{eq:fisher-autocor-tau-tau}, \ref{eq:fisher-autocor-gamma-tau}) and encode the departure of the autocorrelation likelihood from the likelihood of the full data at low \ac{SNR}. All of the $\textproto{D}_{ij}(\rho)$ are sigmoid-type functions that asymptotically approach 1 as $\rho \rightarrow \infty$ (see Figures~\ref{fig:crlb-tau} and~\ref{fig:fishfactor}). The transition \ac{SNR} $\rho_\mathrm{crit}$ is largely the same for all three nontrivial matrix elements, and is determined by the time coincidence window $T$ and the signal bandwidth $\omega_\mathrm{rms}$.
 
-In the limit of large \ac{SNR}, our interpretation is that the point estimates $(\hat\rho, \hat\gamma, \hat\tau)$ contain all of the information about the underlying extrinsic parameters.
-
-On the other hand, in the low \ac{SNR} limit, the diminishing value of $\textproto{D}_{ij}(\rho)$ reflects the fact that some information is lost when the full data $\mathbf{x}$ is discarded. Concretely, as the prior interval $T$ becomes large compared to 1/$\rho\omega_\mathrm{rms}$, the \ac{ML} estimator becomes more and more prone to picking up spurious noise fluctuations far from the true signal. Clearly, when the coincidence window $T$ is kept small as possible, more information is retained in the \ac{ML} point estimates. Put another way, if $T$ is small, then the transition \ac{SNR} $\rho_\mathrm{crit}$ is also small and fainter signals become useful for parameter estimation. In this way, the \ac{BAYESTAR} likelihood exhibits the \emph{threshold effect} that is well\nobreakdashes-known in communication and radar applications \citep{barankin1949locally,mcaulay1969barankin,mcaulay1971barankin}.
-
-\begin{figure*}
-    \centering
-        \includegraphics[width=\columnwidth]{crlb_tau}
-        \includegraphics[width=\columnwidth]{crlb_gamma}
-    \caption[\acl{CRLB} on time and phase accuracy]{\label{fig:crlb-tau}\ac{CRLB} on \ac{RMS} timing uncertainty and phase error, using the likelihood for the full \ac{GW} data (Equation~\ref{eq:gaussian-likelihood-spa}; dashed diagonal line) or the autocorrelation likelihood (Equation~\ref{eq:autocor-likelihood}; solid lines) with a selection of arrival time priors.}
-\end{figure*}
-
 \begin{figure}
     \centering
     \includegraphics{fishfactor}
     \caption[Ratio of Fisher matrix elements between autocorrelation likelihood and full \acs{GW} data]{\label{fig:fishfactor}Ratio between Fisher matrix elements (solid: $\textproto{D}_{\gamma\gamma}$, dashed: $\textproto{D}_{\gamma\tau}$, dotted: $\textproto{D}_{\tau\tau}$) for the autocorrelation likelihood and the full \ac{GW} data. Colors correspond to different arrival time priors as in Figure~\ref{fig:crlb-tau}.}
 \end{figure}
+
+In the limit of large \ac{SNR}, our interpretation is that the point estimates $(\hat\rho, \hat\gamma, \hat\tau)$ contain all of the information about the underlying extrinsic parameters.
+
+On the other hand, in the low \ac{SNR} limit, the diminishing value of $\textproto{D}_{ij}(\rho)$ reflects the fact that some information is lost when the full data $\mathbf{x}$ is discarded. Concretely, as the prior interval $T$ becomes large compared to 1/$\rho\omega_\mathrm{rms}$, the \ac{ML} estimator becomes more and more prone to picking up spurious noise fluctuations far from the true signal. Clearly, when the coincidence window $T$ is kept small as possible, more information is retained in the \ac{ML} point estimates. Put another way, if $T$ is small, then the transition \ac{SNR} $\rho_\mathrm{crit}$ is also small and fainter signals become useful for parameter estimation. In this way, the \ac{BAYESTAR} likelihood exhibits the \emph{threshold effect} that is well\nobreakdashes-known in communication and radar applications \citep{barankin1949locally,mcaulay1969barankin,mcaulay1971barankin}.
 
 In the following sections, we describe our prior and our numerical scheme to integrate over nuisance parameters, which amounts to the \ac{BAYESTAR} algorithm.
 
@@ -745,12 +745,12 @@ The coefficients $p^2$ and $b$ are nonnegative and independent of distance. $p$ 
 %
 The symbol $\overline{I}_0$ denotes an exponentially scaled Bessel function. In the limit of large argument, $I_0(|x|) \sim \exp(|x|) / \sqrt{2 \pi |x|}$ \citep{Olver:2010:NHMF,NIST:DLMF}\footnote{\url{http://dlmf.nist.gov/10.40.E1}}. The scaled Bessel is useful for evaluation on a computer because it has a relatively small range $(0, 1]$ and varies slowly in proportion to $x^{1/2}$.
 
+\subsubsection{Parameter grid}
+
 \begin{figure}
     \includegraphics{radial_integral_interpolant}
     \caption{\label{fig:radial-integral-interpolant}Partition of the parameter space of the distance integral into three regions for (bi)cubic interpolation.}
 \end{figure}
-
-\subsubsection{Parameter grid}
 
 This integral is not particularly amenable to low-order Gaussian quadrature. However, luckily $\mathscr{G}$ is a very well-behaved function of $p$ and $r_0$, so we evaluate it using a lookup table and bicubic interpolation. The lookup table is produced in logarithmic coordinates
 %
@@ -821,16 +821,16 @@ The interpolant is evaluated slightly differently depending on which of the thre
 
 We have explained how we evaluate the marginal posterior at a given sky location. Now we must specify where we choose to evaluate it.
 
-\begin{figure*}
-    \includegraphics[width=\textwidth]{illustration}
-    \caption{\label{fig:adaptive-illustration}Illustration of the \ac{BAYESTAR} adaptive HEALPix sampling scheme.}
-\end{figure*}
-
 Our sampling of the sky relies completely on the \acl{HEALPix} (\acs{HEALPix}), a special data structure designed for all\nobreakdashes-sky maps. \ac{HEALPix} divides the sky into equal\nobreakdashes-area pixels. There is a hierarchy of \ac{HEALPix} resolutions. A \ac{HEALPix} resolution may be designated by its order $N$. The $N=0$th order or base tiling has 12 pixels. At every successive order, each tile is subdivided into four new tiles. A resolution may also be referred to by the number of subdivisions along each side of the base tiles, $N_\mathrm{side} = 2^N$. There are $N^\mathrm{pix} = 12 {N_\mathrm{side}}^2$ pixels at any given resolution. The \ac{HEALPix} projection uniquely specifies the coordinates of the center of each pixel by providing a mapping from the resolution and pixel index $(N_\mathrm{side}, i_\mathrm{pix})$ to right ascension and declination $(\alpha, \delta)$.
 
 We begin by evaluating the posterior probability density at the center of each of the $N_{\mathrm{pix},0} = 3072$ pixels of an $N_{\mathrm{side},0}=16$ \ac{HEALPix} grid. At this resolution, each pixel has an area of 13.4~deg$^2$. We then rank the pixels by contained probability (assuming constant probability density within a pixel), and subdivide the most probable $N_{\mathrm{pix},0}/4$ pixels into $N_{\mathrm{pix},0}$ new pixels. We then evaluate the posterior again at the pixels that we subdivided, sort again, and repeat seven times, so that we have evaluated the posterior probability density a total of $8 N_{\mathrm{pix},0}$ times. On \emph{most} iterations, we descend one level deeper in \ac{HEALPix} resolution. The resulting map is a tree structure that consists of a mix of several resolutions. This process is illustrated in Figure~\ref{fig:adaptive-illustration}.
 
 We traverse the tree and flatten it into the highest resolution represented. The highest possible resolution is $N_\mathrm{side}=2^{11}$, with an area of $\approx 10^{-3}$~deg$^2$ per pixel.\footnote{Although the resulting sky map contains $N_\mathrm{pix} \approx 5\times10^6$ pixels, at most $\approx 2\times10^4$ pixels have distinct values. For the purpose of delivery to observers, therefore, the output is always \texttt{gzip}\nobreakdashes-compressed with a ratio of $\approx 250:1$.}
+
+\begin{figure*}
+    \includegraphics[width=\textwidth]{illustration}
+    \caption{\label{fig:adaptive-illustration}Illustration of the \ac{BAYESTAR} adaptive HEALPix sampling scheme.}
+\end{figure*}
 
 Within each iteration, all of the marginalization integrals may be evaluated in parallel. In our C language implementation, the inner loop over pixels is parallelized with OpenMP\footnote{http://openmp.org/}.
 
@@ -844,13 +844,13 @@ We have completed our description of the \ac{BAYESTAR} algorithm. In the followi
 
 Since \ac{BAYESTAR} is designed as one of the final steps in the real\nobreakdashes-time \ac{BNS} search, it is important to characterize how long it takes to calculate a sky map. We compiled \ac{BAYESTAR} with the Intel~C~Compiler~(\texttt{icc}) at the highest architecture\nobreakdashes-specific optimization setting (\texttt{-xhost}). We timed it under Scientific~Linux~6 on a Supermicro~1027GR\nobreakdashes-TRFT system with dual Intel Xeon E5-2670 CPUs clocked at 2.60GHz, providing a total of 16 cores and capable of executing 32 threads simultaneously (with hyperthreading). In Figure~\ref{fig:runtimes}, we show how long it took to calculate a localization with \ac{BAYESTAR} as the number of OpenMP threads was varied from 1 to 32. This is a violin plot, a smoothed vertical histogram. The red surface shows run times for a two\nobreakdashes-detector network (HL) modeled on the first scheduled Advanced \ac{LIGO} observing run in 2015, and the blue surface shows run times for a three\nobreakdashes-detector network (HLV) based on the second planned observing run in 2016. These are the two observing scenarios that are discussed in \cite{FirstTwoYears}.
 
-Several features are apparent. First, at any number of threads, the two configurations have similar run times, although the 2016 events contain a subpopulation of outliers that take about 2.5 times as long as the 2015 events. These are probably due to taking one of the more expensive code branches in the distance integral. Second, the run times decrease proportionally to the number of threads. A slight flattening at 32 threads may be due to increasing use of hyperthreading. Based on experiences running \ac{BAYESTAR} on the 32\nobreakdashes-core (64 threads with hyperthreading) cluster login machine, we expect the almost ideal parallel speedup to continue on machines with more threads. With just one thread, the \ac{BAYESTAR} analysis takes 500\nobreakdashes--1500~s, already orders of magnitude faster than the full parameter estimation. With 32 threads, \ac{BAYESTAR} takes just 20\nobreakdashes--60~s. This latency is comparable to the other stages (data aggregation, trigger generation, alert distribution) in the real\nobreakdashes-time \ac{BNS} analysis. The 32\nobreakdashes-thread configuration is representative of how \ac{BAYESTAR} might be deployed in early Advanced \ac{LIGO}.\footnote{\ac{BAYESTAR} has been successfully ported to the Intel's Many Integrated Core~(MIC) architecture and has been tested in a 500 thread configuration on a system with dual Intel Xeon Phi 5110P coprocessors.}
-
 \begin{figure}
     \centering
     \includegraphics{runtimes}
     \caption[\acs{BAYESTAR} run time]{\label{fig:runtimes}Violin plot of \ac{BAYESTAR} run times as the number of OpenMP threads is varied from 1 to 32. The 2015 scenario is shown in red and the 2016 scenario in blue.}
 \end{figure}
+
+Several features are apparent. First, at any number of threads, the two configurations have similar run times, although the 2016 events contain a subpopulation of outliers that take about 2.5 times as long as the 2015 events. These are probably due to taking one of the more expensive code branches in the distance integral. Second, the run times decrease proportionally to the number of threads. A slight flattening at 32 threads may be due to increasing use of hyperthreading. Based on experiences running \ac{BAYESTAR} on the 32\nobreakdashes-core (64 threads with hyperthreading) cluster login machine, we expect the almost ideal parallel speedup to continue on machines with more threads. With just one thread, the \ac{BAYESTAR} analysis takes 500\nobreakdashes--1500~s, already orders of magnitude faster than the full parameter estimation. With 32 threads, \ac{BAYESTAR} takes just 20\nobreakdashes--60~s. This latency is comparable to the other stages (data aggregation, trigger generation, alert distribution) in the real\nobreakdashes-time \ac{BNS} analysis. The 32\nobreakdashes-thread configuration is representative of how \ac{BAYESTAR} might be deployed in early Advanced \ac{LIGO}.\footnote{\ac{BAYESTAR} has been successfully ported to the Intel's Many Integrated Core~(MIC) architecture and has been tested in a 500 thread configuration on a system with dual Intel Xeon Phi 5110P coprocessors.}
 
 \input{ligo-acronyms/acronyms}
 
