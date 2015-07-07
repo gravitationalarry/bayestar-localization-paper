@@ -15,7 +15,8 @@ FIGURES = \
 	illustration.pdf \
 	radial_integrand.pdf \
 	radial_integral_interpolant.pdf \
-	autocorr-likelihood.pdf
+	autocorr-likelihood.pdf \
+	adaptive_mesh.pdf
 
 PREREQS = ms.tex \
 	bib/aas_macros.sty \
@@ -29,6 +30,9 @@ ms.pdf: $(PREREQS)
 	$(BIBTEX) $(patsubst %.pdf,%,$@)
 	$(TEX) -draftmode $(patsubst %.pdf,%,$@)
 	$(TEX) $(patsubst %.pdf,%,$@)
+
+adaptive_mesh.pdf: scripts/adaptive_mesh.py matplotlibrc
+	python $<
 
 importance-sampling.pdf: importance-sampling.py
 	python $<
