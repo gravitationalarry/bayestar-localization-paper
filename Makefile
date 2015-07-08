@@ -16,7 +16,8 @@ FIGURES = \
 	radial_integrand.pdf \
 	radial_integral_interpolant.pdf \
 	autocorr-likelihood.pdf \
-	adaptive_mesh.pdf
+	adaptive_mesh.pdf \
+	area-hist.pdf
 
 PREREQS = ms.tex \
 	bib/aas_macros.sty \
@@ -30,6 +31,9 @@ ms.pdf: $(PREREQS)
 	$(BIBTEX) $(patsubst %.pdf,%,$@)
 	$(TEX) -draftmode $(patsubst %.pdf,%,$@)
 	$(TEX) $(patsubst %.pdf,%,$@)
+
+area-hist.pdf: scripts/area-hist.py matplotlibrc
+	python $<
 
 adaptive_mesh.pdf: scripts/adaptive_mesh.py matplotlibrc
 	python $<
