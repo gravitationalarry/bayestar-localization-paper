@@ -453,7 +453,18 @@ In the following section, we discuss some key properties of the autocorreltion l
 \subsection{Properties}
 \label{sec:properties}
 
-First, the autocorrelation likelihood has the elegant feature that if we were to replace the autocorrelation function with the \ac{SNR} time series for the best-matching template, $z(\tau; \hat{\mathbf{\theta}}_\mathrm{in})$, we would recover the likelihood for the full \ac{GW} time series, evaluated at the \ac{ML} estimate of the intrinsic parameters. The numerical scheme that we will develop is thus equally applicable for rapid, coincidence-based localization, or as a fast extrinsic marginalization step for the full parameter estimation.
+First, the autocorrelation likelihood has the elegant feature that if we were to replace the autocorrelation function with the \ac{SNR} time series for the best-matching template, $z(\tau; \hat{\mathbf{\theta}}_\mathrm{in})$, we would recover the likelihood for the full \ac{GW} time series, evaluated at the \ac{ML} estimate of the intrinsic parameters, \emph{viz.}:
+%
+\begin{equation}\label{eq:extrinsic-only-likelihood}
+    % p\left(z_i(\hat{\tau}, \hat{\bm\theta}_\mathrm{in})
+        % \middle| \rho_i, \gamma_i, \tau_i \right) \propto \\
+    \exp \left[ - \frac{1}{2} \sum_i {\rho_i}^2
+        + \sum_i \rho_i \Re \left\{ e^{-i \gamma_i} z_i^*(\tau_i)
+        \right\}
+    \right].
+\end{equation}
+%
+(We have ommitted the term $\int |Y_i(\omega)|^2/S(\omega)d\omega$, which takes the place of the earlyier ${\hat{\rho}_i}^2$ term and is only important for normalization.) The numerical scheme that we will develop is thus equally applicable for rapid, coincidence-based localization, or as a fast extrinsic marginalization step for the full parameter estimation.
 
 Second, observe that at the true parameter values, $\hat{\bm\theta}_i = \bm\theta_i$, the logarithms of Equation~(\ref{eq:autocor-likelihood}) and Equation~(\ref{eq:gaussian-likelihood-spa}) have the same Jacobian. This is because the derivatives of the autocorrelation function are
 %
