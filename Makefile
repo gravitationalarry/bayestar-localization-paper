@@ -9,6 +9,7 @@ FIGURES = \
 	fishfactor.pdf \
 	inclination_integral_convergence.pdf \
 	polarization_angle_integral_convergence.pdf \
+	distance_interpolant_convergence.pdf \
 	radial_integrand.pdf \
 	runtimes.pdf \
 	illustration.pdf \
@@ -49,6 +50,9 @@ inclination_integral_convergence.pdf: scripts/inclination_integral_convergence.p
 	python $<
 
 polarization_angle_integral_convergence.pdf: scripts/polarization_angle_integral_convergence.py matplotlibrc
+	python $<
+
+distance_interpolant_convergence.pdf: scripts/distance_interpolant_convergence.py matplotlibrc
 	python $<
 
 radial_integrand.pdf: scripts/radial_integrand.py matplotlibrc

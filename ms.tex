@@ -832,7 +832,14 @@ We use these breakpoints as initial subdivisions in an adaptive Gaussian quadrat
 
 \subsubsection{Interpolation}
 
-The interpolant is evaluated slightly differently depending on which of the three regions marked I, II, and II in Figure~\ref{fig:radial-integral-interpolant} contains the point of interest. In region I, we use bicubic interpolation in $x$ and $y$. In region II, we use univariate cubic interpolation in $x$, with the sample points taken from the horizontal boundary between regions I and II. In region III, we use univariate cubic interpolation in $u = (x - y) / 2$, with the sample points taken from the downward diagonal boundary between regions I and III. This entire lookup table scheme is accurate to an absolute error of about $10^{-5}$ in $\mathscr{G}$. Finally, the distance integral $\mathscr{F}$ is obtained by multiplying the interpolated value of $\mathscr{G}$ by $\exp\left(p^2/{r_0}^2\right)$.
+The interpolant is evaluated slightly differently depending on which of the three regions marked I, II, and II in Figure~\ref{fig:radial-integral-interpolant} contains the point of interest. In region I, we use bicubic interpolation of $\log \mathcal{G}$ in $x$ and $y$. In region II, we use univariate cubic interpolation of $\log \mathcal{G}$ in $x$, with the sample points taken from the horizontal boundary between regions I and II. In region III, we use univariate cubic interpolation of $\log \mathcal{G}$ in $u = (x - y) / 2$, with the sample points taken from the downward diagonal boundary between regions I and III. Finally, the distance integral $\mathscr{F}$ is obtained by multiplying the interpolated value of $\mathscr{G}$ by $\exp\left(p^2/{r_0}^2\right)$. For a $400\times400$ grid, the entire lookup table scheme is accurate to a relative error of about $10^{-5}$ in $\mathscr{F}$ (see Figure~\ref{fig:distance_interpolant_convergence}).
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=\columnwidth]{distance_interpolant_convergence}
+    \end{center}
+    \caption{\label{fig:distance_interpolant_convergence}Relative error in \ac{BAYESTAR} distance integral interpolation scheme as a function of the size of the grid.}
+\end{figure}
 
 \section{Adaptive HEALPix sampling}
 \label{sec:adaptive-sampling}
