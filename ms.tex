@@ -940,6 +940,8 @@ A more open question is how to account for spin precession. The simulations in \
 
 Although the response time of \ac{BAYESTAR} has been driven by the anticipated timescales for kilonova and afterglow emission, a recurring question is whether there is any detectable \ac{EM} signal in the seconds before, during, and after the merger itself. Since the \ac{GW} inspiral signal is in principal detectable for up to hundreds of seconds before merger, one could imagine positioning rapidly slewing instruments to search for any prompt emission. This concept was explored by the authors \citep{Cannon:2011vi}, and will be revisted in further detail in both Sathyaprakash et~al. (in preparation) and Chu et~al. (in preparation).
 
+On the topic of very low\nobreakdashes-latency localization, we also recommend Chen~\&~Holz (in preparation), who propose a rapid localization scheme that is similar to ours, but even faster: their likelihood is strictly Gaussian, so one more marginalization integral (the integral over arrival time) can be performed analytically.
+
 \section{Conclusion}
 
 We have presented a novel, fast, accurate, Bayesian algorithm for inferring the sky locations of compact binary merger sources that may soon be detected by advanced ground\nobreakdashes-based \ac{GW} detectors. For \ac{BNS} systems with small spins, we have shown that \ac{BAYESTAR} produces sky maps that are as accurate as the full \ac{MCMC} parameter estimation code, but can do so within $\sim$10 seconds after a detection. Still faster response times should be possible in the future (if warranted) by deploying \ac{BAYESTAR} on machines with more cores, or by distributing \ac{BAYESTAR} across multiple computers.
