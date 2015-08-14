@@ -15,7 +15,7 @@ FIGURES = \
 	illustration.pdf \
 	radial_integrand.pdf \
 	radial_integral_interpolant.pdf \
-	autocorr-likelihood.pdf \
+	autocorr-likelihood.png \
 	adaptive_mesh.pdf \
 	area-hist.pdf \
 	2015-pp.pdf \
@@ -44,6 +44,9 @@ area-hist.pdf: scripts/area-hist.py matplotlibrc
 	python $<
 
 adaptive_mesh.pdf: scripts/adaptive_mesh.py matplotlibrc
+	python $<
+
+autocorr-likelihood.png: scripts/autocorr-likelihood.py matplotlibrc
 	python $<
 
 importance-sampling.pdf: importance-sampling.py

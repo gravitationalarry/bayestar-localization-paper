@@ -181,4 +181,4 @@ for i, (filename, label, need_square) in enumerate(data):
     #     ax.yaxis.set_label_position('right')
     # else:
     #     plt.setp(ax.get_yticklabels(), visible=False)
-fig.savefig('autocorr-likelihood.pdf')
+fig.savefig('autocorr-likelihood.png')
