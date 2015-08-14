@@ -22,10 +22,16 @@ FIGURES = \
 	2016-pp.pdf
 
 PREREQS = ms.tex \
-	bib/aas_macros.sty \
+	aas_macros.sty \
 	ligo-acronyms/acronyms.tex \
 	bib/telescope.bib \
 	ms.bib \
+	$(FIGURES)
+
+TARFILES = \
+	combined_ms.tex \
+	ms.bbl \
+	aas_macros.sty \
 	$(FIGURES)
 
 ms.pdf: $(PREREQS)
@@ -75,6 +81,15 @@ fishfactor.pdf: scripts/fishfactor.py matplotlibrc autocorrelation_fisher_matrix
 
 runtimes.pdf: plot_runtimes.py 2015_runtimes.npy 2016_runtimes.npy matplotlibrc
 	python $<
+
+combined_ms.tex: ms.pdf
+	./latexpand ms.tex --output $@
+
+ms.tar.gz: $(TARFILES) ms.pdf
+	COPYFILE_DISABLE=true tar -H -s '/combined_ms/ms/' -czf $@ $(TARFILES)
+
+ms.zip: ms.tar.gz
+	mkdir zip && cd zip && tar -xzf ../ms.tar.gz && zip ../ms.zip * && cd .. && rm -rf zip
 
 clean:
 	rm -f ms.{aux,log,out,bbl,blg,pdf} msNotes.bib $(FIGURES)
