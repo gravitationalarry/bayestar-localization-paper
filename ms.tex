@@ -722,7 +722,14 @@ We sample $t_\oplus$ regularly from $-T$ to $T$ at intervals of $\Delta t$. This
 \subsection{Integral over distance}
 \label{sec:distance}
 
-The distance integral is now performed differently from what we initially described in \cite{leo-singer-thesis,BerryLocalization}; the method described in the present work is about an order of magnitude faster. The innermost integral over distance $r$ may be written as
+The distance integral is now performed differently from what we initially described in \cite{leo-singer-thesis,BerryLocalization}; the method described in the present work is about an order of magnitude faster. We define $\rho_i = \omega_i / r$ in order to absorb all of the distance-independent terms in the amplitudes into $\omega_i$, and then define
+%
+\begin{align}
+    p^2 &= \frac{1}{2} \sum_i {\omega_i}^2 \label{eq:likelihood-p-factor} \\
+    b &= \left| \sum_i \hat\rho_i \omega_i e^{i \tilde{\gamma}_i}
+        a_i^*(\tilde{\tau}_i) \right|. \label{eq:likelihood-b-factor} \end{align}
+%
+The innermost integral over distance $r$ may then be written as
 %
 \begin{align}\label{eq:distance-integral}
     \mathscr{F} &=
@@ -748,9 +755,6 @@ or, completing the square,
 where
 %
 \begin{align}
-    p^2 &= \frac{1}{2} r^2 \sum_i {\rho_i}^2 \label{eq:likelihood-p-factor} \\
-    b &= r \left| \sum_i \hat\rho_i \rho_i e^{i \tilde{\gamma}_i}
-        a_i^*(\tilde{\tau}_i) \right| \label{eq:likelihood-b-factor} \\
     r_0 &= 2 p^2 / b \\
     \overline{I}_0(x) &= \exp(-|x|) I_0(x).
 \end{align}
