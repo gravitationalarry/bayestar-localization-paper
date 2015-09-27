@@ -1,4 +1,4 @@
-\documentclass[amsmath,amssymb,aps,prx,reprint,nopreprintnumbers,nofootinbib]{revtex4-1}
+\documentclass[amsmath,amssymb,aps,prx,reprint,nopreprintnumbers,nofootinbib,showpacs]{revtex4-1}
 \usepackage[nolist]{acronym}
 \usepackage{multirow}
 \usepackage{bigdelim}
@@ -57,6 +57,7 @@ Rapid Bayesian position reconstruction for gravitational\nobreakdashes-wave tran
 \author{Larry R. Price}
 \email{larryp@caltech.edu}
 \affiliation{\acs{LIGO} Laboratory, California Institute of Technology, Pasadena, CA 91125, USA}
+\pacs{04.80.Nn, 04.30.Tv, 02.50.Tt}
 
 \begin{abstract}
 Within the next few years, Advanced LIGO and Virgo should detect \acp{GW} from binary neutron star and neutron star\nobreakdashes--black hole mergers. These sources are also predicted to power a broad array of electromagnetic transients. Because the X\nobreakdashes-ray and optical signatures can be faint and fade rapidly, observing them hinges on rapidly inferring the sky location from the gravitational wave observations. \ac{MCMC} methods for gravitational\nobreakdashes-wave parameter estimation can take hours or more. We introduce BAYESTAR, a rapid, Bayesian, non-\ac{MCMC} sky localization algorithm that takes just seconds to produce probability sky maps that are comparable in accuracy to the full analysis. Prompt localizations from BAYESTAR will make it possible to search electromagnetic counterparts of compact binary mergers.
