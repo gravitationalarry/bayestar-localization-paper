@@ -90,11 +90,6 @@ We call this algorithm \ac{BAYESTAR}\footnote{A pun on the Cylon battleships in 
 
 This paper is organized as follows. In Section~\ref{sec:detection}, we describe the \ac{GW} signal model and sketch the standard detection algorithm, the matched filter bank. In Section~\ref{sec:parameter-estimation}, we describe Bayesian inference formalism and the prevailing method for inferring the parameters of detected candidates, \ac{MCMC} sampling. In Section~\ref{sec:bayestar-likelihood}, we propose the \ac{BAYESTAR} likelihood as a model for the uncertainty in the matched\nobreakdashes-filter parameter estimates, and discuss its relationship to and consistency with the likelihood for the full \ac{GW} data. In Section~\ref{sec:prior}, we describe the input to \ac{BAYESTAR} supplied by the detection pipeline, and the prior distribution on parameters. In Section~\ref{sec:marginal-posterior}, we explain the integration scheme by which the posterior probability distribution is calculated for a given sky location. In Section~\ref{sec:adaptive-sampling}, we show a scheme whereby the sky posterior is sampled on an adaptive \acs{HEALPix} grid. In Section~\ref{sec:run-time}, we report the running time of the algorithm on the hardware available on the \ac{LIGO} Data Grid. Finally, in Section~\ref{sec:case-study}, we quantify the sky localization performance on a comprehensive set of simulated \ac{GW} events.
 
-% Establish and describe the first rapid and tractable solution of the GW position reconstruction problem.
-% Use and abuse of Fisher matrix: use it as a clue.
-% Generality: replace GW antenna pattern and GW polarization model with any other kind of receiver.
-% Demonstration of a practical Bayesian analysis that does not use an MCMC method.
-
 \section{Signal model and detection}
 \label{sec:detection}
 
