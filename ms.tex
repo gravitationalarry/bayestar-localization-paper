@@ -650,7 +650,7 @@ where $m=2$ for a prior that is uniform in volume, and $m=-1$ for a prior that i
     r_\mathrm{max} = \frac{1}{4} \max_i r_{1,i}.
 \end{equation*}
 
-Finally, the prior is uniform in $-1 \leq \cos\iota \leq 1$ and $0 \leq \psi < 2\pi$.
+Finally, the prior is uniform in $-1 \leq \cos\iota \leq 1$ and $0 \leq \psi < \pi$.
 
 We compute the autocorrelation function for each detector from $t = 0$ to $t = T$ at intervals of $\Delta t = 1/f_s$, where $f_s$ is the smallest power of two that is greater than or equal to the Nyquist rate. Because BNS signals typically terminate at about 1500~Hz, a typical value for $\Delta t$ is $(4096\,\textrm{Hz})^{-1}$. We use a pruned \ac{FFT} because for BNS systems, the \ac{GW} signal remains in LIGO's sensitive band for $\sim$100\nobreakdashes--1000~s, whereas $T \sim 10$~ms.\footnote{See \url{http://www.fftw.org/pruned.html} for a discussion of methods for computing the pruned \ac{FFT}, the first $K$ samples of an \ac{FFT} of length $N$.}
 
