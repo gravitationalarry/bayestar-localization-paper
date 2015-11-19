@@ -857,8 +857,7 @@ The \ac{BAYESTAR} adaptive sampling process works as follows. We begin by evalua
     \caption{\label{fig:adaptive-illustration}Illustration of the \ac{BAYESTAR} adaptive HEALPix sampling scheme.}
 \end{figure*}
 
-The resulting map is a tree structure that describes a mesh of pixels with different resolutions. An example \ac{BAYESTAR} subdivision is shown in Figure~\ref{fig:adaptive-illustration}. To convert this mesh into a FITS image, 
-we traverse the tree and flatten it into the highest resolution represented. The highest possible resolution is $N_\mathrm{side}=2^{11}$, with an area of $\approx 10^{-3}$~deg$^2$ per pixel.\footnote{Although the resulting sky map contains $N_\mathrm{pix} \approx 5\times10^6$ pixels, at most $\approx 2\times10^4$ pixels have distinct values. For the purpose of delivery to observers, therefore, the output is always \texttt{gzip}\nobreakdashes-compressed with a ratio of $\approx 250:1$.}
+The resulting map is a tree structure that describes a mesh of pixels with different resolutions. An example \ac{BAYESTAR} subdivision is shown in Figure~\ref{fig:adaptive-mesh}. To convert this mesh into a FITS image, we traverse the tree and flatten it into the highest resolution represented. The highest possible resolution is $N_\mathrm{side}=2^{11}$, with an area of $\approx 10^{-3}$~deg$^2$ per pixel.\footnote{Although the resulting sky map contains $N_\mathrm{pix} \approx 5\times10^6$ pixels, at most $\approx 2\times10^4$ pixels have distinct values. For the purpose of delivery to observers, therefore, the output is always \texttt{gzip}\nobreakdashes-compressed with a ratio of $\approx 250:1$.}
 
 \begin{figure}
     \includegraphics[width=\columnwidth]{adaptive_mesh}
