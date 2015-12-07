@@ -50,64 +50,64 @@
 
 \begin{document}
 
-\title[Rapid-response Bayesian sky localization]{WHOOMP! (There It Is) \\
-Rapid Bayesian position reconstruction for gravitational\nobreakdashes-wave transients}
+\title[Rapid-response Bayesian sky localization]{WHOOMP! (There it is):\\Rapid Bayesian position reconstruction for gravitational\nobreakdashes-wave transients}
 \author{Leo P. Singer}
 \email{leo.singer@ligo.org}
 \author{Larry R. Price}
 \email{larryp@caltech.edu}
-\affiliation{\acs{LIGO} Laboratory, California Institute of Technology, Pasadena, CA 91125, USA}
+\affiliation{\acs{LIGO} Laboratory, California Institute of Technology, Pasadena, California 91125, USA}
+\received{28 September 2015}
 \pacs{04.80.Nn, 04.30.Tv, 02.50.Tt}
 
 \begin{abstract}
-Within the next few years, Advanced LIGO and Virgo should detect \acp{GW} from binary neutron star and neutron star\nobreakdashes--black hole mergers. These sources are also predicted to power a broad array of electromagnetic transients. Because the electromagnetic signatures can be faint and fade rapidly, observing them hinges on rapidly inferring the sky location from the gravitational wave observations. \ac{MCMC} methods for gravitational\nobreakdashes-wave parameter estimation can take hours or more. We introduce BAYESTAR, a rapid, Bayesian, non-\ac{MCMC} sky localization algorithm that takes just seconds to produce probability sky maps that are comparable in accuracy to the full analysis. Prompt localizations from BAYESTAR will make it possible to search electromagnetic counterparts of compact binary mergers.
+Within the next few years, Advanced LIGO and Virgo should detect \aclp{GW} from \acl{BNS} and \acl{NSBH} mergers. These sources are also predicted to power a broad array of \acl{EM} transients. Because the \acl{EM} signatures can be faint and fade rapidly, observing them hinges on rapidly inferring the sky location from the \acl{GW} observations. \acl{MCMC} methods for gravitational\nobreakdashes-wave parameter estimation can take hours or more. We introduce BAYESTAR, a rapid, Bayesian, non-\acl{MCMC} sky localization algorithm that takes just seconds to produce probability sky maps that are comparable in accuracy to the full analysis. Prompt localizations from BAYESTAR will make it possible to search \acl{EM} counterparts of compact binary mergers.
 \end{abstract}
 
 \maketitle
 
-The \acl{LIGO} (\acsu{LIGO}; \cite{AdvancedLIGOHarry,AdvancedLIGO}) has just begun taking data \cite{LIGOObservingScenarios} in its `Advanced' configuration. The two \ac{LIGO} detectors will ultimately increase their reach in volume within the local Universe by three orders of magnitude as compared to their initial configurations through 2010. They form the first parts of a sensitive global \ac{GW} detector network, soon to be augmented by Advanced Virgo \cite{AdvancedVirgo} and later by the Japanese KAGRA facility \cite{LCGT,KAGRAInterferometerDesign} and \ac{LIGO}\nobreakdashes--India~\cite{LIGOIndia}.
+The Laser Interferometer Gravitational Wave Observatory (\acsu{LIGO})~\cite{AdvancedLIGOHarry,AdvancedLIGO}) has just begun taking data \cite{LIGOObservingScenarios} in its ``Advanced'' configuration. The two \ac{LIGO} detectors will ultimately increase their reach in volume within the local Universe by 3 orders of magnitude as compared to their initial configurations through 2010. They form the first parts of a sensitive global gravitational-wave (\acsu{GW}) detector network, soon to be augmented by Advanced Virgo~\cite{AdvancedVirgo} and later by the Japanese KAGRA facility~\cite{LCGT,KAGRAInterferometerDesign} and \ac{LIGO}\nobreakdashes--India~\cite{LIGOIndia}.
 
-The most readily detectable sources of \acp{GW} include binary neutron star mergers, with 0.4\nobreakdashes--400 events per year within the reach of Advanced LIGO at final design sensitivity~\cite{rates}. These binary systems are not only efficient sources of \acp{GW}, but also potential sources of detectable \ac{EM} transients from the aftermath of the tidal disruption of the \acp{NS}. \citet{MostPromisingEMCounterpart} argue that the most promising \ac{EM} counterparts are the hypothesized optical/infrared ``kilonovae'' powered by the radioactivate decay of $r$\nobreakdashes-process elements synthesized within the neutron\nobreakdashes-rich ejecta. These are expected to be faint, red, and peak rapidly, reaching an absolute magnitude of only $M_R \sim -13$ within a week, though rising several magnitudes brighter in the infrared~\citep{KilonovaHighOpacities}.
+The most readily detectable sources of \acp{GW} include binary neutron star mergers, with 0.4\nobreakdashes--400 events per year within the reach of Advanced LIGO at its final design sensitivity~\cite{rates}. These binary systems are not only efficient sources of \acp{GW} but also potential sources of detectable \ac{EM} transients from the aftermath of the tidal disruption of the \acp{NS}. \citet{MostPromisingEMCounterpart} argue that the most promising \ac{EM} counterparts are the hypothesized optical/infrared ``kilonovae'' powered by the radioactive decay of $r$\nobreakdashes-process elements synthesized within the neutron\nobreakdashes-rich ejecta. These are expected to be faint and red and to peak rapidly, reaching an absolute magnitude of only $M_R \sim -13$ within a week, though rising several magnitudes brighter in the infrared~\citep{KilonovaHighOpacities}.
 
 Several mechanisms could make the kilonovae brighter, bluer, and hence more readily detectable \citep{KilonovaPrecursor,KilonovaRedOrBlue}, but peak even earlier, within hours. If, as is widely believed \citep{1986ApJ...308L..43P,1989Natur.340..126E,1992ApJ...395L..83N,2011ApJ...732L...6R}, \ac{BNS} mergers are indeed progenitors of short \acp{GRB}, then a small (due to jet collimation) fraction of Advanced \ac{LIGO} events could also be accompanied by a bright optical afterglow, but this signature, likewise, would peak within hours or faster.
 
-Adding to the challenge of detecting a faint, short-lived optical transient, there is an extreme mismatch between the sky localization accuracy of \ac{GW} detector networks, $\sim$10\nobreakdashes--500\,deg$^2$ \citep{FairhurstTriangulation,WenLocalizationAdvancedLIGO,FairhurstLocalizationAdvancedLIGO,2011PhRvD..84j4020V,RodriguezBasicParameterEstimation,NissankeLocalization,NissankeKasliwalEMCounterparts,KasliwalTwoDetectors,Grover:2013,SiderySkyLocalizationComparison,FirstTwoYears}, and the \acp{FOV} of 1\nobreakdashes--8\,m\nobreakdashes-class optical telescopes. Wide\nobreakdashes-field optical transient facilites such as BlackGEM~(0.6\,m/2.7\,deg$^2$), the \acl{ZTF}~(\acsu{ZTF}; 1.2\,m/47\,deg$^2$) \cite{ZTF}, the \acl{DECAM}~(\acsu{DECAM}; 4\,m/3\,deg$^2$), or the \acl{LSST}~(\acsu{LSST}; 8.4\,m/9.6\,deg$^2$), operated in ``target of opportunity'' mode, may be able to tile these large areas rapidly enough to find the one needle in the haystack that is connected to the \ac{GW} event. However, prompt and accurate \ac{GW} position reconstructions will be of the utmost importance for guiding the selection of fields to observe.
+Adding to the challenge of detecting a faint, short-lived optical transient, there is an extreme mismatch between the sky localization accuracy of \ac{GW} detector networks, $\sim$10\nobreakdashes--500\,deg$^2$ \citep{FairhurstTriangulation,WenLocalizationAdvancedLIGO,FairhurstLocalizationAdvancedLIGO,2011PhRvD..84j4020V,RodriguezBasicParameterEstimation,NissankeLocalization,NissankeKasliwalEMCounterparts,KasliwalTwoDetectors,Grover:2013,SiderySkyLocalizationComparison,FirstTwoYears}, and the \acp{FOV} of 1\nobreakdashes--8\,m\nobreakdashes-class optical telescopes. Wide\nobreakdashes-field optical transient facilities such as BlackGEM~(0.6\,m/2.7\,deg$^2$), the \acl{ZTF}~(1.2\,m/47\,deg$^2$)~\cite{ZTF}, the \acl{DECAM}~(4\,m/3\,deg$^2$), or the \acl{LSST}~(8.4\,m/9.6\,deg$^2$), operated in ``target of opportunity'' mode, may be able to tile these large areas rapidly enough to find the one needle in the haystack that is connected to the \ac{GW} event. However, prompt and accurate \ac{GW} position reconstructions will be of the utmost importance for guiding the selection of fields to observe.
 
-The final science run of the initial LIGO and Virgo instruments saw the first joint search for \ac{GW} and electromagnetic emission from compact binaries. This involved several advances in the \ac{GW} data analysis \citep{CBCLowLatency}, including the first real\nobreakdashes-time matched\nobreakdashes-filter detection pipeline (\acs{MBTA}, \aclu{MBTA}; \cite{LIGOVirgoInspiralPipelineComparison}), a semi\nobreakdashes-coherent, ad hoc rapid triangulation code (Timing++), and the first version of a rigorous Bayesian \ac{MCMC} parameter estimation code (LALINFERENCE; \citealt{S6PE})---all in service of the first search for X\nobreakdashes-ray \citep{SwiftFollowup} and optical \citep{OpticalImageAnalysis} counterparts of \ac{GW} triggers, by a consortium of facilities. Despite the technical achievements in the \ac{GW} data analysis, there was an undesirable tradeoff between the speed as well as accuracy of the rapid localization and the full parameter estimation: the former could analyze a detection candidate in minutes, whereas the latter took half a day; the latter decreased the area on the sky by a factor of 1/20 over the former but took 1000 times as long to run~\cite{SiderySkyLocalizationComparison}.
+The final science run of the initial LIGO and Virgo instruments saw the first joint search for \ac{GW} and \ac{EM} emission from compact binaries. This involved several advances in the \ac{GW} data analysis \citep{CBCLowLatency}, including the first real\nobreakdashes-time matched\nobreakdashes-filter detection pipeline, the \acl{MBTA}~\cite{LIGOVirgoInspiralPipelineComparison}; a semi\nobreakdashes-coherent, \textit{ad hoc} rapid triangulation code, Timing++; and the first version of a rigorous Bayesian \ac{MCMC} parameter estimation code, LALINFERENCE~\cite{S6PE}---all in service of the first search for X\nobreakdashes-ray \citep{SwiftFollowup} and optical \citep{OpticalImageAnalysis} counterparts of \ac{GW} triggers, by a consortium of facilities. Despite the technical achievements in the \ac{GW} data analysis, there was an undesirable tradeoff between the speed as well as accuracy of the rapid localization and the full parameter estimation: the former could analyze a detection candidate in minutes, whereas the latter took half a day; the latter decreased the area on the sky by a factor of 1/20 over the former but took 1000 times as long to run~\cite{SiderySkyLocalizationComparison}.
 
-The success of \ac{EM} follow\nobreakdashes-up of \ac{LIGO} events will depend critically on disseminating high quality sky localizations within a timescale of minutes to hours. To that end, we have devised a rapid and accurate Bayesian sky localization method that takes mere seconds to achieve approximately the same accuracy as the full \ac{MCMC} analysis. Our key insights are the following:
+The success of \ac{EM} follow\nobreakdashes-up of \ac{LIGO} events will depend critically on disseminating high quality sky localizations within a time scale of minutes to hours. To that end, we have devised a rapid and accurate Bayesian sky localization method that takes mere seconds to achieve approximately the same accuracy as the full \ac{MCMC} analysis. Our key insights are the following:
 %
 \begin{enumerate}
     \item Nearly all of the information in the \ac{GW} time series that is informative for sky localization is encapsulated within the matched\nobreakdashes-filter estimates of the times, amplitudes, and phases on arrival at the detectors. To infer the position and distance of a \ac{GW} event, we only have to consider three numbers per detector rather than a densely sampled strain time series per detector.
     \item The matched\nobreakdashes-filter pipeline can be treated as a measurement system in and of itself. Just like the strain time series from the detectors, the resultant times, amplitudes, and phases have a predictable and quantifiable measurement uncertainty that can be translated into a likelihood function suitable for Bayesian inference.
-    \item The Fisher information matrix will provide clues as to suitable forms of this likelihood function. Recent \ac{GW} parameter estimation literature has largely rejected the Fisher matrix,\footnote{Though not entirely; see \cite{EffectiveFisherMatrix}.} but this is mostly on the grounds of the abuse of the related \ac{CRLB} outside its realm of validity (i.e., at low to moderate \ac{SNR}) \cite{BayesianBounds,UseAbuseFisherMatrix,FisherMatrixAsymptoticExpansions,InadequaciesFisherMatrix}. However, we recognize that the block structure of the Fisher matrix provides important insights, and is a useful quantity for checking the validity of the aforementioned likelihood function, quite independent of the \ac{CRLB}.
+    \item The Fisher information matrix will provide clues as to suitable forms of this likelihood function. Recent \ac{GW} parameter estimation literature has largely rejected the Fisher matrix,\footnote{Though not entirely; see \cite{EffectiveFisherMatrix}.} but this is mostly on the grounds of the abuse of the related \ac{CRLB} outside its realm of validity of moderate to high \ac{SNR}~\cite{BayesianBounds,UseAbuseFisherMatrix,FisherMatrixAsymptoticExpansions,InadequaciesFisherMatrix}. However, we recognize that the block structure of the Fisher matrix provides important insights and is a useful quantity for checking the validity of the aforementioned likelihood function, quite independent of the \ac{CRLB}.
     \item The Fisher matrix teaches us that errors in sky localization are semi\nobreakdashes-independent from errors in masses. This implies that if we care only about position reconstruction and not about jointly estimating masses as well, then we can reduce the dimensionality of the parameter estimation problem significantly. Moreover, this frees us of the need to directly compute the expensive post-Newtonian model waveforms, making the likelihood itself much faster to evaluate.
-    \item Thanks to a simple likelihood function and a well\nobreakdashes-characterized parameter space, we may dispense with costly and parallelization\nobreakdashes-resistant \ac{MCMC} integration, and instead perform the Bayesian marginalization with classic, deterministic, very low order Gaussian quadrature.
+    \item Thanks to a simple likelihood function and a well\nobreakdashes-characterized parameter space, we may dispense with costly and parallelization\nobreakdashes-resistant \ac{MCMC} integration and instead perform the Bayesian marginalization with classic, deterministic, very low order Gaussian quadrature.
     \item The Bayesian inference scheme thus designed to operate on the matched\nobreakdashes-filter detection pipeline outputs could be trivially generalized to operate on the full \ac{GW} time series within the same computational constraints. This would yield a fast and coherent localization algorithm that is mathematically equivalent to the full \ac{MCMC} parameter estimation, restricted to extrinsic parameters (sky location, binary orientation, and distance).
 \end{enumerate}
 %
-We call this algorithm \ac{BAYESTAR}\footnote{A pun on the Cylon battleships in the American television series Battlestar Galactica. The defining characteristic of the Cylons is that they repeatedly defeat humanity by using their superhuman information\nobreakdashes-gathering ability to coordinate overwhelming forces.}\footnote{We do not like to mention the final `L' in the acronym, because then it would be pronounced BAYESTARL, which sounds stupid.}. It is as fast as Timing++, but nearly as accurate as the rigorous full parameter estimation. It is unique in that it bridges the detection and parameter estimation of \ac{GW} signals, two tasks that have until now involved very different numerical methods and time scales. Beginning with the first Advanced \acs{LIGO} observing run, \ac{BAYESTAR} is providing localizations within minutes of the detection of any \ac{BNS} merger candidate, playing a key role in enabling rapid follow-up observations.
+We call this algorithm \ac{BAYESTAR}.\footnote{A pun on the Cylon battleships in the American television series Battlestar Galactica. The defining characteristic of the Cylons is that they repeatedly defeat humanity by using their superhuman information\nobreakdashes-gathering ability to coordinate overwhelming forces.}\footnote{We do not like to mention the final `L' in the acronym, because then it would be pronounced BAYESTARL, which sounds stupid.} It is as fast as Timing++ but nearly as accurate as the rigorous full parameter estimation. It is unique in that it bridges the detection and parameter estimation of \ac{GW} signals, two tasks that have until now involved very different numerical methods and time scales. Beginning with the first Advanced \acs{LIGO} observing run, \ac{BAYESTAR} is providing localizations within minutes of the detection of any \ac{BNS} merger candidate, playing a key role in enabling rapid follow-up observations.
 
-This paper is organized as follows. In Section~\ref{sec:detection}, we describe the \ac{GW} signal model and sketch the standard detection algorithm, the matched filter bank. In Section~\ref{sec:parameter-estimation}, we describe Bayesian inference formalism and the prevailing method for inferring the parameters of detected candidates, \ac{MCMC} sampling. In Section~\ref{sec:bayestar-likelihood}, we propose the \ac{BAYESTAR} likelihood as a model for the uncertainty in the matched\nobreakdashes-filter parameter estimates, and discuss its relationship to and consistency with the likelihood for the full \ac{GW} data. In Section~\ref{sec:prior}, we describe the input to \ac{BAYESTAR} supplied by the detection pipeline, and the prior distribution on parameters. In Section~\ref{sec:marginal-posterior}, we explain the integration scheme by which the posterior probability distribution is calculated for a given sky location. In Section~\ref{sec:adaptive-sampling}, we show a scheme whereby the sky posterior is sampled on an adaptive \acs{HEALPix} grid. In Section~\ref{sec:run-time}, we report the running time of the algorithm on the hardware available on the \ac{LIGO} Data Grid. Finally, in Section~\ref{sec:case-study}, we quantify the sky localization performance on a comprehensive set of simulated \ac{GW} events.
+This paper is organized as follows. In Sec.~\ref{sec:detection}, we describe the \ac{GW} signal model and sketch the standard detection algorithm, the matched\nobreakdashes-filter bank. In Sec.~\ref{sec:parameter-estimation}, we describe Bayesian inference formalism and the prevailing method for inferring the parameters of detected candidates, \ac{MCMC} sampling. In Sec.~\ref{sec:bayestar-likelihood}, we propose the \ac{BAYESTAR} likelihood as a model for the uncertainty in the matched\nobreakdashes-filter parameter estimates, and discuss its relationship to and consistency with the likelihood for the full \ac{GW} data. In Sec.~\ref{sec:prior}, we describe the input to \ac{BAYESTAR} supplied by the detection pipeline, and the prior distribution on parameters. In Sec.~\ref{sec:marginal-posterior}, we explain the integration scheme by which the posterior probability distribution is calculated for a given sky location. In Sec.~\ref{sec:adaptive-sampling}, we show a scheme whereby the sky posterior is sampled on an adaptive \ac{HEALPix} grid. In Sec.~\ref{sec:run-time}, we report the running time of the algorithm on the hardware available on the \ac{LIGO} Data Grid. Finally, in Sec.~\ref{sec:case-study}, we quantify the sky localization performance on a comprehensive set of simulated \ac{GW} events.
 
 \section{Signal model and detection}
 \label{sec:detection}
 
-In the \ac{TD}, the strain observed by a single \ac{GW} interferometer is
+In the \acl{TD}, the strain observed by a single \ac{GW} interferometer is
 %
 \begin{equation}
     y_i(t) = x_i (t; \bm\theta) + n_i (t).
 \end{equation}
 %
-In the \ac{FD},
+In the \acl{FD},
 %
 \begin{equation}\label{eq:signal-model}
     Y_i (\omega) = \int_{-\infty}^\infty y(t) e^{-i \omega t} dt = X_i (\omega; \bm\theta) + N_i (\omega),
 \end{equation}
 %
-where $X_i (\omega; \bm\theta)$ is the \ac{GW} signal given a parameter vector $\bm\theta$ that describes the \ac{GW} source, and $N_i (\omega)$ is that detector's Gaussian noise with one\nobreakdashes-sided \ac{PSD} $S_i(\omega) = E\left[\left|N_i(\omega)\right|^2\right] + E\left[\left|N_i(-\omega)\right|^2\right] = 2 E\left[\left|N_i(\omega)\right|^2\right]$. We shall denote the combined observation from a network of detectors as $\mathbf Y (\omega) \equiv \{Y_i (\omega)\}_i$.
+where $X_i (\omega; \bm\theta)$ is the \ac{GW} signal given a parameter vector $\bm\theta$ that describes the \ac{GW} source and $N_i (\omega)$ is that detector's Gaussian noise with one\nobreakdashes-sided \ac{PSD} $S_i(\omega) = E\left[\left|N_i(\omega)\right|^2\right] + E\left[\left|N_i(-\omega)\right|^2\right] = 2 E\left[\left|N_i(\omega)\right|^2\right]$. We shall denote the combined observation from a network of detectors as $\mathbf Y (\omega) \equiv \{Y_i (\omega)\}_i$.
 
-Under the assumptions that the detector noise is Gaussian and that the noise from different detectors are uncorrelated, the likelihood of the observation, $\mathbf y$, conditioned upon the parameters $\bm\theta$, is a product of Gaussian distributions:
+Under the assumptions that the detector noise is Gaussian and that the noise from different detectors is uncorrelated, the likelihood of the observation, $\mathbf y$, conditioned upon the parameters $\bm\theta$, is a product of Gaussian distributions:
 %
 \begin{multline}\label{eq:gaussian-likelihood}
     \mathcal{L}(\mathbf Y; \bm\theta) = \prod_i p(Y_i | \bm\theta)
@@ -118,7 +118,7 @@ Under the assumptions that the detector noise is Gaussian and that the noise fro
     \right].
 \end{multline}
 
-A \ac{CBC} source is specified by a vector of extrinsic parameters describing its position and orientation, and intrinsic parameters describing the physical properties of the binary components\footnote{This list of parameters involves some simplifying assumptions. Eccentricity is omitted: although it may play a major role in the evolution and waveforms of rare close binaries formed by dynamical capture~\citep{PhysRevD.87.043004,2013PhRvD..87l7501H,2014PhRvD..90h4016H}, \ac{BNS} systems formed by binary stellar evolution should almost always circularize due to tidal interaction~\citep{0004-637X-572-1-407} and later \ac{GW} emission~\citep{PhysRev.136.B1224} long before the inspiral enters LIGO's frequency range of $\sim$10\nobreakdashes--1000~kHz. Tidal deformabilities of the \acp{NS} are omitted because the signal imprinted by the companions' material properties is so small that it will only be detectable by an Einstein Telescope\nobreakdashes-class \ac{GW} observatory~\citep{PhysRevD.81.123016}. Furthermore, in \ac{GW} detection efforts, especially those focused on \ac{BNS} systems, the component spins $\mathbf{S}_1$ and $\mathbf{S}_2$ are often assumed to be nonprecessing and aligned with the system's total angular momentum and condensed to a single scalar parameter $\chi$, or even neglected entirely: $\mathbf{S}_1 = \mathbf{S}_2 = 0$.}:
+A \ac{CBC} source is specified by a vector of extrinsic parameters describing its position and orientation and intrinsic parameters describing the physical properties of the binary components\footnote{This list of parameters involves some simplifying assumptions. Eccentricity is omitted; although it may play a major role in the evolution and waveforms of rare close binaries formed by dynamical capture~\citep{PhysRevD.87.043004,2013PhRvD..87l7501H,2014PhRvD..90h4016H}, \ac{BNS} systems formed by binary stellar evolution should almost always circularize due to tidal interaction~\citep{0004-637X-572-1-407} and later \ac{GW} emission~\citep{PhysRev.136.B1224} long before the inspiral enters LIGO's frequency range of $\sim$10\nobreakdashes--1000~kHz. Tidal deformabilities of the \acp{NS} are omitted because the signal imprinted by the companions' material properties is so small that it will only be detectable by an Einstein Telescope\nobreakdashes-class \ac{GW} observatory~\citep{PhysRevD.81.123016}. Furthermore, in \ac{GW} detection efforts, especially those focused on \ac{BNS} systems, the component spins $\mathbf{S}_1$ and $\mathbf{S}_2$ are often assumed to be nonprecessing and aligned with the system's total angular momentum and condensed to a single scalar parameter $\chi$, or even neglected entirely: $\mathbf{S}_1 = \mathbf{S}_2 = 0$.}:
 %
 \begin{equation}\label{eq:params}
     \bm\theta = \left[
@@ -138,7 +138,7 @@ A \ac{CBC} source is specified by a vector of extrinsic parameters describing it
     \end{array}\right.
 \end{equation}
 
-Assuming a nonprecessing circular orbit, we can write the \ac{GW} signal received by any detector as a linear combination of two basis waveforms, $H_0$ and $H_{\pi/2}$ \citep{PhysRevD.83.084002}. $H_0$ and $H_{\pi/2}$ are approximately ``in quadrature'' in the same sense as the cosine and sine functions, being orthogonal and out of phase by ${\pi/2}$ at all frequencies. If $H_0$ and $H_{\pi/2}$ are Fourier transforms of real functions, then $H_0(\omega) = H_0^*(-\omega)$ and $H_{\pi/2}(\omega) = H_{\pi/2}^*(-\omega)$, and we can write
+Assuming a non\nobreakdashes-precessing circular orbit, we can write the \ac{GW} signal received by any detector as a linear combination of two basis waveforms, $H_0$ and $H_{\pi/2}$ \citep{PhysRevD.83.084002}. $H_0$ and $H_{\pi/2}$ are approximately ``in quadrature'' in the same sense as the cosine and sine functions, being orthogonal and out of phase by ${\pi/2}$ at all frequencies. If $H_0$ and $H_{\pi/2}$ are Fourier transforms of real functions, then $H_0(\omega) = H_0^*(-\omega)$ and $H_{\pi/2}(\omega) = H_{\pi/2}^*(-\omega)$, and we can write
 %
 \begin{equation}
     H_{\pi/2}(\omega) = H_0(\omega) \cdot
@@ -148,7 +148,7 @@ Assuming a nonprecessing circular orbit, we can write the \ac{GW} signal receive
     \end{cases}.
 \end{equation}
 %
-For brevity, we define $H \equiv H_{0}$ and write all subsequent equations in terms of the $H$ basis vector alone. Then, we can write the signal model in a way that isolates all dependence on the extrinsic parameters, $\bm\theta_\mathrm{ex}$, into a few coefficients, and all dependence on the intrinsic parameters, $\bm\theta_\mathrm{in}$, into the basis waveform, by taking the Fourier transform of Equation~(2.8) of \cite{PhysRevD.83.084002}:
+For brevity, we define $H \equiv H_{0}$ and write all subsequent equations in terms of the $H$ basis vector alone. Then, we can write the signal model in a way that isolates all dependence on the extrinsic parameters, $\bm\theta_\mathrm{ex}$, into a few coefficients and all dependence on the intrinsic parameters, $\bm\theta_\mathrm{in}$, into the basis waveform, by taking the Fourier transform of Eq.~(2.8) of Ref.~\cite{PhysRevD.83.084002},
 %
 \begin{multline}\label{eq:full-signal-model}
     X_i(\omega; \bm\theta) = e^{-i \omega (t_\oplus - \mathbf{d}_i \cdot \mathbf{n})}
@@ -171,14 +171,14 @@ for $\omega \geq 0$, where
     \right).
 \end{equation}
 %
-The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector antenna factors, defined such that $0 \leq {F_{+,i}}^2 + {F_{\times,i}}^2 \leq 1$. They depend on the orientation of detector $i$ as well as the sky location and sidereal time of the event and are presented in~\cite{ExcessPower}. In a coordinate system with the $x$ and $y$ axes aligned with the arms of a detector, the antenna pattern is given in spherical polar coordinates as
+The quantities $F_{+,i}$ and $F_{\times,i}$ are the dimensionless detector antenna factors, defined such that $0 \leq {F_{+,i}}^2 + {F_{\times,i}}^2 \leq 1$. They depend on the orientation of detector $i$ as well as the sky location and sidereal time of the event and are presented in Ref.~\cite{ExcessPower}. In a coordinate system with the $x$ and $y$ axes aligned with the arms of a detector, the antenna pattern is given in spherical polar coordinates as
 %
 \begin{align}
     F_+ &= -\frac{1}{2}(1 + \cos^2 \theta) \cos{2\phi}, \\
     F_\times &= -\cos\theta \sin{2\phi}.
 \end{align}
 %
-The unit vector $\mathbf{d}_i$ represents the position of detector $i$ in units of light travel time.\footnote{When considering transient \ac{GW} sources such as those that we are concerned with in this thesis, the origin of the coordinate system is usually taken to be the geocenter. For long\nobreakdashes-duration signals such as those from statically deformed neutron stars, the solar system barycenter is a more natural choice.} The vector $\mathbf{n}$ is the direction of the source. The negative sign in the dot product $-\mathbf{d}_i \cdot \mathbf{n}$ is present because the direction of travel of the \ac{GW} signal is opposite to that of its sky location. The quantity $r_{1,i}$ is a fiducial distance at which detector $i$ would register SNR=1 for an optimally oriented binary (face\nobreakdashes-on, and in a direction perpendicular to the interferometer's arms):
+The unit vector $\mathbf{d}_i$ represents the position of detector $i$ in units of light travel time.\footnote{When considering transient \ac{GW} sources such as those that we are concerned with in this article, the origin of the coordinate system is usually taken to be the geocenter. For long\nobreakdashes-duration signals such as those from statically deformed neutron stars, the solar system barycenter is a more natural choice.} The vector $\mathbf{n}$ is the direction of the source. The negative sign in the dot product $-\mathbf{d}_i \cdot \mathbf{n}$ is present because the direction of travel of the \ac{GW} signal is opposite to that of its sky location. The quantity $r_{1,i}$ is a fiducial distance at which detector $i$ would register \ac{SNR}=1 for an optimally oriented binary (face\nobreakdashes-on, and in a direction perpendicular to the interferometer's arms):
 %
 \begin{equation}\label{eq:horizon}
 r_{1,i} = 1 / \sigma_i, \qquad {\sigma_i}^2 = \int_0^\infty \frac{\left|H(\omega; \boldsymbol \theta_\mathrm{in})\right|^2}{S_i(\omega)} \,d\omega.
@@ -192,7 +192,7 @@ More succinctly, we can write the signal received by detector $i$ in terms of ob
     = X_i (\omega; \rho_i, \gamma_i, \tau_i, \bm\theta_\mathrm{in}) = \frac{\rho_i}{\sigma_i} e^{i (\gamma_i - \omega \tau_i)} H(\omega; \bm\theta_\mathrm{in}).
 \end{multline}
 
-The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{MLE} from the likelihood in Equation~(\ref{eq:gaussian-likelihood}) and the signal model in Equation~(\ref{eq:signal-model}). Concretely, this results in a bank of matched filters, or cross-correlations between the incoming data stream and a collection of template waveforms,
+The prevailing technique for detection of \acp{GW} from \acp{CBC} is to realize a \ac{ML} estimator (MLE) from the likelihood in Eq.~(\ref{eq:gaussian-likelihood}) and the signal model in Eq.~(\ref{eq:signal-model}). Concretely, this results in a bank of matched filters, or cross-correlations between the incoming data stream and a collection of template waveforms,
 %
 \begin{equation}
 z_i(\tau_i;\bm\theta_\mathrm{in}) = \frac{1}{\sigma_i (\bm\theta_\mathrm{in})} \int_0^\infty \frac{H^*(\omega; \bm\theta_\mathrm{in}) Y_i(\omega) e^{i \omega \tau_i}}{S_i(\omega)} \,d\omega.
@@ -225,7 +225,7 @@ this, therefore, is the simplest useful candidate ranking statistic.
 \subsection{Uncertainty and the Fisher matrix}
 \label{sec:fisher}
 
-We can predict the uncertainty in the detection pipeline's \ac{ML} estimates using the \ac{CRLB}. The \ac{CRLB} has been widely applied in \ac{GW} data analysis to estimate parameter estimation uncertainty \cite{1996PhRvD..53.3033B,FairhurstTriangulation,2009PhRvD..79h4032A,WenLocalizationAdvancedLIGO,LIGOObservingScenarios,FairhurstLIGOIndia}\footnote{\label{footnote:template-banks}The Fisher matrix is also used in construction of \ac{CBC} matched filter banks. The common procedure is to place templates uniformly according to the determinant of the signal space metric, which is the Fisher matrix. This is equivalent to uniformly sampling the Jeffreys prior. In practice, this is done either by constructing a hexagonal lattice \citep{PhysRevD.76.102004} or sampling stochastically \citep{2009PhRvD..80j4014H,2009PhRvD..80b4009V,SBank,2010PhRvD..81b4004M,2014PhRvD..89b4003P}.}. As we noted, there are significant caveats to the \ac{CRLB} at low or moderate \ac{SNR} \cite{BayesianBounds,UseAbuseFisherMatrix,FisherMatrixAsymptoticExpansions,InadequaciesFisherMatrix}. However, here we will be concerned more with gaining intuition from the block structure of the Fisher matrix than its numerical value. Furthermore, the Fisher matrix in its own right---independent of its suitability to describe the parameter covariance---is a well\nobreakdashes-defined property of any likelihood function, and we will exploit it as such in Section~\ref{sec:bayestar-likelihood}.
+We can predict the uncertainty in the detection pipeline's \ac{ML} estimates using the \ac{CRLB}. The \ac{CRLB} has been widely applied in \ac{GW} data analysis to estimate parameter estimation uncertainty \cite{1996PhRvD..53.3033B,FairhurstTriangulation,2009PhRvD..79h4032A,WenLocalizationAdvancedLIGO,LIGOObservingScenarios,FairhurstLIGOIndia}.\footnote{\label{footnote:template-banks}The Fisher matrix is also used in construction of \ac{CBC} matched-filter banks. The common procedure is to place templates uniformly according to the determinant of the signal space metric, which is the Fisher matrix. This is equivalent to uniformly sampling the Jeffreys prior. In practice, this is done either by constructing a hexagonal lattice~\citep{PhysRevD.76.102004} or sampling stochastically~\citep{2009PhRvD..80j4014H,2009PhRvD..80b4009V,SBank,2010PhRvD..81b4004M,2014PhRvD..89b4003P}.} As we noted, there are significant caveats to the \ac{CRLB} at low or moderate \ac{SNR} \cite{BayesianBounds,UseAbuseFisherMatrix,FisherMatrixAsymptoticExpansions,InadequaciesFisherMatrix}. However, here we will be concerned more with gaining intuition from the block structure of the Fisher matrix than its numerical value. Furthermore, the Fisher matrix in its own right---independent of its suitability to describe the parameter covariance---is a well\nobreakdashes-defined property of any likelihood function, and we will exploit it as such in Sec.~\ref{sec:bayestar-likelihood}.
 
 We will momentarily consider the likelihood for a single detector:
 %
@@ -241,7 +241,7 @@ We will momentarily consider the likelihood for a single detector:
     \right],
 \end{multline}
 %
-with $X_i(\omega; \rho_i, \gamma_i, \tau_i, \bm\theta_\mathrm{in})$ given by Equation~(\ref{eq:signal-model}).
+with $X_i(\omega; \rho_i, \gamma_i, \tau_i, \bm\theta_\mathrm{in})$ given by Eq.~(\ref{eq:signal-model}).
 
 The Fisher information matrix for a measurement $y$ described by the unknown parameter vector $\bm{\theta}$ is the conditional expectation value
 %
@@ -257,7 +257,7 @@ The Fisher information matrix for a measurement $y$ described by the unknown par
     \right].
 \end{equation}
 
-The Fisher matrix describes how strongly the likelihood depends, on average, on the parameters. Furthermore, it provides an estimate of the mean-square error in the parameters. If $\hat{\bm\theta}$ is an unbiased estimator of $\bm\theta$, $\tilde{\bm\theta} = \hat{\bm\theta} - \bm\theta$ is the measurement error, and $\Sigma = \mathrm{E} \, [\tilde{\bm\theta}\tilde{\bm\theta}\transpose]$ is the covariance of the measurement error, then the \ac{CRLB} says that $\Sigma \geq \mathcal{I}^{-1}$, in the sense that $\left(\Sigma - \mathcal{I}^{-1}\right)$ is positive semi\nobreakdashes-definite.
+The Fisher matrix describes how strongly the likelihood depends, on average, on the parameters. Furthermore, it provides an estimate of the mean-square error in the parameters. If $\hat{\bm\theta}$ is an unbiased estimator of $\bm\theta$, $\tilde{\bm\theta} = \hat{\bm\theta} - \bm\theta$ is the measurement error, and $\Sigma = \mathrm{E} \, [\tilde{\bm\theta}\tilde{\bm\theta}\transpose]$ is the covariance of the measurement error, then the \ac{CRLB} says that $\Sigma \geq \mathcal{I}^{-1}$, in the sense that $\left(\Sigma - \mathcal{I}^{-1}\right)$ is positive semidefinite.
 
 Note that if $\log\mathcal{L}$ is twice differentiable in terms of $\bm\theta$, then the Fisher matrix can also be written in terms of second derivatives as
 %
@@ -270,7 +270,7 @@ Note that if $\log\mathcal{L}$ is twice differentiable in terms of $\bm\theta$, 
     \right].
 \end{equation}
 
-When (as in our assumptions) the likelihood is Gaussian,\footnote{This assumes that the merger occurs at a frequency outside the sensitive ``bucket'' of the detector's noise \ac{PSD}. There are additional terms if the \ac{GW} spectrum drops to zero within the sensitive bandwidth of the detector, as can be the case for \ac{NSBH} mergers; see \cite{2014CQGra..31o5005M}.} Equation~(\ref{eq:general-fisher-matrix}) simplifies to
+When (as in our assumptions) the likelihood is Gaussian,\footnote{This assumes that the merger occurs at a frequency outside the sensitive ``bucket'' of the detector's noise \ac{PSD}. There are additional terms if the \ac{GW} spectrum drops to zero within the sensitive bandwidth of the detector, as can be the case for \acl{NSBH} mergers; see Ref.~\cite{2014CQGra..31o5005M}.} Eq.~(\ref{eq:general-fisher-matrix}) simplifies to
 %
 \begin{equation}\label{eq:gaussian-fisher-matrix}
     \mathcal{I}_{jk} = \int_0^\infty \Re \left[
@@ -312,7 +312,7 @@ The top-left block describes only the extrinsic parameters, and is given by
     }.
 \end{equation}
 %
-(This is equivalent to an expression given in \cite{Grover:2013}.) The bottom row and right column of Equation~(\ref{eq:single-detector-block-fisher-matrix}) describe the intrinsic parameters and how they are coupled to the extrinsic parameters. We show in Appendix~\ref{sec:independence-intrinsic-extrinsic} that we need not consider the intrinsic parameters at all if we are concerned only with sky localization.
+(This is equivalent to an expression given in Ref.~\cite{Grover:2013}.) The bottom row and right column of Eq.~(\ref{eq:single-detector-block-fisher-matrix}) describe the intrinsic parameters and how they are coupled to the extrinsic parameters. We show in Appendix~\ref{sec:independence-intrinsic-extrinsic} that we need not consider the intrinsic parameters at all if we are concerned only with sky localization.
 
 For our likelihood, the \ac{CRLB} implies that
 %
@@ -334,9 +334,9 @@ For our likelihood, the \ac{CRLB} implies that
     \right),
 \end{equation}
 %
-where ${\omega_{\mathrm{rms},i}}^2 = {\overline{\omega^2}}_i - {{\overline{\omega}}_i}^2$. This structure implies that errors in \ac{SNR} are uncorrelated with errors in time and phase, and that there is a particular sum and difference of the times and phases that are measured independently (see Appendix~\ref{sec:interpretation-of-errors}).
+where ${\omega_{\mathrm{rms},i}}^2 = {\overline{\omega^2}}_i - {{\overline{\omega}}_i}^2$. This structure implies that errors in the \ac{SNR} are uncorrelated with errors in time and phase and that there is a particular sum and difference of the times and phases that are measured independently (see Appendix~\ref{sec:interpretation-of-errors}).
 
-Reading off the $\tau \tau$ element of the covariance matrix reproduces the timing accuracy in Equation~(24) of \cite{FairhurstTriangulation},
+Reading off the $\tau \tau$ element of the covariance matrix reproduces the timing accuracy in Eq.~(24) of Ref.~\cite{FairhurstTriangulation},
 %
 \begin{equation}\label{eq:timing-crlb}
     \std \left(\hat{\tau}_i - \tau_i \right) \geq \sqrt{\left(\mathcal{I}^{-1}\right)_{\tau\tau}} = \frac{\rho_i}{\omega_{\mathrm{rms},i}}.
@@ -347,15 +347,15 @@ Reading off the $\tau \tau$ element of the covariance matrix reproduces the timi
 \section{Bayesian probability and parameter estimation}
 \label{sec:parameter-estimation}
 
-In the Bayesian framework, parameters are inferred from the data by forming the posterior distribution, $p(\bm\theta|\mathbf y)$, which describes the probability of the parameters given the observations. Bayes' rule relates the likelihood $p(\mathbf y|\bm\theta)$ to the posterior $p(\bm\theta|\mathbf y)$,
+In the Bayesian framework, parameters are inferred from the data by forming the posterior distribution, $p(\bm\theta|\mathbf y)$, which describes the probability of the parameters given the observations. Bayes's rule relates the likelihood $p(\mathbf y|\bm\theta)$ to the posterior $p(\bm\theta|\mathbf y)$,
 %
 \begin{equation}\label{bayes}
 p(\bm\theta|\mathbf y) = \frac{p(\mathbf y|\bm\theta) p(\bm\theta)}{p(\mathbf y)},
 \end{equation}
 %
-introducing the prior distribution $p(\bm\theta)$ which encapsulates previous information about the paramters (for example, arising from earlier observations or from known physical bounds on the parameters), and the evidence $p(\mathbf y)$ which can be thought of as a normalization factor or as describing the parsimoniousness of the model.
+introducing the prior distribution $p(\bm\theta)$ which encapsulates previous information about the parameters (for example, arising from earlier observations or from known physical bounds on the parameters) and the evidence $p(\mathbf y)$ which can be thought of as a normalization factor or as describing the parsimoniousness of the model.
 
-The choice of prior is determined by one's astrophysical assumptions. During \ac{S6} when LIGO's Bayesian \ac{CBC} parameter estimation pipelines were first deployed, the prior was taken to be isotropic in sky location and binary orientation, and uniform in volume, arrival time, and the component masses~\cite{S6PE}.
+The choice of prior is determined by one's astrophysical assumptions. During \acl{S6} when LIGO's Bayesian \ac{CBC} parameter estimation pipelines were first deployed, the prior was taken to be isotropic in the sky location and binary orientation and uniform in volume, arrival time, and the component masses~\cite{S6PE}.
 
 In Bayesian inference, although it is often easy to write down the likelihood or even the full posterior in closed form, usually one is interested in only a subset $\bm\beta$ of all of the model's parameters, the others $\bm\lambda$ being nuisance parameters. In this case, we integrate away the nuisance parameters, forming the marginal posterior
 %
@@ -367,10 +367,10 @@ with $\bm\theta = (\bm\beta, \bm\lambda)$. For instance, for the purpose of loca
 
 % Bayesian parameter estimation has many advantages, including broad generality and the ability to make probabilistically meaningful statements even with very low \ac{SNR} measurements. However, in problems of even modest complexity, the marginalization step involves many-dimensional, ill-behaved integrals. The powerful \ac{MCMC} integration technique has become almost synonymous with Bayesian inference. Though powerful, \ac{MCMC} is inherently non-deterministic and resistant to parallelization, as well as (at least historically) slow. With the most sophisticated \ac{CBC} parameter estimation codes, it still takes days to process a single event. This delay is undesirable for planning targeted \ac{EM} follow\nobreakdashes-up searches of LIGO events.
 
-\section{The \acs{BAYESTAR} likelihood}
+\section{\acs{BAYESTAR} likelihood}
 \label{sec:bayestar-likelihood}
 
-For the purpose of rapid sky localization, we assume that we do not have access to the \ac{GW} data $\mathbf{Y}$ itself, and that our only contact with it is through the \ac{ML} parameter estimates $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\bm\theta}_\mathrm{in}\}$. Although this is a significant departure from conventional \ac{GW} parameter estimation techniques, we can still apply the full Bayesian machinery of Equation~(\ref{eq:marginal-posterior}) to compute a posterior distribution for the sky location.
+For the purpose of rapid sky localization, we assume that we do not have access to the \ac{GW} data $\mathbf{Y}$ itself and that our only contact with it is through the \ac{ML} parameter estimates $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\bm\theta}_\mathrm{in}\}$. Although this is a significant departure from conventional \ac{GW} parameter estimation techniques, we can still apply the full Bayesian machinery of Eq.~(\ref{eq:marginal-posterior}) to compute a posterior distribution for the sky location.
 
 The relevant likelihood is now the probability of the \ac{ML} estimates, conditioned upon the true parameter values, and marginalized over all possible \ac{GW} observations:
 %
@@ -385,11 +385,11 @@ The relevant likelihood is now the probability of the \ac{ML} estimates, conditi
     \, d\mathbf{Y}.
 \end{equation}
 %
-Although we may not be able to evaluate this equation directly, with some educated guesses we can create a likelihood that has many properties in common with it. Any valid approximate likelihood must have the same Fisher matrix as shown in Equation~(\ref{eq:single-detector-block-fisher-matrix}). It must also have the same limiting behavior: it should be periodic in the phase error $\tilde{\gamma}_i$ and go to zero as $\tilde{\tau}_i \rightarrow \pm \infty$, $\hat{\rho}_i \rightarrow 0$, or $\hat{\rho}_i \rightarrow \infty$. Additionally, when $\tilde{\tau}_i = 0$, the distribution of ${\hat{\rho}_i}^2$ should reduce to a noncentral $\chi^2$ distribution with two degrees of freedom, centered about ${\rho_i}^2$, because the complex matched filter time series $z_i(t)$ is Gaussian (under the ideal assumption the \ac{GW} strain time series is Gaussian).
+Although we may not be able to evaluate this equation directly, with some educated guesses we can create a likelihood that has many properties in common with it. Any valid approximate likelihood must have the same Fisher matrix as shown in Eq.~(\ref{eq:single-detector-block-fisher-matrix}). It must also have the same limiting behavior: it should be periodic in the phase error $\tilde{\gamma}_i$ and go to zero as $\tilde{\tau}_i \rightarrow \pm \infty$, $\hat{\rho}_i \rightarrow 0$, or $\hat{\rho}_i \rightarrow \infty$. Additionally, when $\tilde{\tau}_i = 0$, the distribution of ${\hat{\rho}_i}^2$ should reduce to a noncentral $\chi^2$ distribution with 2 degrees of freedom, centered about ${\rho_i}^2$, because the complex matched-filter time series $z_i(t)$ is Gaussian (under the ideal assumption the \ac{GW} strain time series is Gaussian).
 
-These conditions could be satisfied by realizing a multivariate Gaussian distribution with covariance matrix $\Sigma = \mathcal{I}^\intercal$, and then replacing individual quadratic terms in the exponent of the form $-\tilde{\theta}^2/2$ with $\cos{\tilde{\theta}}$.
+These conditions could be satisfied by realizing a multivariate Gaussian distribution with covariance matrix $\Sigma = \mathcal{I}^\intercal$ and then replacing individual quadratic terms in the exponent of the form $-\tilde{\theta}^2/2$ with $\cos{\tilde{\theta}}$.
 
-A more natural way is to plug the signal model from Equation~(\ref{eq:signal-model}) \emph{evaluated at the \ac{ML} parameter estimates} into the single-detector likelihood in Equation~(\ref{eq:gaussian-likelihood-spa}):
+A more natural way is to plug the signal model from Eq.~(\ref{eq:signal-model}) evaluated at the \ac{ML} parameter estimates into the single-detector likelihood in Eq.~(\ref{eq:gaussian-likelihood-spa}):
 %
 \begin{widetext}
 \begin{equation}
@@ -408,7 +408,7 @@ A more natural way is to plug the signal model from Equation~(\ref{eq:signal-mod
 \end{equation}
 \end{widetext}
 %
-If we further assume that \emph{the intrinsic parameters are equal to their \ac{ML} estimates}, $\bm\theta_\mathrm{in} = \hat{\bm\theta}_\mathrm{in}$, then this reduces to what we call the \emph{autocorrelation likelihood},
+If we further assume that the intrinsic parameters are equal to their \ac{ML} estimates, $\bm\theta_\mathrm{in} = \hat{\bm\theta}_\mathrm{in}$, then this reduces to what we call the autocorrelation likelihood,
 %
 \begin{widetext}
 \begin{equation}\label{eq:autocor-likelihood}
@@ -427,7 +427,7 @@ with $\tilde{\gamma}_i = \hat\gamma_i - \gamma_i$, $\tilde{\tau}_i = \hat\tau_i 
     a_i(t; \bm\theta_\mathrm{in}) := \frac{1}{{{\sigma_i}^2(\bm\theta_\mathrm{in})}} \int_0^\infty \frac{\left| H(\omega; \hat{\bm\theta}_\mathrm{in})\right|^2}{S_i(\omega)} e^{i \omega t} \,d\omega.
 \end{equation}
 %
-Some example autocorrelation functions and corresponding likelihoods are shown in Figure~\ref{fig:autocorr-likelihood}. To assemble the joint likelihood for the whole network, we form the product of the autocorrelation likelihoods from the individual detectors:
+Some example autocorrelation functions and corresponding likelihoods are shown in Fig.~\ref{fig:autocorr-likelihood}. To assemble the joint likelihood for the whole network, we form the product of the autocorrelation likelihoods from the individual detectors:
 %
 \begin{multline}
     p\left(\left\{\hat\rho_i, \hat\gamma_i, \hat\tau_i\right\}_i
@@ -439,17 +439,17 @@ Some example autocorrelation functions and corresponding likelihoods are shown i
     \right].
 \end{multline}
 
-In the following section, we discuss some key properties of the autocorreltion likelihood.
+In the following section, we discuss some key properties of the autocorrelation likelihood.
 
 \begin{figure*}
     \includegraphics[width=\textwidth]{autocorr-likelihood}
-    \caption{\label{fig:autocorr-likelihood}The autocorrelation likelihood for a $(1.4, 1.4)$\,$M_\odot$ binary as observed by four detector configurations: from top to bottom, the final sensitivity achieved by the \acs{LIGO} Hanford, \acs{LIGO} Livingston, and Virgo detectors in their ``initial'' configuration, and the final Advanced \acs{LIGO} design sensitivity. The left panels show the noise amplitude spectral densities. The middle panels show the absolute value of the autocorrelation function. The right panel shows the phase-marginalized autocorrelation likelihood for \ac{SNR}=1,~2,~4,~and~8. In the right panel, the time scale is normalized by \ac{SNR} so that one can see that as \ac{SNR} increases, a central parabola is approached (the logarithm of a Gaussian distribution with standard deviation given by the Fisher matrix).}
+    \caption{\label{fig:autocorr-likelihood}The autocorrelation likelihood for a $(1.4, 1.4)$\,$M_\odot$ binary as observed by four detector configurations: from top to bottom, the final sensitivity achieved by the \acs{LIGO} Hanford, \acs{LIGO} Livingston, and Virgo detectors in their ``initial'' configuration and the final Advanced \acs{LIGO} design sensitivity. The left panels show the noise amplitude spectral densities. The middle panels show the absolute value of the autocorrelation function. The right panel shows the phase-marginalized autocorrelation likelihood for \ac{SNR}=1,~2,~4,~and~8. In the right panel, the time scale is normalized by the \ac{SNR} so that one can see that as the \ac{SNR} increases, a central parabola is approached (the logarithm of a Gaussian distribution with standard deviation given by the Fisher matrix).}
 \end{figure*}
 
 \subsection{Properties}
 \label{sec:properties}
 
-First, the autocorrelation likelihood has the elegant feature that if we were to replace the autocorrelation function with the \ac{SNR} time series for the best-matching template, $z(\tau; \hat{\mathbf{\theta}}_\mathrm{in})$, we would recover the likelihood for the full \ac{GW} time series, evaluated at the \ac{ML} estimate of the intrinsic parameters, \emph{viz.}:
+First, the autocorrelation likelihood has the elegant feature that if we were to replace the autocorrelation function with the \ac{SNR} time series for the best-matching template, $z(\tau; \hat{\mathbf{\theta}}_\mathrm{in})$, we would recover the likelihood for the full \ac{GW} time series, evaluated at the \ac{ML} estimate of the intrinsic parameters, viz.:
 %
 \begin{equation}\label{eq:extrinsic-only-likelihood}
     % p\left(z_i(\hat{\tau}, \hat{\bm\theta}_\mathrm{in})
@@ -460,15 +460,15 @@ First, the autocorrelation likelihood has the elegant feature that if we were to
     \right].
 \end{equation}
 %
-(We have ommitted the term $\int |Y_i(\omega)|^2/S(\omega)d\omega$, which takes the place of the earlier ${\hat{\rho}_i}^2$ term and is only important for normalization.) The numerical scheme that we will develop is thus equally applicable for rapid, coincidence-based localization, or as a fast extrinsic marginalization step for the full parameter estimation.
+[We have omitted the term $\int |Y_i(\omega)|^2/S(\omega)d\omega$, which takes the place of the earlier ${\hat{\rho}_i}^2$ term and is only important for normalization.] The numerical scheme that we will develop is thus equally applicable for rapid, coincidence-based localization, or as a fast extrinsic marginalization step for the full parameter estimation.
 
-Second, observe that at the true parameter values, $\hat{\bm\theta}_i = \bm\theta_i$, the logarithms of Equation~(\ref{eq:autocor-likelihood}) and Equation~(\ref{eq:gaussian-likelihood-spa}) have the same Jacobian. This is because the derivatives of the autocorrelation function are
+Second, observe that at the true parameter values, $\hat{\bm\theta}_i = \bm\theta_i$, the logarithms of Eqs.~(\ref{eq:autocor-likelihood}) and~(\ref{eq:gaussian-likelihood-spa}) have the same Jacobian. This is because the derivatives of the autocorrelation function are
 %
 \begin{equation*}
     a^{(n)}(t) = i^n \overline{\omega^n},
 \end{equation*}
 %
-with $\overline{\omega^n}$ defined in Equation~(\ref{eq:angular-frequency-moments}). For example, the first few derivatives are
+with $\overline{\omega^n}$ defined in Eq.~(\ref{eq:angular-frequency-moments}). For example, the first few derivatives are
 %
 \begin{equation*}
     a(0) = 1,
@@ -478,7 +478,7 @@ with $\overline{\omega^n}$ defined in Equation~(\ref{eq:angular-frequency-moment
     \ddot{a}(0) = -\overline{\omega^2}.
 \end{equation*}
 
-Using Equation~(\ref{eq:general-fisher-matrix-second-derivatives}), we can compute the Fisher matrix elements for the autocorrelation likelihood given by Equation~(\ref{eq:autocor-likelihood}), with detector subscript suppressed:
+Using Eq.~(\ref{eq:general-fisher-matrix-second-derivatives}), we can compute the Fisher matrix elements for the autocorrelation likelihood given by Eq.~(\ref{eq:autocor-likelihood}), with the detector subscript suppressed,
 %
 \begin{align}
     \nonumber
@@ -513,23 +513,23 @@ Using Equation~(\ref{eq:general-fisher-matrix-second-derivatives}), we can compu
     }.
 \end{align}
 %
-The notation $I_k$ denotes a modified Bessel function of the first kind. Matrix elements that are not listed have values that are implied by the symmetry of the Fisher matrix. Note that the minus signs are correct but a little confusing: despite them, $\mathcal{I}_{\gamma\gamma}, \mathcal{I}_{\tau\tau} \geq 0$ and $\mathcal{I}_{\gamma\tau} \leq 0$. The time integration limits $[-T, T]$ correspond to a flat prior on arrival time, or a time coincidence window between detectors.
+The notation $I_k$ denotes a modified Bessel function of the first kind. Matrix elements that are not listed have values that are implied by the symmetry of the Fisher matrix. Note that the minus signs are correct but a little confusing; despite them, $\mathcal{I}_{\gamma\gamma}, \mathcal{I}_{\tau\tau} \geq 0$ and $\mathcal{I}_{\gamma\tau} \leq 0$. The time integration limits $[-T, T]$ correspond to a flat prior on arrival time or a time coincidence window between detectors.
 
 \begin{figure*}
     \centering
         \includegraphics[width=\columnwidth]{crlb_tau}
         \includegraphics[width=\columnwidth]{crlb_gamma}
-    \caption[\acl{CRLB} on time and phase accuracy]{\label{fig:crlb-tau}\ac{CRLB} on \ac{RMS} timing uncertainty and phase error, using the likelihood for the full \ac{GW} data (Equation~\ref{eq:gaussian-likelihood-spa}; dashed diagonal line) or the autocorrelation likelihood (Equation~\ref{eq:autocor-likelihood}; solid lines) with a selection of arrival time priors.}
+    \caption[\acl{CRLB} on time and phase accuracy]{\label{fig:crlb-tau}\ac{CRLB} on \acl{RMS} timing uncertainty and phase error, using the likelihood for the full \ac{GW} data [Eq.~(\ref{eq:gaussian-likelihood-spa}); dashed diagonal line] or the autocorrelation likelihood [Eq.~(\ref{eq:autocor-likelihood}); solid lines] with a selection of arrival time priors.}
 \end{figure*}
 
-We can show that the weighting function $w(t; \rho)$ approaches a Dirac delta function as $\rho \rightarrow \infty$, so that the Fisher matrix for the autocorrelation likelihood approaches the Fisher matrix for the full \ac{GW} data, Equation~(\ref{eq:fisher-matrix}), as $\rho \rightarrow \infty$. The Bessel functions asymptotically approach:
+We can show that the weighting function $w(t; \rho)$ approaches a Dirac delta function as $\rho \rightarrow \infty$, so that the Fisher matrix for the autocorrelation likelihood approaches the Fisher matrix for the full \ac{GW} data, Eq.~(\ref{eq:fisher-matrix}), as $\rho \rightarrow \infty$. The Bessel functions asymptotically approach
 %
 \begin{equation*}
     I_0(x), I_1(x) \rightarrow \frac{e^x}{\sqrt{2 \pi x}}
     \textrm{ as } x \rightarrow \infty.
 \end{equation*}
 %
-For large $\rho$, the exponents of $e^{\rho^2}$ dominate Equation~(\ref{eq:fisher-weight-factor}) and we can write:
+For large $\rho$, the exponents of $e^{\rho^2}$ dominate Eq.~(\ref{eq:fisher-weight-factor}), and we can write
 %
 \begin{equation*}
     w(t; \rho) \rightarrow \frac{
@@ -565,7 +565,7 @@ Substituting, we find that $w(t; \rho)$ approaches a normalized Gaussian distrib
 %
 And finally, because the Dirac delta function may be defined as the limit of a Gaussian, $w(t; \rho) \rightarrow \delta(t)$ as $\rho \rightarrow \infty$.
 
-We can now write the Fisher matrix for the autocorrelation likelihood in a way that makes a comparison to the full signal model explicit. Define:
+We can now write the Fisher matrix for the autocorrelation likelihood in a way that makes a comparison to the full signal model explicit. Define
 %
 \begin{align*}
     \mathcal{I}_{\gamma\gamma} &= \rho^2 \cdot \textproto{D}_{\gamma\gamma}(\rho), \\
@@ -577,25 +577,25 @@ Now, the $\textproto{D}_{ij}$%
 %
 \footnote{The Fish(er) factor.}
 %
-contain the integrals from Equations~(\ref{eq:fisher-autocor-gamma-gamma}, \ref{eq:fisher-autocor-tau-tau}, \ref{eq:fisher-autocor-gamma-tau}) and encode the departure of the autocorrelation likelihood from the likelihood of the full data at low \ac{SNR}. All of the $\textproto{D}_{ij}(\rho)$ are sigmoid-type functions that asymptotically approach 1 as $\rho \rightarrow \infty$ (see Figures~\ref{fig:crlb-tau} and~\ref{fig:fishfactor}). The transition \ac{SNR} $\rho_\mathrm{crit}$ is largely the same for all three nontrivial matrix elements, and is determined by the time coincidence window $T$ and the signal bandwidth $\omega_\mathrm{rms}$.
+contain the integrals from Eqs.~(\ref{eq:fisher-autocor-gamma-gamma},~\ref{eq:fisher-autocor-tau-tau},~\ref{eq:fisher-autocor-gamma-tau}) and encode the departure of the autocorrelation likelihood from the likelihood of the full data at a low \ac{SNR}. All of the $\textproto{D}_{ij}(\rho)$ are sigmoid-type functions that asymptotically approach 1 as $\rho \rightarrow \infty$ (see Figs.~\ref{fig:crlb-tau} and~\ref{fig:fishfactor}). The transition \ac{SNR} $\rho_\mathrm{crit}$ is largely the same for all three nontrivial matrix elements, and is determined by the time coincidence window $T$ and the signal bandwidth $\omega_\mathrm{rms}$.
 
 \begin{figure}
     \centering
     \includegraphics{fishfactor}
-    \caption[Ratio of Fisher matrix elements between autocorrelation likelihood and full \acs{GW} data]{\label{fig:fishfactor}Ratio between Fisher matrix elements (solid: $\textproto{D}_{\gamma\gamma}$, dashed: $\textproto{D}_{\gamma\tau}$, dotted: $\textproto{D}_{\tau\tau}$) for the autocorrelation likelihood and the full \ac{GW} data. Colors correspond to different arrival time priors as in Figure~\ref{fig:crlb-tau}.}
+    \caption[Ratio of Fisher matrix elements between autocorrelation likelihood and full \acs{GW} data]{\label{fig:fishfactor}Ratio between Fisher matrix elements (solid: $\textproto{D}_{\gamma\gamma}$, dashed: $\textproto{D}_{\gamma\tau}$, dotted: $\textproto{D}_{\tau\tau}$) for the autocorrelation likelihood and the full \ac{GW} data. Colors correspond to different arrival time priors as in Fig.~\ref{fig:crlb-tau}.}
 \end{figure}
 
 In the limit of large \ac{SNR}, our interpretation is that the point estimates $(\hat\rho, \hat\gamma, \hat\tau)$ contain all of the information about the underlying extrinsic parameters.
 
-On the other hand, in the low \ac{SNR} limit, the diminishing value of $\textproto{D}_{ij}(\rho)$ reflects the fact that some information is lost when the full data $\mathbf{x}$ is discarded. Concretely, as the prior interval $T$ becomes large compared to 1/$\rho\omega_\mathrm{rms}$, the \ac{ML} estimator becomes more and more prone to picking up spurious noise fluctuations far from the true signal. Clearly, when the coincidence window $T$ is kept small as possible, more information is retained in the \ac{ML} point estimates. Put another way, if $T$ is small, then the transition \ac{SNR} $\rho_\mathrm{crit}$ is also small and fainter signals become useful for parameter estimation. In this way, the \ac{BAYESTAR} likelihood exhibits the \emph{threshold effect} that is well\nobreakdashes-known in communication and radar applications \citep{barankin1949locally,mcaulay1969barankin,mcaulay1971barankin}.
+On the other hand, in the low \ac{SNR} limit, the diminishing value of $\textproto{D}_{ij}(\rho)$ reflects the fact that some information is lost when the full data $\mathbf{x}$ are discarded. Concretely, as the prior interval $T$ becomes large compared to 1/$\rho\omega_\mathrm{rms}$, the \ac{ML} estimator becomes more and more prone to picking up spurious noise fluctuations far from the true signal. Clearly, when the coincidence window $T$ is kept as small as possible, more information is retained in the \ac{ML} point estimates. Put another way, if $T$ is small, then the transition \ac{SNR} $\rho_\mathrm{crit}$ is also small and fainter signals become useful for parameter estimation. In this way, the \ac{BAYESTAR} likelihood exhibits the \emph{threshold effect} that is well known in communication and radar applications \citep{barankin1949locally,mcaulay1969barankin,mcaulay1971barankin}.
 
-In the following sections, we describe our prior and our numerical scheme to integrate over nuisance parameters, which amounts to the \ac{BAYESTAR} algorithm.
+In the following sections, we describe our prior and our numerical schemes to integrate over nuisance parameters, which together amount to the \ac{BAYESTAR} algorithm.
 
 \section{Prior and problem setup}
 \label{sec:prior}
 
 The detection pipeline supplies a candidate, $\{\left\{ \hat\rho_i, \hat\gamma_i, \hat\tau_i \right\}_i, \hat{\bm\theta}_\mathrm{in}\}$, and discretely sampled noise \acp{PSD}, $S_i(\omega_j)$, for all detectors. We compute the \ac{GW} signal for a source with intrinsic parameters equal to the detection pipeline's estimate, $H(\omega; \hat{\bm\theta}_\mathrm{in})$.
-Then we find the \ac{SNR}=1 horizon distance $r_{1,i}$ for each detector by numerically integrating Equation~(\ref{eq:horizon}).
+Then, we find the \ac{SNR}=1 horizon distance $r_{1,i}$ for each detector by numerically integrating Eq.~(\ref{eq:horizon}).
 
 We have no explicit prior on the intrinsic parameters; in our analysis they are fixed at their \ac{ML} estimates, $\hat{\bm\theta}_\mathrm{in}$.\footnote{As noted in footnote \ref{footnote:template-banks}, the detection template bank is typically designed to uniformly sample the Jeffreys prior on the intrinsic parameters. Due to the equivalence of marginalization and maximization with respect to a parameter under a Gaussian distribution, fixing the intrinsic parameters at their \ac{ML} estimates is roughly equivalent to selecting the Jeffreys prior.}
 
@@ -640,7 +640,7 @@ The distance prior is a user-selected power of distance,
     \end{cases}
 \end{equation*}
 %
-where $m=2$ for a prior that is uniform in volume, and $m=-1$ for a prior that is uniform in the logarithm of the distance. If a distance prior is not specified, the default is uniform in volume out to the maximum SNR=4 horizon distance:
+where $m=2$ for a prior that is uniform in volume and $m=-1$ for a prior that is uniform in the logarithm of the distance. If a distance prior is not specified, the default is uniform in volume out to the maximum \ac{SNR}=4 horizon distance:
 %
 \begin{equation*}
     m = 2,
@@ -652,12 +652,12 @@ where $m=2$ for a prior that is uniform in volume, and $m=-1$ for a prior that i
 
 Finally, the prior is uniform in $-1 \leq \cos\iota \leq 1$ and $0 \leq \psi < \pi$.
 
-We compute the autocorrelation function for each detector from $t = 0$ to $t = T$ at intervals of $\Delta t = 1/f_s$, where $f_s$ is the smallest power of two that is greater than or equal to the Nyquist rate. Because BNS signals typically terminate at about 1500~Hz, a typical value for $\Delta t$ is $(4096\,\textrm{Hz})^{-1}$. We use a pruned \ac{FFT} because for BNS systems, the \ac{GW} signal remains in LIGO's sensitive band for $\sim$100\nobreakdashes--1000~s, whereas $T \sim 10$~ms.\footnote{See \url{http://www.fftw.org/pruned.html} for a discussion of methods for computing the pruned \ac{FFT}, the first $K$ samples of an \ac{FFT} of length $N$.}
+We compute the autocorrelation function for each detector from $t = 0$ to $t = T$ at intervals of $\Delta t = 1/f_s$, where $f_s$ is the smallest power of 2 that is greater than or equal to the Nyquist rate. Because BNS signals typically terminate at about 1500~Hz, a typical value for $\Delta t$ is $(4096\,\textrm{Hz})^{-1}$. We use a pruned \ac{FFT} because for BNS systems, the \ac{GW} signal remains in LIGO's sensitive band for $\sim$100\nobreakdashes--1000~s, whereas $T \sim 10$~ms.\footnote{See \url{http://www.fftw.org/pruned.html} for a discussion of methods for computing the pruned \ac{FFT}, the first $K$ samples of an \ac{FFT} of length $N$.}
 
 \section{Marginal posterior}
 \label{sec:marginal-posterior}
 
-The marginal posterior as a function of sky location is
+The marginal posterior as a function of the sky location is
 %
 \begin{multline}
     f(\alpha, \delta) \propto
@@ -675,7 +675,7 @@ The marginal posterior as a function of sky location is
     r^m d\phi_c \, dr \, dt_\oplus \, d\cos{\iota} \, d\psi.
 \end{multline}
 
-To marginalize over the coalescence phase, we can write $\tilde{\gamma}_i = \tilde{\gamma}_i^\prime + 2\phi_c$. Then integrating over $\phi_c$ and suppressing normalization factors, we get
+To marginalize over the coalescence phase, we can write $\tilde{\gamma}_i = \tilde{\gamma}_i^\prime + 2\phi_c$. Then, integrating over $\phi_c$ and suppressing normalization factors, we get
 %
 \begin{multline}
     f(\alpha, \delta) \rightarrow
@@ -695,9 +695,9 @@ In the above equation, we need not distinguish between $\tilde{\gamma}_i$ and $\
 
 \subsection{Integral over angles and time}
 
-The integrand is periodic in $\psi$, so simple Newton\nobreakdashes--Cotes quadrature over $\psi$ exhibits extremely rapid convergence (see Figure~\ref{fig:angle-convergence}). We therefore sample the posterior on a regular grid of 10 points from 0 to $\pi$.
+The integrand is periodic in $\psi$, so simple Newton\nobreakdashes--Cotes quadrature over $\psi$ exhibits extremely rapid convergence (see Fig.~\ref{fig:angle-convergence}). We therefore sample the posterior on a regular grid of ten points from 0 to $\pi$.
 
-The integral over $\cos\iota$ converges just as rapidly with Gauss\nobreakdashes--Legendre quadrature (see Figure~\ref{fig:angle-convergence}), so we use a 10\nobreakdashes-point Gauss\nobreakdashes--Legendre rule for integration over $\cos\iota$.
+The integral over $\cos\iota$ converges just as rapidly with Gauss\nobreakdashes--Legendre quadrature (see Fig.~\ref{fig:angle-convergence}), so we use a ten\nobreakdashes-point Gauss\nobreakdashes--Legendre rule for integration over $\cos\iota$.
 
 \begin{figure*}
     \begin{minipage}[t]{0.5\textwidth}
@@ -710,7 +710,7 @@ The integral over $\cos\iota$ converges just as rapidly with Gauss\nobreakdashes
         (b) Inclination angle \\
         \includegraphics{inclination_integral_convergence}
     \end{minipage}
-    \caption{\label{fig:angle-convergence}Relative error in \ac{BAYESTAR} integration scheme as a function of the number of Gaussian quadrature nodes. The two panels describe (a) the integral over the polarization angle $\psi$ and (b) the integral over inclination angle $\iota$.}
+    \caption{\label{fig:angle-convergence}Relative error in the \ac{BAYESTAR} integration scheme as a function of the number of Gaussian quadrature nodes. The two panels describe (a) the integral over the polarization angle $\psi$ and (b) the integral over the inclination angle $\iota$.}
 \end{figure*}
 
 We sample $t_\oplus$ regularly from $-T$ to $T$ at intervals of $\Delta t$. This is typically $\sim 2 (10\,\mathrm{ms})(4096\,\mathrm{Hz}) \approx 80$~samples. We use Catmull\nobreakdashes--Rom cubic splines to interpolate the real and imaginary parts of the autocorrelation functions between samples.
@@ -718,7 +718,7 @@ We sample $t_\oplus$ regularly from $-T$ to $T$ at intervals of $\Delta t$. This
 \subsection{Integral over distance}
 \label{sec:distance}
 
-The distance integral is now performed differently from what we initially described in \cite{leo-singer-thesis,BerryLocalization}; the method described in the present work is about an order of magnitude faster. We define $\rho_i = \omega_i / r$ in order to absorb all of the distance-independent terms in the amplitudes into $\omega_i$, and then define
+The distance integral is now performed differently from what we initially described in Refs.~\cite{leo-singer-thesis,BerryLocalization}; the method described in the present work is about an order of magnitude faster. We define $\rho_i = \omega_i / r$ in order to absorb all of the distance-independent terms in the amplitudes into $\omega_i$ and then define
 %
 \begin{align}
     p^2 &= \frac{1}{2} \sum_i {\omega_i}^2 \label{eq:likelihood-p-factor} \\
@@ -755,7 +755,7 @@ where
     \overline{I}_0(x) &= \exp(-|x|) I_0(x).
 \end{align}
 %
-The coefficients $p^2$ and $b$ are nonnegative and independent of distance. $p$ has a maximum value of
+The coefficients $p^2$ and $b$ are non\nobreakdashes-negative and independent of distance. $p$ has a maximum value of
 %
 \begin{equation}
     p_\mathrm{max} = \sqrt{\frac{1}{2} \sum_i \left(\frac{r_{1,i}}{r}\right)^2}.
@@ -776,7 +776,7 @@ This integral is not particularly amenable to low-order Gaussian quadrature. How
     x = \log p, \qquad y = \log r_0.
 \end{equation}
 %
-As shown in Figure~\ref{fig:radial-integral-interpolant}, the function basically consists of a plateau region in the upper-left half of the plane delimited by the lines $y = x$ and $x = \log p_0$, with
+As shown in Fig.~\ref{fig:radial-integral-interpolant}, the function basically consists of a plateau region in the upper-left half of the plane delimited by the lines $y = x$ and $x = \log p_0$, with
 %
 \begin{equation}
     p_0 = \frac{1}{2}
@@ -806,7 +806,7 @@ The lookup table for $\mathscr{G}$ is populated as follows. If we neglect both t
     r = r_\pm = \left(\frac{1}{r_0} \mp \frac{\sqrt{-\log\eta}}{p}\right)^{-1}.
 \end{equation}
 
-We have now identified up to five breakpoints that partition the distance integrand into up to four intervals with quantitatively distinct behavior. These intervals are depicted in Figure~\ref{fig:radial_integrand} with distance increasing from left to right. There is a left\nobreakdashes-hand or small distance tail in which the integrand is small and monotonically increasing, a left\nobreakdashes- and right\nobreakdashes-hand side of the maximum likelihood peak, and a right\nobreakdashes-hand tail in which the integrand is small and monotonically decreasing. These breakpoints are:
+We have now identified up to five breakpoints that partition the distance integrand into up to four intervals with quantitatively distinct behavior. These intervals are depicted in Fig.~\ref{fig:radial_integrand} with the distance increasing from left to right. There is a left\nobreakdashes-hand or small distance tail in which the integrand is small and monotonically increasing, a left\nobreakdashes- and right\nobreakdashes-hand side of the maximum likelihood peak, and a right\nobreakdashes-hand tail in which the integrand is small and monotonically decreasing. These breakpoints are
 %
 \begin{equation}
     r_\mathrm{break} = \{ r \in
@@ -823,24 +823,24 @@ We have now identified up to five breakpoints that partition the distance integr
     \leq r_\mathrm{max}\}.
 \end{equation}
 
-We use these breakpoints as initial subdivisions in an adaptive Gaussian quadrature algorithm\footnote{for instance, \ac{GSL}'s \texttt{gsl\_integrate\_qagp} function, \url{http://www.gnu.org/software/gsl/manual/html_node/QAGP-adaptive-integration-with-known-singular-points.html}}. This function estimates the integral over each subdivision and each interval's contribution to the total error, then subdivides the interval whose error contribution is largest. Subdivisions continue until a fixed total fractional error is reached. In this way, most integrand evaluations are expended on the most important distance interval, whether that happens to be the tails (when the posterior is dominated by the prior) or the peak (when the posterior is dominated by the observations).
+We use these breakpoints as initial subdivisions in an adaptive Gaussian quadrature algorithm\footnote{For instance, \acl{GSL}'s \texttt{gsl\_integrate\_qagp} function, \url{http://www.gnu.org/software/gsl/manual/html_node/QAGP-adaptive-integration-with-known-singular-points.html}.}. This function estimates the integral over each subdivision and each interval's contribution to the total error, then subdivides the interval that contributes the most to the error. Subdivisions continue until a fixed total fractional error is reached. In this way, most integrand evaluations are expended on the most important distance interval, whether that happens to be the tails (when the posterior is dominated by the prior) or the peak (when the posterior is dominated by the observations).
 
 \begin{figure}
     \begin{center}
         \includegraphics[width=\columnwidth]{radial_integrand}
     \end{center}
-    \caption{\label{fig:radial_integrand}Illustration of initial subdivisions for distance integration scheme. Distance increases from left to right. In the color version, the left\nobreakdashes-hand tail, the left\nobreakdashes- and right\nobreakdashes-hand sides of the maximum likelihood peak, and the right\nobreakdashes-hand tail, are colored cyan, red, green, and blue, respectively.}
+    \caption{\label{fig:radial_integrand}Illustration of initial subdivisions for the distance integration scheme. The distance increases from left to right. In the color version, the left\nobreakdashes-hand tail, the left\nobreakdashes- and right\nobreakdashes-hand sides of the maximum likelihood peak, and the right\nobreakdashes-hand tail, are colored cyan, red, green, and blue, respectively.}
 \end{figure}
 
 \subsubsection{Interpolation}
 
-The interpolant is evaluated slightly differently depending on which of the three regions marked I, II, and III in Figure~\ref{fig:radial-integral-interpolant} contains the point of interest. In region I, we use bicubic interpolation of $\log \mathcal{G}$ in $x$ and $y$. In region II, we use univariate cubic interpolation of $\log \mathcal{G}$ in $x$, with the sample points taken from the horizontal boundary between regions I and II. In region III, we use univariate cubic interpolation of $\log \mathcal{G}$ in $u = (x - y) / 2$, with the sample points taken from the downward diagonal boundary between regions I and III. Finally, the distance integral $\mathscr{F}$ is obtained by multiplying the interpolated value of $\mathscr{G}$ by $\exp\left(p^2/{r_0}^2\right)$. For a $400\times400$ grid, the entire lookup table scheme is accurate to a relative error of about $10^{-5}$ in $\mathscr{F}$ (see Figure~\ref{fig:distance_interpolant_convergence}).
+The interpolant is evaluated slightly differently depending on which of the three regions marked I, II, and III in Fig.~\ref{fig:radial-integral-interpolant} contains the point of interest. In region I, we use bicubic interpolation of $\log \mathcal{G}$ in $x$ and $y$. In region II, we use univariate cubic interpolation of $\log \mathcal{G}$ in $x$, with the sample points taken from the horizontal boundary between regions I and II. In region III, we use univariate cubic interpolation of $\log \mathcal{G}$ in $u = (x - y) / 2$, with the sample points taken from the downward diagonal boundary between regions I and III. Finally, the distance integral $\mathscr{F}$ is obtained by multiplying the interpolated value of $\mathscr{G}$ by $\exp\left(p^2/{r_0}^2\right)$. For a $400\times400$ grid, the entire lookup table scheme is accurate to a relative error of about $10^{-5}$ in $\mathscr{F}$ (see Fig.~\ref{fig:distance_interpolant_convergence}).
 
 \begin{figure}
     \begin{center}
         \includegraphics[width=\columnwidth]{distance_interpolant_convergence}
     \end{center}
-    \caption{\label{fig:distance_interpolant_convergence}Relative error in \ac{BAYESTAR} distance integral interpolation scheme as a function of the size of the grid.}
+    \caption{\label{fig:distance_interpolant_convergence}Relative error in the \ac{BAYESTAR} distance integral interpolation scheme as a function of the size of the grid.}
 \end{figure}
 
 \section{Adaptive HEALPix sampling}
@@ -848,65 +848,65 @@ The interpolant is evaluated slightly differently depending on which of the thre
 
 We have explained how we evaluate the marginal posterior at a given sky location. Now we must specify where we choose to evaluate it.
 
-Our sampling of the sky relies completely on the \acl{HEALPix} (\acsu{HEALPix}, \cite{healpix}), a special data structure designed for all\nobreakdashes-sky maps. \ac{HEALPix} divides the sky into equal\nobreakdashes-area pixels. There is a hierarchy of \ac{HEALPix} resolutions. A \ac{HEALPix} resolution may be designated by its order $N$. The $N=0$th order or base tiling has 12 pixels. At every successive order, each tile is subdivided into four new tiles. A resolution may also be referred to by the number of subdivisions along each side of the base tiles, $N_\mathrm{side} = 2^N$. There are $N_\mathrm{pix} = 12 {N_\mathrm{side}}^2$ pixels at any given resolution. The \ac{HEALPix} projection uniquely specifies the coordinates of the center of each pixel by providing a mapping from the resolution and pixel index $(N_\mathrm{side}, i_\mathrm{pix})$ to right ascension and declination $(\alpha, \delta)$.
+Our sampling of the sky relies completely on \ac{HEALPix}~\cite{healpix}, a special data structure designed for all\nobreakdashes-sky maps. \ac{HEALPix} divides the sky into equal\nobreakdashes-area pixels. There is a hierarchy of \ac{HEALPix} resolutions. A \ac{HEALPix} resolution may be designated by its order $N$. The $N=0$th order or base tiling has 12 pixels. At every successive order, each tile is subdivided into four new tiles. A resolution may also be referred to by the number of subdivisions along each side of the base tiles, $N_\mathrm{side} = 2^N$. There are $N_\mathrm{pix} = 12 {N_\mathrm{side}}^2$ pixels at any given resolution. The \ac{HEALPix} projection uniquely specifies the coordinates of the center of each pixel by providing a mapping from the resolution and pixel index $(N_\mathrm{side}, i_\mathrm{pix})$ to right ascension and declination $(\alpha, \delta)$.
 
-The \ac{BAYESTAR} adaptive sampling process works as follows. We begin by evaluating the posterior probability density at the center of each of the $N_{\mathrm{pix},0} = 3072$ pixels of an $N_{\mathrm{side},0}=16$ \ac{HEALPix} grid. At this resolution, each pixel has an area of 13.4~deg$^2$. We then rank the pixels by contained probability (assuming constant probability density within a pixel), and subdivide the most probable $N_{\mathrm{pix},0}/4$ pixels into $N_{\mathrm{pix},0}$ new daughter pixels. We then evaluate the posterior again at the centers of the new daughter pixels, sort again, and repeat seven times. After the last iteration, we have evaluated the posterior probability density a total of $8 N_{\mathrm{pix},0}$ times. On \emph{most} subdivision steps, we descend one level deeper in \ac{HEALPix} resolution. This process is illustrated in Figure~\ref{fig:adaptive-illustration}.
+The \ac{BAYESTAR} adaptive sampling process works as follows. We begin by evaluating the posterior probability density at the center of each of the $N_{\mathrm{pix},0} = 3072$ pixels of an $N_{\mathrm{side},0}=16$ \ac{HEALPix} grid. At this resolution, each pixel has an area of 13.4~deg$^2$. We then rank the pixels by contained probability (assuming constant probability density within a pixel) and subdivide the most probable $N_{\mathrm{pix},0}/4$ pixels into $N_{\mathrm{pix},0}$ new daughter pixels. We then evaluate the posterior again at the centers of the new daughter pixels, sort again, and repeat seven times. By the end of the last iteration, we have evaluated the posterior probability density a total of $8 N_{\mathrm{pix},0}$ times. On \emph{most} subdivision steps, we descend one level deeper in \ac{HEALPix} resolution. This process is illustrated in Fig.~\ref{fig:adaptive-illustration}.
 
 \begin{figure*}
     \includegraphics[width=\textwidth]{illustration}
     \caption{\label{fig:adaptive-illustration}Illustration of the \ac{BAYESTAR} adaptive HEALPix sampling scheme.}
 \end{figure*}
 
-The resulting map is a tree structure that describes a mesh of pixels with different resolutions. An example \ac{BAYESTAR} subdivision is shown in Figure~\ref{fig:adaptive-mesh}. To convert this mesh into a FITS image, we traverse the tree and flatten it into the highest resolution represented. The highest possible resolution is $N_\mathrm{side}=2^{11}$, with an area of $\approx 10^{-3}$~deg$^2$ per pixel.\footnote{Although the resulting sky map contains $N_\mathrm{pix} \approx 5\times10^6$ pixels, at most $\approx 2\times10^4$ pixels have distinct values. For the purpose of delivery to observers, therefore, the output is always \texttt{gzip}\nobreakdashes-compressed with a ratio of $\approx 250:1$.}
+The resulting map is a tree structure that describes a mesh of pixels with different resolutions. An example \ac{BAYESTAR} subdivision is shown in Fig.~\ref{fig:adaptive-mesh}. To convert this mesh into a \ac{FITS}~\cite{FITS} image, we traverse the tree and flatten it into the highest resolution represented. The highest possible resolution is $N_\mathrm{side}=2^{11}$, with an area of $\approx 10^{-3}$~deg$^2$ per pixel.\footnote{Although the resulting sky map contains $N_\mathrm{pix} \approx 5\times10^6$ pixels, at most $\approx 2\times10^4$ pixels have distinct values. For the purpose of delivery to observers, therefore, the output is always \texttt{gzip}\nobreakdashes-compressed with a ratio of $\approx 250:1$.}
 
 \begin{figure}
     \includegraphics[width=\columnwidth]{adaptive_mesh}
-    \caption{\label{fig:adaptive-mesh}An example multi\nobreakdashes-resultion \ac{HEALPix} mesh arising from the \ac{BAYESTAR} sampling scheme (plotted in a cylindrical projection). This is event 18951 from \cite{FirstTwoYears}.}
+    \caption{\label{fig:adaptive-mesh}An example multiresolution \ac{HEALPix} mesh arising from the \ac{BAYESTAR} sampling scheme (plotted in a cylindrical projection). This is event 18951 from Ref.~\cite{FirstTwoYears}.}
 \end{figure}
 
 \section{Parallelization}
 
-\ac{MCMC} and similar stochastic schemes are typically very resistant to parallelization. However, \ac{BAYESTAR} is completely deterministic and easily parallelizable because each pixel can be evaluated independently from all of the others. \ac{BAYESTAR} consists of nine computationally intensive loops: the generation of the distance integral lookup table and the eight loops over pixels in the adaptive HEALPix sampling step. The iterations of each loop are distributed across multiple cores using OpenMP\footnote{http://openmp.org/} compiler directives. In Section~\ref{sec:run-time}, we will show that \ac{BAYESTAR}'s run time is almost perfectly proportional to the number of cores, demonstrating that the serial sections (the sorts between the adaptation steps) are a negligible contribution to the overall wall clock time.
+\ac{MCMC} and similar stochastic schemes are typically very resistant to parallelization. However, \ac{BAYESTAR} is completely deterministic and easily parallelizable because each pixel can be evaluated independently from all of the others. \ac{BAYESTAR} consists of nine computationally intensive loops: the generation of the distance integral lookup table and the eight loops over pixels in the adaptive HEALPix sampling step. The iterations of each loop are distributed across multiple cores using OpenMP\footnote{\url{http://openmp.org/}.} compiler directives. In Sec.~\ref{sec:run-time}, we will show that \ac{BAYESTAR}'s run time is almost perfectly proportional to the number of cores, demonstrating that the serial sections (the sorts between the adaptation steps) are a negligible contribution to the overall wall clock time.
 
 \section{Case study}
 \label{sec:case-study}
 
-We have completed our description of the \ac{BAYESTAR} algorithm. In \cite{FirstTwoYears}, the authors presented a comprehensive and astrophysically realistic sample of simulated \ac{BNS} mergers. We focused on the first two planned Advanced LIGO and Virgo observing runs as desribed in \cite{LIGOObservingScenarios}. That work presented a catalog of 500 sky localizations from \ac{BAYESTAR} and LALINFERENCE, and dealt with the quantitave position reconstruction accuracy as well as the qualitative sky morphologies. In the present work, we will use the same data set, but instead focus on demonstrating the correctness and performance of the \ac{BAYESTAR} algorithm.
+We have completed our description of the \ac{BAYESTAR} algorithm. In Ref.~\cite{FirstTwoYears}, the authors presented a comprehensive and astrophysically realistic sample of simulated \ac{BNS} mergers. We focused on the first two planned Advanced LIGO and Virgo observing runs as desribed in Ref.~\cite{LIGOObservingScenarios}. That work presented a catalog of 500 sky localizations from \ac{BAYESTAR} and LALINFERENCE and dealt with the quantitative position reconstruction accuracy as well as the qualitative sky morphologies. In the present work, we will use the same data set but instead focus on demonstrating the correctness and performance of the \ac{BAYESTAR} algorithm.
 
 \subsection{Observing scenarios}
 
-To review the assumptions made in \cite{FirstTwoYears}, the two scenarios are:
+To review the assumptions made in Ref.~\cite{FirstTwoYears}, the two scenarios are:
 
-\paragraph*{2015} The first Advanced \acs{LIGO} observing run, or ``O1'', scheduled to start in September 2015 and continue for three months. There are only two detectors participating in this run: \acs{LIGO} Hanford (``H'') and \acs{LIGO} Livingston (``L''). Both detectors are expected to operate with a direction\nobreakdashes-averaged \ac{BNS} merger range of 40\nobreakdashes--80\,Mpc (though ongoing Advanced \acs{LIGO} commissioning suggests that the higher end of this range will be achieved). As a result of having only two detectors, most localizations are long, thin arcs a few degrees wide and tens to hundreds of degrees long. The median 90\% credible area is about 600\,deg$^2$.
+\textit{2015}.---The first Advanced \acs{LIGO} observing run, or ``O1,'' scheduled to start in September 2015 and continue for three months. There are only two detectors participating in this run: \acs{LIGO} Hanford (H) and \acs{LIGO} Livingston (L). Both detectors are expected to operate with a direction\nobreakdashes-averaged \ac{BNS} merger range of 40\nobreakdashes--80\,Mpc (though ongoing Advanced \acs{LIGO} commissioning suggests that the higher end of this range will be achieved). As a result of having only two detectors, most localizations are long, thin arcs a few degrees wide and tens to hundreds of degrees long. The median 90\% credible area is about 600\,deg$^2$.
 
-\paragraph*{2016} The second observing run, ``O1'', with the two between Advanced \acs{LIGO} detectors, upgraded to a \ac{BNS} range of 80\nobreakdashes--120\,Mpc, operated jointly with the newly commissioned Advanced Virgo detector (``V''), operating at a range of 20\nobreakdashes--60\,Mpc. The run is envisioned as lasting for six months in 2016\nobreakdashes--2017. The detectors are assumed to have random and independent 80\% duty cycles. Consequently, all three detectors (``HLV'') are in science mode about half of the time, with the remaining time divided roughly equally between each of the possible pairs (``HL'', ``HV'', or ``LV'') and one or fewer detectors (at least two \ac{GW} facilities are required for a detection). Virgo's range is assumed to be somewhat less than \acs{LIGO}'s because its commissioning timetable is about a year behind. Although the simulated signals are generally too weak in Virgo to trigger the matched\nobreakdashes-filter pipeline and contribute to \emph{detection}, even these sub\nobreakdashes-threshold signals aid in position reconstruction with LALINFERENCE by lifting degeneracies. As a result, the median 90\% credible area decreases to about 200\,deg$^2$.
+\textit{2016}.---The second observing run, ``O2,'' with the two between Advanced \acs{LIGO} detectors, upgraded to a \ac{BNS} range of 80\nobreakdashes--120\,Mpc, operated jointly with the newly commissioned Advanced Virgo detector (V), operating at a range of 20\nobreakdashes--60\,Mpc. The run is envisioned as lasting for six months in 2016\nobreakdashes--2017. The detectors are assumed to have random and independent 80\% duty cycles. Consequently, all three detectors (HLV) are in science mode about half of the time, with the remaining time divided roughly equally between each of the possible pairs (HL, HV, or LV) and one or fewer detectors (at least two \ac{GW} facilities are required for a detection). Virgo's range is assumed to be somewhat less than \acs{LIGO}'s because its commissioning time table is about a year behind. Although the simulated signals are generally too weak in Virgo to trigger the matched\nobreakdashes-filter pipeline and contribute to \emph{detection}, even these subthreshold signals aid in position reconstruction with LALINFERENCE by lifting degeneracies. As a result, the median 90\% credible area decreases to about 200\,deg$^2$.
 
 All simulated sources have component masses distributed uniformly between 1.2 and 1.6\,$M_\odot$ and randomly oriented spins with dimensionless magnitudes $\chi = c|\mathbf{S}|/Gm^2$ between -0.05 and +0.05. Sky positions and binary orientations are random and isotropic. Distances are drawn uniformly from ${D_\mathrm{L}}^3$, reflecting a uniform source population (neglecting cosmological effects, which are small within the Advanced \acs{LIGO} \ac{BNS} range).
 
 \subsection{Detection and localization}
 
-The simulated waveforms were deposited in Gaussian noise that has been filtered to have the \acp{PSD} consistent with \cite{LIGOObservingScenarios}. They were detected using the real\nobreakdashes-time matched\nobreakdashes-filter pipeline, GSTLAL\_INSPIRAL \citep{Cannon:2011vi}. Candidates with estimated \acp{FAR} less than $10^{-2}$\,yr$^{-1}$ were considered to be ``detections.'' Because using Gaussian noise results in lower \acp{FAR} than would be calculated in realistically glitchy detector noise, we imposed an additional detection threshold on the network \ac{SNR}, $\hat{\rho} \geq 12$, which has been found to correspond to a comparable \ac{FAR} in the initial \ac{LIGO} runs.\footnote{See \cite{BerryLocalization} for an analysis of the effect of glitchy noise on detection and parameter estimation.} Localizations for the ``detections'' were generated with \ac{BAYESTAR} as well as the functionally equivalent and interchangeable LALINFERENCE\_MCMC, LALINFERENCE\_NEST, and LALINFERENCE\_BAMBI samplers (collectively referred to as LALINFERENCE).
+The simulated waveforms were deposited in Gaussian noise that has been filtered to have the \acp{PSD} consistent with Ref.~\cite{LIGOObservingScenarios}. They were detected using the real\nobreakdashes-time matched\nobreakdashes-filter pipeline, GSTLAL\_INSPIRAL \citep{Cannon:2011vi}. Candidates with estimated \acp{FAR} less than $10^{-2}$\,yr$^{-1}$ were considered to be ``detections.'' Because using Gaussian noise results in lower \acp{FAR} than would be calculated in realistically glitchy detector noise, we imposed an additional detection threshold on the network \ac{SNR}, $\hat{\rho} \geq 12$, which has been found to correspond to a comparable \ac{FAR} in the initial \ac{LIGO} runs.\footnote{See Ref.~\cite{BerryLocalization} for an analysis of the effect of glitchy noise on detection and parameter estimation.} Localizations for the detections were generated with \ac{BAYESTAR} as well as the functionally equivalent and interchangeable LALINFERENCE\_MCMC, LALINFERENCE\_NEST, and LALINFERENCE\_BAMBI samplers (collectively referred to as LALINFERENCE).
 
 \subsection{Areas}
 
-We measured sky localization areas for each event as follows. First, we ranked the \ac{HEALPix} pixels by descending posterior probability. Then, we computed the cumulative sum of the pixels in that order. Finally, we searched for the index of the pixel whose cumulative sum was equal to a given value: for example, 0.9 if we are interested in the 90\% credible area. That pixel index times the area per pixel is the area of the smallest region of the specified credible level. This area can be thought of measuring the precision of the sky localization: it is a measure of the scale of the posterior distribution.
+We measured sky localization areas for each event as follows. First, we ranked the \ac{HEALPix} pixels by descending posterior probability. Then, we computed the cumulative sum of the pixels in that order. Finally, we searched for the index of the pixel of which the cumulative sum was equal to a given value: for example, 0.9 if we are interested in the 90\% credible area. That pixel index times the area per pixel is the area of the smallest region of the specified credible level. This area can be thought of measuring the precision of the sky localization: it is a measure of the scale of the posterior distribution.
 
 We can construct a second measure, called the searched area, as the smallest such constructed area that contains the true location of the source. A telescope with a \ac{FOV} that is small compared to the characteristic scale of the posterior would intercept the true location of the source after covering the searched area. This measure is mainly useful because it measures the accuracy of the sky localization independently of the precision. In other words, it treats the sky map as merely a ranking statistic.
 
-Histograms of the 90\% credible area and the searched area are shown in Figure~\ref{fig:area-hist}, broken down by observing scenario (2015 or 2016) and detector network (HL, HV, LV, or HLV). Note that there are no stastically significant differences in areas between \ac{BAYESTAR} and LALINFERENCE, with the exception in the 2016/HLV configuration, for which some LALINFERENCE sky maps span about an order of magnitude less area than \ac{BAYESTAR}. If we consider only events for which all three detectors contained a signal that was loud enough to trigger the matched\nobreakdashes-filter pipeline, the difference becomes much smaller and insignificant within 95\% error bars. This is because if the signal is too weak to trigger the detection pipeline in one of the detectors, then \ac{BAYESTAR} receives no information about that detector. This issue does not occur in the two\nobreakdashes-detector configurations (HL, HV, or LV) because two or more triggers are required to report a detection candidate.
+Histograms of the 90\% credible area and the searched area are shown in Fig.~\ref{fig:area-hist}, broken down by observing scenario (2015 or 2016) and detector network (HL, HV, LV, or HLV). Note that there are no statistically significant differences in areas between \ac{BAYESTAR} and LALINFERENCE, with the exception in the 2016/HLV configuration, for which some LALINFERENCE sky maps span about an order of magnitude less area than \ac{BAYESTAR}. If we consider only events for which all three detectors contained a signal that was loud enough to trigger the matched\nobreakdashes-filter pipeline, the difference becomes much smaller and insignificant within 95\% error bars. This is because if the signal is too weak to trigger the detection pipeline in one of the detectors, then \ac{BAYESTAR} receives no information about that detector. This issue does not occur in the two\nobreakdashes-detector configurations (HL, HV, or LV) because two or more triggers are required to report a detection candidate.
 
 \begin{figure*}
     \includegraphics{area-hist}
-    \caption{\label{fig:area-hist}Cumulative histograms of sky area, broken down by observing run and detector network. The plots in the left column show the 90\% credible area and the plots in the right column show the searched area. From top bottom, the rows refer to the following observing scenarios/network configurations: 2015/HL, 2016/HL, 2016/HV, 2016/LV, 2016/HLV. The shaded regions represent the 95\% confidence bounds. The magenta lines are represent \ac{BAYESTAR} and the blue lines LALINFERENCE. Where relevant, dotted lines show all events in the given network configuratoin and solid lines show only events for which the matched\nobreakdashes-filter pipeline triggered on all operating detectors. Note that statistically significant differences in areas between the \ac{BAYESTAR} and LALINFERENCE localizations occur only for events that were below the detection threshold in one or more detectors.}
+    \caption{\label{fig:area-hist}Cumulative histograms of sky area, broken down by observing run and detector network. The plots in the left column show the 90\% credible area and the plots in the right column show the searched area. From top bottom, the rows refer to the following observing scenarios/network configurations: 2015/HL, 2016/HL, 2016/HV, 2016/LV, and 2016/HLV. The shaded regions represent the 95\% confidence bounds. The magenta lines represent \ac{BAYESTAR} and the blue lines LALINFERENCE. Where relevant, dotted lines show all events in the given network configuration and solid lines show only events for which the matched\nobreakdashes-filter pipeline triggered on all operating detectors. Note that statistically significant differences in areas between the \ac{BAYESTAR} and LALINFERENCE localizations occur only for events that were below the detection threshold in one or more detectors.}
 \end{figure*}
 
-This is a significant issue for the 2016 configuration, because the most accurate localizations are possible when all three detectors are operating. However, there may be a simple remedy. As we noted in Section~\ref{sec:properties}, the \ac{BAYESTAR} likelihood can be modified to use, instead of the times, phases, and amplitudes on arrival, the full complex matched\nobreakdashes-filter time series from all detectors. The detection pipeline, GSTLAL\_INSPIRAL, would have to be modifed to save and transmit a small interval of the complex \ac{SNR} time series (perhaps a few tens of milliseconds) around the time of each detection candidate. In addition to supplying the missing information for sub\nobreakdashes-threshold signals, this would make \ac{BAYESTAR} mathematically equivalent to the LALINFERENCE analysis, but with the intrinsic parameters fixed to their maximum\nobreakdashes-likelihood values. This idea will be pursued in future work.
+This is a significant issue for the 2016 configuration, because the most accurate localizations are possible when all three detectors are operating. However, there may be a simple remedy. As we noted in Sec.~\ref{sec:properties}, the \ac{BAYESTAR} likelihood can be modified to use, instead of the times, phases, and amplitudes on arrival, the full complex matched\nobreakdashes-filter time series from all detectors. The detection pipeline, GSTLAL\_INSPIRAL, would have to be modified to save and transmit a small interval of the complex \ac{SNR} time series (perhaps a few tens of milliseconds) around the time of each detection candidate. In addition to supplying the missing information for subthreshold signals, this would make \ac{BAYESTAR} mathematically equivalent to the LALINFERENCE analysis, but with the intrinsic parameters fixed to their maximum\nobreakdashes-likelihood values. This idea will be pursued in future work.
 
-\subsection{Self consistency}
+\subsection{Self-consistency}
 
-As we observed above, the area of a given credible region describes the precision of the sky localization, whereas the searched area describes the accuracy. However, self consistency requires that the two are related. For example, we should find that on average 90\% of events have their true locations contained within their respective 90\% credible regions. More generally, if we make a cumulative histogram of the credible levels corresponding to the searched areas of all of the events, then we should obtain a diagonal line (with small deviations due to finite sample size). This test, popularized for \ac{GW} data analysis by \cite{SiderySkyLocalizationComparison}, is a necessary but not sufficient condition for the validity of any Bayesian parameter estimation scheme.
+As we observed above, the area of a given credible region describes the precision of the sky localization, whereas the searched area describes the accuracy. However, self-consistency requires that the two are related. For example, we should find that on average 90\% of events have their true locations contained within their respective 90\% credible regions. More generally, if we make a cumulative histogram of the credible levels corresponding to the searched areas of all of the events, then we should obtain a diagonal line (with small deviations due to finite sample size). This test, popularized for \ac{GW} data analysis by Ref.~\cite{SiderySkyLocalizationComparison}, is a necessary but not sufficient condition for the validity of any Bayesian parameter estimation scheme.
 
-It is already well established that LALINFERENCE localizations satisfy the $P$\nobreakdashes--$P$ plot test when deployed with accurate templates and reasonable priors. We found at first that \ac{BAYESTAR}'s $P$\nobreakdashes--$P$ plots tended to sag below the diagonal, indicating that though the accuracy (i.e., searched area) was comparable to LALINFERENCE, the \emph{precision} was overstated, with confidence intervals that were only about 70\% of the correct area. This was rectified by pre\nobreakdashes-scaling the \acp{SNR} from GSTLAL\_INSPIRAL by a factor of 0.83 prior to running \ac{BAYESTAR}. This correction factor suggests that, for example, an \ac{SNR} 10 trigger from GSTLAL\_INSPIRAL has the \emph{effective information content} of an \ac{SNR} 8.3 signal. The missing information may be due to losses from the discreteness of the template bank, from the \ac{SVD}, from mismatch between the matched\nobreakdashes-filter templates and the simulated signals, from the small but nonzero correlations between masses and intrinsic parameters, or from elsewhere within the detection pipeline. The correction is hard\nobreakdashes-coded into the rapid localization. With it, the $P$\nobreakdashes--$P$ plots are diagonalized without negatively affecting the searched area (see Figure~\ref{fig:pp}).
+It is already well established that LALINFERENCE localizations satisfy the $P$\nobreakdashes--$P$ plot test when deployed with accurate templates and reasonable priors. We found at first that \ac{BAYESTAR}'s $P$\nobreakdashes--$P$ plots tended to sag below the diagonal, indicating that though the accuracy (i.e., searched area) was comparable to LALINFERENCE, the \emph{precision} was overstated, with confidence intervals that were only about 70\% of the correct area. This was rectified by prescaling the \acp{SNR} from GSTLAL\_INSPIRAL by a factor of 0.83 prior to running \ac{BAYESTAR}. This correction factor suggests that, for example, a \ac{SNR}=10 trigger from GSTLAL\_INSPIRAL has the \emph{effective information content} of a \ac{SNR}=8.3 signal. The missing information may be due to losses from the discreteness of the template bank, from the \acl{SVD}, from mismatch between the matched\nobreakdashes-filter templates and the simulated signals, from the small but nonzero correlations between masses and intrinsic parameters, or from elsewhere within the detection pipeline. The correction is hard coded into the rapid localization. With it, the $P$\nobreakdashes--$P$ plots are diagonalized without negatively affecting the searched area (see Fig.~\ref{fig:pp}).
 
 \begin{figure*}
     \begin{center}
@@ -919,7 +919,7 @@ It is already well established that LALINFERENCE localizations satisfy the $P$\n
 \subsection{Run time}
 \label{sec:run-time}
 
-Since \ac{BAYESTAR} is designed as one of the final steps in the real\nobreakdashes-time \ac{BNS} search, it is important to characterize how long it takes to calculate a sky map. We compiled \ac{BAYESTAR} with the Intel~C~Compiler~(\texttt{icc}) at the highest architecture\nobreakdashes-specific optimization setting (\texttt{-ipo~-O3~-xhost}). We timed it under Scientific~Linux~6.1 on a Supermicro SuperServer 6028TP\nobreakdashes-HTTR system with dual 8\nobreakdashes-core Intel Xeon E5\nobreakdashes-2630~v3 CPUs clocked at 2.40\,GHz, capable of executing 32 threads simultaneously (with hyperthreading). In Figure~\ref{fig:runtimes}, we show how long it took to calculate a localization with \ac{BAYESTAR} as the number of OpenMP threads was varied from 1 to 32. This is a violin plot, a smoothed vertical histogram. The magenta regions show run times for a two\nobreakdashes-detector network (HL) modeled on the first scheduled Advanced \ac{LIGO} observing run in 2015, and the blue regions show run times for a three\nobreakdashes-detector network (HLV) based on the second planned observing run in 2016. These are the two observing scenarios that are discussed in \cite{FirstTwoYears}.
+Since \ac{BAYESTAR} is designed as one of the final steps in the real\nobreakdashes-time \ac{BNS} search, it is important to characterize how long it takes to calculate a sky map. We compiled \ac{BAYESTAR} with the Intel~C~Compiler~(\texttt{icc}) at the highest architecture\nobreakdashes-specific optimization setting (\texttt{-ipo~-O3~-xhost}). We timed it under Scientific~Linux~6.1 on a Supermicro SuperServer 6028TP\nobreakdashes-HTTR system with dual 8\nobreakdashes-core Intel Xeon E5\nobreakdashes-2630~v3 CPUs clocked at 2.40\,GHz, capable of executing 32 threads simultaneously (with hyperthreading). In Fig.~\ref{fig:runtimes}, we show how long it took to calculate a localization with \ac{BAYESTAR} as the number of OpenMP threads was varied from 1 to 32. This is a violin plot, a smoothed vertical histogram. The magenta regions show run times for a two\nobreakdashes-detector network (HL) modeled on the first scheduled Advanced \ac{LIGO} observing run in 2015, and the blue regions show run times for a three\nobreakdashes-detector network (HLV) based on the second planned observing run in 2016. These are the two observing scenarios that are discussed in Ref.~\cite{FirstTwoYears}.
 
 \begin{figure}
     \centering
@@ -929,50 +929,50 @@ Since \ac{BAYESTAR} is designed as one of the final steps in the real\nobreakdas
 
 Several features are apparent. First, at any number of threads, the two configurations have similar run times, although the 2016 events contain a subpopulation of outliers that take about 2.5 times as long as the 2015 events. These are probably due to taking one of the more expensive code branches in the distance integral interpolation. Second, the run times decrease proportionally to the number of threads. Based on experiences running \ac{BAYESTAR} on the 32\nobreakdashes-core (64 threads with hyperthreading) cluster login machine, we expect the almost ideal parallel speedup to continue on machines with even more processors.
 
-With just one thread, the \ac{BAYESTAR} analysis takes 76\nobreakdashes--356~s, already orders of magnitude faster than the full parameter estimation. With 32 threads, \ac{BAYESTAR} takes just 4\nobreakdashes--13~s. In practice, \ac{BAYESTAR}'s data handling (reading the detectors' \acp{PSD}, communicating with the \ac{GW} candidate database, writing FITS files) take an additional 15~s or so, though this overhead could be reduced by parallelizing many of these steps. The overall latency is comparable to the other stages (data aggregation, trigger generation, alert distribution) in the real\nobreakdashes-time \ac{BNS} analysis; therefore any significant further speedup would require significant changes through Advanced \acs{LIGO} computing and infrastructure. The 32\nobreakdashes-thread configuration is representative of how \ac{BAYESTAR} might be deployed in early Advanced \ac{LIGO}.\footnote{\ac{BAYESTAR} has been successfully ported to the Intel's Many Integrated Core~(MIC) architecture and has been tested in a 500 thread configuration on a system with dual Intel Xeon Phi 5110P coprocessors.} For comparison, sky localization with LALINFERENCE takes about 100 hours \cite{BerryLocalization}.
+With just one thread, the \ac{BAYESTAR} analysis takes 76\nobreakdashes--356~s, already orders of magnitude faster than the full parameter estimation. With 32 threads, \ac{BAYESTAR} takes just 4\nobreakdashes--13~s. In practice, \ac{BAYESTAR}'s data handling (reading the detectors' \acp{PSD}, communicating with the \ac{GW} candidate database, writing \ac{FITS} files) takes an additional 15~s or so, though this overhead could be reduced by parallelizing many of these steps. The overall latency is comparable to the other stages (data aggregation, trigger generation, alert distribution) in the real\nobreakdashes-time \ac{BNS} analysis; therefore, any significant further speedup would require significant changes through Advanced \acs{LIGO} computing and infrastructure. The 32\nobreakdashes-thread configuration is representative of how \ac{BAYESTAR} might be deployed in early Advanced~\ac{LIGO}.\footnote{\ac{BAYESTAR} has been successfully ported to the Intel's Many Integrated Core architecture and has been tested in a 500 thread configuration on a system with dual Intel Xeon Phi 5110P coprocessors.} For comparison, sky localization with LALINFERENCE takes about 100\,h~\cite{BerryLocalization}.
 
-Note that this benchmark shows \ac{BAYESTAR} to be an order of magnitude faster than what was reported in \cite{leo-singer-thesis,BerryLocalization} due to the changes in the distance integration scheme that we noted in Section~\ref{sec:distance}.
+Note that this benchmark shows \ac{BAYESTAR} to be an order of magnitude faster than what was reported in Refs.~\cite{leo-singer-thesis,BerryLocalization} due to the changes in the distance integration scheme that we noted in Sec.~\ref{sec:distance}.
 
 \section{Future work}
 
-One immediately pressing direction for future work is to address the issue of sub\nobreakdashes-threshold signals, as this will be a major issue when Advanced Virgo comes online in 2016\nobreakdashes--2017. Using the full \ac{SNR} time series in place of the autocorrelation function seems like a promising avenue; implementing this requires some infrastructure changes to both the matched filter pipeline and \ac{BAYESTAR}. Along these lines, we also refer the reader to \cite{PankowRapidPE} for a similar, non-\ac{MCMC} approach to rapid exploration of the full parameter space.
+One immediately pressing direction for future work is to address the issue of subthreshold signals, as this will be a major issue when Advanced Virgo comes online in 2016\nobreakdashes--2017. Using the full \ac{SNR} time series in place of the autocorrelation function seems like a promising avenue; implementing this requires some infrastructure changes to both the matched-filter pipeline and \ac{BAYESTAR}. Along these lines, we also refer the reader to Ref.~\cite{PankowRapidPE} for a similar, non\nobreakdashes-\ac{MCMC} approach to the rapid exploration of the full parameter space.
 
-A more open\nobreakdashes-ended question is how to account for spin precession. The simulations in \cite{FirstTwoYears} and in this paper featured extremely modest spins of $\chi \leq 0.05$, consistent with the fastest known pulsars in binaries \citep{2003Natur.426..531B,DetectingBNSSystemsWithSpin}. The signals were detected using a template bank that lacked spins entirely. Farr et~al. (in preparation) show that using nonspinning \ac{BNS} templates for parameter estimation has negligible impact on sky localization. However, if one or both companions are spinning as fast as a millisecond pulsar, $\chi \sim 0.4$ \cite{FastestSpinningMillisecondPulsar}, or even near breakup, $\chi \sim 0.7$, then the orbital plane may precess; in this case, spins can no longer be neglected for detection \cite{DetectingBNSSystemsWithSpin} and may also be important for parameter estimation. Since spinning \ac{BNS} searches are still an active area of development, \ac{BAYESTAR}'s sky localization accuracy in this regime should be reexamined in the future.
+A more open\nobreakdashes-ended question is how to account for spin precession. The simulations in Ref.~\cite{FirstTwoYears} and in this paper featured extremely modest spins of $\chi \leq 0.05$, consistent with the fastest known pulsars in binaries \citep{2003Natur.426..531B,DetectingBNSSystemsWithSpin}. The signals were detected using a template bank that lacked spins entirely. Ref.~\cite{FirstTwoYearsSpin} shows that using nonspinning \ac{BNS} templates for parameter estimation has negligible impact on sky localization. However, if one or both companions are spinning as fast as a millisecond pulsar, $\chi \sim 0.4$ \cite{FastestSpinningMillisecondPulsar}, or even near breakup, $\chi \sim 0.7$, then the orbital plane may precess; in this case, spins can no longer be neglected for detection \cite{DetectingBNSSystemsWithSpin} and may also be important for parameter estimation. Since spinning \ac{BNS} searches are still an active area of development, \ac{BAYESTAR}'s sky localization accuracy in this regime should be reexamined in the future.
 
-Although the response time of \ac{BAYESTAR} has been driven by the anticipated timescales for kilonova and afterglow emission, a recurring question is whether there is any detectable \ac{EM} signal in the seconds before, during, and after the merger itself. Since the \ac{GW} inspiral signal is in principal detectable for up to hundreds of seconds before merger, one could imagine positioning rapidly slewing instruments to search for any prompt emission. This concept was explored by the authors \citep{Cannon:2011vi}, and will be revisted in further detail in both Sathyaprakash et~al. (in preparation) and Chu et~al. (in preparation).
+Although the response time of \ac{BAYESTAR} has been driven by the anticipated time scales for kilonova and afterglow emission, a recurring question is whether there is any detectable \ac{EM} signal in the seconds before, during, and after the merger itself. Since the \ac{GW} inspiral signal is in principal detectable for up to hundreds of seconds before merger, one could imagine positioning rapidly slewing instruments to search for any prompt emission. This concept was explored by the authors \citep{Cannon:2011vi}.
 
-On the topic of very low\nobreakdashes-latency localization, we also recommend Chen~\&~Holz (in preparation), who propose a rapid localization scheme that is similar to ours, but even faster because it makes some additional compromises: their likelihood is strictly Gaussian, so one more marginalization integral (the integral over arrival time) can be performed analytically.
+On the topic of very low\nobreakdashes-latency localization, we also recommend Chen~\&~Holz~\cite{ChenHolzRapidLocalization}, who propose a rapid localization scheme that is similar to ours, but even faster because it makes some additional compromises: their likelihood is strictly Gaussian, so one more marginalization integral (the integral over arrival time) can be performed analytically.
 
 \section{Conclusion}
 
-We have presented a novel, fast, accurate, Bayesian algorithm for inferring the sky locations of compact binary merger sources that may soon be detected by advanced ground\nobreakdashes-based \ac{GW} detectors. For \ac{BNS} systems with small spins, we have shown that \ac{BAYESTAR} produces sky maps that are as accurate as the full \ac{MCMC} parameter estimation code, but can do so within $\sim$10 seconds after a detection. Still faster response times should be possible in the future (if warranted) by deploying \ac{BAYESTAR} on machines with more cores, or by distributing \ac{BAYESTAR} across multiple computers.
+We have presented a novel, fast, accurate, Bayesian algorithm for inferring the sky locations of compact binary merger sources that may soon be detected by advanced ground\nobreakdashes-based \ac{GW} detectors. For \ac{BNS} systems with small spins, we have shown that \ac{BAYESTAR} produces sky maps that are as accurate as the full \ac{MCMC} parameter estimation code but can do so within $\sim$10\,s after a detection. Still faster response times should be possible in the future (if warranted) by deploying \ac{BAYESTAR} on machines with more cores or by distributing \ac{BAYESTAR} across multiple computers.
 
-Following a \ac{BNS} merger, the signal will be detected by the matched\nobreakdashes-filter pipeline within tens of seconds; an alert containing the time and estimated significance of the event can be distributed almost immediately (although a human validation stage that may be present at the beginning of the first observing run may introduce some additional latency). The localization from \ac{BAYESTAR} will be available tens of seconds to a minute later. Finally, the refined localiation and the detailed estimates of masses and spins from LALINFERENCE will be distributed hours to days later.
+Following a \ac{BNS} merger, the signal will be detected by the matched\nobreakdashes-filter pipeline within tens of seconds; an alert containing the time and estimated significance of the event can be distributed almost immediately (although a human validation stage that may be present at the beginning of the first observing run may introduce some additional latency). The localization from \ac{BAYESTAR} will be available tens of seconds to a minute later. Finally, the refined localization and the detailed estimates of masses and spins from LALINFERENCE will be distributed hours to days later.
 
-Relevant timescales for possible \ac{EM} counterparts to \ac{GW} signals include seconds (the prompt \ac{GRB} signature), hundreds of seconds (extended emission and X\nobreakdashes-ray plateaus that are observed for some short \acp{GRB}), minutes to hours (X\nobreakdashes-ray and optical afterglow), hours to days (the kilonova or the blue flashes associated with unbound ejecta or disk winds), and days to years (the radio afterglow). For the first time, we are able to provide accurate localizations before the peak of any of these \ac{EM} signatures (except for the short \ac{GRB} or any pre\nobreakdashes-merger signal). Even for components like the kilonova that should peak within hours to days, the availability of the localizations within seconds might provide a window of several hours to obtain tiled images of the area before the \ac{EM} emission begins. These could be used as reference images, crucial at optical wavelengths for establishing the rapid rise and quickly distinguishing from slower background transients.
+Relevant time scales for possible \ac{EM} counterparts to \ac{GW} signals include seconds (the prompt \ac{GRB} signature), hundreds of seconds (extended emission and X\nobreakdashes-ray plateaus that are observed for some short \acp{GRB}), minutes to hours (X\nobreakdashes-ray and optical afterglow), hours to days (the kilonova or the blue flashes associated with unbound ejecta or disk winds), and days to years (the radio afterglow). For the first time, we are able to provide accurate localizations before the peak of any of these \ac{EM} signatures (except for the short \ac{GRB} or any premerger signal). Even for components like the kilonova that should peak within hours to days, the availability of the localizations within seconds might provide a window of several hours to obtain tiled images of the area before the \ac{EM} emission begins. These could be used as reference images, crucial at optical wavelengths for establishing the rapid rise and quickly distinguishing from slower background transients.
 
 \input{ligo-acronyms/acronyms}
 
 \begin{acknowledgements}
-This paper has LIGO Document Number LIGO\nobreakdashes-P1500009\nobreakdashes-v5.
+This paper has LIGO Document Number LIGO\nobreakdashes-P1500009\nobreakdashes-v6.
 
-We thank John Veitch and Will Farr for chairing a review of the analysis and code. We thank Britt Griswold for assistance with preparing Figure~\ref{fig:adaptive-illustration}.
+We thank John Veitch and Will Farr for chairing a review of the analysis and code. We thank Britt Griswold for assistance with preparing Fig.~\ref{fig:adaptive-illustration}.
 \end{acknowledgements}
 
-LIGO was constructed by the California Institute of Technology and Massachusetts Institute of Technology with funding from the \ac{NSF} and operates under cooperative agreement PHY\nobreakdashes-0107417.
+LIGO was constructed by the California Institute of Technology and Massachusetts Institute of Technology with funding from the \ac{NSF} and operates under Cooperative Agreement No.~PHY\nobreakdashes-0107417.
 
-This research was supported by the \ac{NSF} through a Graduate Research Fellowship to L.S. L.S. thanks the Aspen Center for Physics and \ac{NSF} Grant \#1066293 for hospitality during the editing of this paper.
+This research was supported by the \ac{NSF} through a Graduate Research Fellowship to L.~S. L.~S. thanks the Aspen Center for Physics and \ac{NSF} Grant \#1066293 for hospitality during the editing of this paper.
 
-Source code for \ac{BAYESTAR} is available as part of LALInference\footnote{\url{https://ligo-vcs.phys.uwm.edu/cgit/lalsuite/tree/lalinference}}, the open source LIGO/Virgo parameter estimation toolchain, which is in turn part of LALSuite\footnote{\url{http://www.lsc-group.phys.uwm.edu/daswg/projects/lalsuite.html}}. This research made use of Astropy\footnote{\url{http://www.astropy.org}} \citep{astropy}, a community-developed core Python package for astronomy. Some of the results in this paper have been derived using \ac{HEALPix}\footnote{\url{http://healpix.sourceforge.net}} \cite{healpix}.
+Source code for \ac{BAYESTAR} is available as part of LALInference,\footnote{\url{https://ligo-vcs.phys.uwm.edu/cgit/lalsuite/tree/lalinference}.} the open source LIGO/Virgo parameter estimation toolchain, which is in turn part of LALSuite.\footnote{\url{http://www.lsc-group.phys.uwm.edu/daswg/projects/lalsuite.html}.} This research made use of Astropy\footnote{\url{http://www.astropy.org}.}~\citep{astropy}, a community-developed core Python package for astronomy. Some of the results in this paper have been derived using \ac{HEALPix}\footnote{\url{http://healpix.sourceforge.net}.}~\cite{healpix}.
 
-Some results were produced on the NEMO computing cluster operated by the Center for Gravitation and Cosmology at University of Wisconsin\nobreakdashes--Milwaukee under \ac{NSF} Grants PHY\nobreakdashes-0923409 and PHY\nobreakdashes-0600953.
+Some results were produced on the NEMO computing cluster operated by the Center for Gravitation and Cosmology at University of Wisconsin\nobreakdashes--Milwaukee under \ac{NSF} Grants No.~PHY\nobreakdashes-0923409 and No.~PHY\nobreakdashes-0600953.
 
 \appendix
 
 \section{Independence of intrinsic and extrinsic errors}
 \label{sec:independence-intrinsic-extrinsic}
 
-If all of the detectors have the same noise \acp{PSD} up to multiplicative factors, $c_1 S_1(\omega) = c_2 S_2(\omega) = \cdots = c_n S_n(\omega) \equiv S(\omega)$, then we can show that the errors in the intrinsic parameters (masses) are not correlated with sky position errors. This is because we can change variables from amplitudes, phases, and times to amplitude ratios, phase differences, and time differences. With $N$ detectors, we can form a single average amplitude, time, and phase, plus $N-1$ linearly independent differences. The averages are correlated with the intrinsic parameters, but neither are correlated with the differences. Since only the differences inform sky location, this gives us license to neglect uncertainty in masses when we are computing sky resolution.
+If all of the detectors have the same noise \acp{PSD} up to multiplicative factors, $c_1 S_1(\omega) = c_2 S_2(\omega) = \cdots = c_n S_n(\omega) \equiv S(\omega)$, then we can show that the errors in the intrinsic parameters (masses) are not correlated with sky position errors. This is because we can change variables from amplitudes, phases, and times to amplitude ratios, phase differences, and time differences. With $N$ detectors, we can form a single average amplitude, time, and phase, plus $N-1$ linearly independent differences. The averages are correlated with the intrinsic parameters, but neither are correlated with the differences. Since only the differences inform the sky location, this gives us license to neglect uncertainty in masses when we are computing the sky resolution.
 
 This is easiest to see if we make the temporary change of variables $\rho \rightarrow \varsigma = \log \rho$. This allows us to factor out the \ac{SNR} dependence from the single-detector Fisher matrix. The extrinsic part becomes
 %
@@ -992,7 +992,7 @@ This is easiest to see if we make the temporary change of variables $\rho \right
     \end{array} \right).
 \end{align}
 %
-Due to our assumption that the detectors' \acp{PSD} are proportional to each other, the noise moments are the same for all detectors, ${\overline{\omega^k}}_i \equiv {\overline{\omega^k}}$. Then we can write the single-detector Fisher matrix as
+Due to our assumption that the detectors' \acp{PSD} are proportional to each other, the noise moments are the same for all detectors, ${\overline{\omega^k}}_i \equiv {\overline{\omega^k}}$. Then, we can write the single-detector Fisher matrix as
 %
 \begin{equation}
     \mathcal{I}_i = {\rho_i}^2 \left(
@@ -1071,12 +1071,12 @@ The transformed network Fisher matrix is block diagonal,
 \end{equation}
 \end{widetext}
 %
-The top\nobreakdashes-left block contains $N-1$ relative amplitudes, phases, and times on arrival, all potentially correlated with each other. The bottom\nobreakdashes-right block contains the average amplitudes, phases, and times, as well as the masses. The averages and the masses are correlated with each other, but are not correlated with the differences. Because only the differences are informative for sky localization, we drop the intrinsic parameters from the rest of the Fisher matrix calculations in this appendix.
+The top\nobreakdashes-left block contains $N-1$ relative amplitudes, phases, and times on arrival, all potentially correlated with each other. The bottom\nobreakdashes-right block contains the average amplitudes, phases, and times, as well as the masses. The averages and the masses are correlated with each other, but are not correlated with the differences. Because only the differences are informative for sky localization, we drop the intrinsic parameters from the rest of the Fisher matrix calculations in the Appendix.
 
 \section{Interpretation of phase and time errors}
 \label{sec:interpretation-of-errors}
 
-The Fisher matrix in Equation~(\ref{eq:fisher-matrix}) is block diagonal, which implies that estimation errors in the signal amplitude $\rho$ are uncorrelated with the phase $\gamma$ and time $\tau$. A sequence of two changes of variables lends some physical interpretation to the nature of the coupled estimation errors in $\gamma$~and~$\tau$.
+The Fisher matrix in Eq.~(\ref{eq:fisher-matrix}) is block diagonal, which implies that estimation errors in the signal amplitude $\rho$ are uncorrelated with the phase $\gamma$ and time $\tau$. A sequence of two changes of variables lends some physical interpretation to the nature of the coupled estimation errors in $\gamma$~and~$\tau$.
 
 First, we put the phase and time on the same footing by measuring the time in units of $1 / \sqrt{\overline{\omega^2}}$ with a change of variables from $\tau$ to $\gamma_\tau = \sqrt{\overline{\omega^2}} \tau$:
 %
@@ -1100,14 +1100,14 @@ The second change of variables, from $\gamma$ and $\gamma_\tau$ to $\gamma_\pm =
     }.
 \end{equation}
 %
-Thus, in the appopriate time units, the \textit{sum and difference} of the phase and time of the signal are measured independently.
+Thus, in the appropriate time units, the \textit{sum and difference} of the phase and time of the signal are measured independently.
 
 \section{Position resolution}
 \label{sec:position-resolution}
 
-Finally, we will calculate the position resolution of a network of \ac{GW} detectors. We could launch directly into computing derivatives of the full signal model from Equation~(\ref{eq:full-signal-model}) with respect to all of the parameters, but this would result in a very complicated expression. Fortunately, we can take two shortcuts. First, since we showed in Section~\ref{sec:independence-intrinsic-extrinsic} that the intrinsic parameters are correlated only with an overall nuisance average arrival time, amplitude, and phase, we need not consider the derivatives with respect to mass at all. Second, we can reuse the extrinsic part of the single detector Fisher matrix from Equation~(\ref{eq:fisher-matrix}) by computing the much simpler Jacobian matrix to transform from the time, amplitude, and phase on arrival, to the parameters of interest.
+Finally, we will calculate the position resolution of a network of \ac{GW} detectors. We could launch directly into computing derivatives of the full signal model from Eq.~(\ref{eq:full-signal-model}) with respect to all of the parameters, but this would result in a very complicated expression. Fortunately, we can take two shortcuts. First, since we showed in Appendix~\ref{sec:independence-intrinsic-extrinsic} that the intrinsic parameters are correlated only with an overall nuisance average arrival time, amplitude, and phase, we need not consider the derivatives with respect to mass at all. Second, we can reuse the extrinsic part of the single-detector Fisher matrix from Eq.~(\ref{eq:fisher-matrix}) by computing the much simpler Jacobian matrix to transform from the time, amplitude, and phase on arrival to the parameters of interest.
 
-We begin by transforming the single\nobreakdashes-detector Fisher matrix from a polar to a rectangular representation of the complex amplitude given in Equations~(\ref{eq:optimal-rho}, \ref{eq:optimal-tau}), $\rho_i, \gamma_i \rightarrow \Re[z_i] = \rho_i \cos \gamma_i, \Im[z_i] = \rho_i \sin \gamma_i$:
+We begin by transforming the single\nobreakdashes-detector Fisher matrix from a polar to a rectangular representation of the complex amplitude given in Eqs.~(\ref{eq:optimal-rho}, \ref{eq:optimal-tau}), $\rho_i, \gamma_i \rightarrow \Re[z_i] = \rho_i \cos \gamma_i, \Im[z_i] = \rho_i \sin \gamma_i$:
 %
 \begin{equation}\label{eq:fisher-matrix-extrinsic-one-detector-cartesian}
     \mathcal{I}_i = \bordermatrix{
@@ -1224,7 +1224,7 @@ We insert an infinitesimal rotation $\delta R$ to perturb the source's orientati
     \tau_i &= t_\oplus + (\mathbf{d}_i^\prime)\transpose (\delta R) \mathbf{k}^\prime.
 \end{align}
 %
-We only need a first order expression for $\delta R$, because we will be taking products of first derivatives of it\footnote{Caution: the angles $\delta\theta$ and $\delta\phi$ represent displacements in two orthogonal directions, but are \emph{not} necessarily simply related to $\theta$ and $\phi$.}:
+We only need a first-order expression for $\delta R$, because we will be taking products of first derivatives of it\footnote{Caution: the angles $\delta\theta$ and $\delta\phi$ represent displacements in two orthogonal directions, but are \emph{not} necessarily simply related to $\theta$ and $\phi$.}:
 %
 \begin{equation}
     \delta R = \left(
@@ -1309,10 +1309,9 @@ gives us the information matrix marginalized over all parameters but $\delta\the
 
 \subsection{Spatial interpretation}
 
-How do we extract the dimensions of the localization from the Fisher matrix? If there are $N \leq 2$ detectors, then the Fisher matrix must be degenerate, because there are $3N$ measurements and 7 parameters:
+How do we extract the dimensions of the localization from the Fisher matrix? If there are $N \leq 2$ detectors, then the Fisher matrix must be degenerate, because there are $3N$ measurements and seven parameters:
 %
-\begin{widetext}
-\begin{equation*}
+\begin{align*}
     \left\{
     \begin{array}{c}
         \delta\theta \\
@@ -1324,20 +1323,17 @@ How do we extract the dimensions of the localization from the Fisher matrix? If 
         t_\oplus
     \end{array}
     \right\}
-    = 7 \text{ parameters}
-    \qquad
+    =& \; 7 \text{ parameters} \;
     \longleftrightarrow
-    \qquad
     \left\{
     \begin{array}{c}
         \Re[z_i] \\
         \Im[z_i] \\
         \tau_i
     \end{array}
-    \right\}
-    \times N = 3N \text{ observables.}
-\end{equation*}
-\end{widetext}
+    \right\} \\
+    &\times N = 3N \text{ observables.}
+\end{align*}
 %
 Therefore, for $N=2$ detectors, the marginalized Fisher matrix $\mathcal{I}_\mathrm{marg}$ is singular. Its only nonzero eigenvalue $\lambda$ describes the width of an annulus on the sky. The width of the annulus that contains probability $p$ is given by
 %
@@ -1347,7 +1343,7 @@ Therefore, for $N=2$ detectors, the marginalized Fisher matrix $\mathcal{I}_\mat
 %
 The prefactor $2 \sqrt{2} / \erf^{-1}(p)$ is the central interval of a normal distribution that contains a probability $p$, and is $\approx 3.3$ for $p = 0.9$. \emph{Caution:} for two\nobreakdashes-detector networks, priors play an important role in practical parameter estimation and areas can be much smaller than one would predict from the Fisher matrix.
 
-For $N \geq 3$ detectors, the parameters are over\nobreakdashes-constrained by the data and the Fisher matrix describes the dimensions of an ellipse. Within a circle of radius $r$ centered on the origin, the enclosed probability $p$ is
+For $N \geq 3$ detectors, the parameters are overconstrained by the data, and the Fisher matrix describes the dimensions of an ellipse. Within a circle of radius $r$ centered on the origin, the enclosed probability $p$ is
 %
 \begin{equation}
     p = \int_0^{2\pi} \int_0^r \frac{1}{2\pi} e^{-s^2/2} s \, ds \, d\phi = 1 - e^{-r^2/2}.
@@ -1359,7 +1355,7 @@ Therefore the radius $r$ of the circle that contains a probability $p$ is
     r = \sqrt{-2\ln (1 - p)}.
 \end{equation}
 %
-Suppose that the eigenvalues of the Fisher matrix are $\lambda_1$ and $\lambda_2$. This describes a $1\sigma$ uncertainty ellipse that has major and minor radii ${\lambda_1}^{-1/2}$, ${\lambda_2}^{-1/2}$, and area $A_{1\sigma} = \pi / \sqrt{\lambda_1 \lambda_2} = \pi / \sqrt{\det\mathcal{I}}$. Then the area of an ellipse containing probability $p$ is
+Suppose that the eigenvalues of the Fisher matrix are $\lambda_1$ and $\lambda_2$. This describes a $1\sigma$ uncertainty ellipse that has major and minor radii ${\lambda_1}^{-1/2}$, ${\lambda_2}^{-1/2}$, and area $A_{1\sigma} = \pi / \sqrt{\lambda_1 \lambda_2} = \pi / \sqrt{\det\mathcal{I}}$. Then, the area of an ellipse containing probability $p$ is
 %
 \begin{equation}\label{eq:a-pth-quantile}
     A_p = -2\pi\ln(1-p) / \sqrt{\det \mathcal{I}},
@@ -1370,18 +1366,18 @@ or, more memorably for the $90$th percentile, $A_{0.9} = 2\pi\ln(10) / \sqrt{\de
 \subsection{Outline of calculation}
 \label{sec:fisher-matrix-area-outline}
 
-Using the above derivation, we arrive at a prediction for the sky resolution of a \ac{GW} detector network. We took some shortcuts that allowed us to avoid directly evaluating the complicated derivatives of the signal itself with respect to sky location. As a result, the expressions involved in each step are simple enough to be manually entered into a computer program. However, because the procedure involves several steps, we outline it once again below.
+Using the above derivation, we arrive at a prediction for the sky resolution of a \ac{GW} detector network. We took some shortcuts that allowed us to avoid directly evaluating the complicated derivatives of the signal itself with respect to the sky location. As a result, the expressions involved in each step are simple enough to be manually entered into a computer program. However, because the procedure involves several steps, we outline it once again below.
 
 \begin{enumerate}
-    \item Compute, for each detector, the horizon distance $r_{1,i}$, the angular frequency moments ${\overline{\omega}}_i$ and ${\overline{\omega^2}}_i$, and $(h_+, h_\times)$ from Equations~(\ref{eq:hplus},~\ref{eq:hcross}). (These can be reused for multiple source positions as long as the masses and the detector noise \acp{PSD} are the same.)
-    \item For a given $\phi, \theta, \psi$, compute the complex received amplitude $z_i$ from Equations~(\ref{eq:H-hplus-hcross},~\ref{eq:z-hplus-hcross}), the extrinsic Fisher matrix from Equation~(\ref{eq:fisher-matrix}), and the Jacobian from Equation~(\ref{eq:jacobian-detector-tensor}).
-    \item Sum the information from all detectors using Equation~\ref{eq:summed-information}.
-    \item Compute the marginalized Fisher matrix from the Schur complement using Equation~(\ref{eq:marginal-fisher-matrix}).
-    \item If there are two detectors, find the width $L_p$ of the ring describing the $p$th quantile using Equation~(\ref{eq:l-pth-quantile}). If there are three or more detectors, find the area $A_p$ of the $p$th quantile using Equation~(\ref{eq:a-pth-quantile}).
-    \item (Optionally, convert from (ste)radians to (square) degrees.)
+    \item Compute, for each detector, the horizon distance $r_{1,i}$, the angular frequency moments ${\overline{\omega}}_i$ and ${\overline{\omega^2}}_i$, and $(h_+, h_\times)$ from Eqs.~(\ref{eq:hplus},~\ref{eq:hcross}). (These can be reused for multiple source positions as long as the masses and the detector noise \acp{PSD} are the same.)
+    \item For a given $\phi, \theta, \psi$, compute the complex received amplitude $z_i$ from Eqs.~(\ref{eq:H-hplus-hcross},~\ref{eq:z-hplus-hcross}), the extrinsic Fisher matrix from Eq.~(\ref{eq:fisher-matrix}), and the Jacobian from Eq.~(\ref{eq:jacobian-detector-tensor}).
+    \item Sum the information from all detectors using Eq.~\ref{eq:summed-information}.
+    \item Compute the marginalized Fisher matrix from the Schur complement using Eq.~(\ref{eq:marginal-fisher-matrix}).
+    \item If there are two detectors, find the width $L_p$ of the ring describing the $p$th quantile using Eq.~(\ref{eq:l-pth-quantile}). If there are three or more detectors, find the area $A_p$ of the $p$th quantile using Eq.~(\ref{eq:a-pth-quantile}).
+    \item {[}Optionally, convert from (ste)radians to (square) degrees.{]}
 \end{enumerate}
 
-See code listing in Appendix~A.6 of \cite{leo-singer-thesis}.
+See the code listing in Appendix~A.6 of Ref.~\cite{leo-singer-thesis}.
 
 \bibliography{apj-jour,bib/telescope,ms}
 
