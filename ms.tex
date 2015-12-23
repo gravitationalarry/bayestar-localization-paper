@@ -887,7 +887,7 @@ The simulated waveforms were deposited in Gaussian noise that has been filtered 
 
 \subsection{Areas}
 
-We measured sky localization areas for each event as follows. First, we ranked the \ac{HEALPix} pixels by descending posterior probability. Then, we computed the cumulative sum of the pixels in that order. Finally, we searched for the index of the pixel of which the cumulative sum was equal to a given value: for example, 0.9 if we are interested in the 90\% credible area. That pixel index times the area per pixel is the area of the smallest region of the specified credible level. This area can be thought of measuring the precision of the sky localization: it is a measure of the scale of the posterior distribution.
+We measured sky localization areas for each event as follows. First, we ranked the \ac{HEALPix} pixels by descending posterior probability. Then, we computed the cumulative sum of the pixels in that order. Finally, we searched for the index of the pixel of which the cumulative sum was equal to a given value: for example, 0.9 if we are interested in the 90\% credible area. That pixel index times the area per pixel is the area of the smallest region of the specified credible level. This area can be thought of as measuring the precision of the sky localization: it is a measure of the scale of the posterior distribution.
 
 We can construct a second measure, called the searched area, as the smallest such constructed area that contains the true location of the source. A telescope with a \ac{FOV} that is small compared to the characteristic scale of the posterior would intercept the true location of the source after covering the searched area. This measure is mainly useful because it measures the accuracy of the sky localization independently of the precision. In other words, it treats the sky map as merely a ranking statistic.
 
@@ -1274,7 +1274,7 @@ We transform and sum the information from each detector,
 
 To extract an area from the Fisher matrix, we must first marginalize or discard the nuisance parameters. Note that marginalizing parameters of a multivariate Gaussian distribution amounts to simply dropping the relevant entries in the mean vector and covariance matrix. Since the information is the inverse of the covariance matrix, we need to invert the Fisher matrix, drop all but the first two rows and columns, and then invert again.
 
-This procedure has a shortcut called the Schur complement (see, for example, \citealt{numerical-recipes-inversion-partition}). Consider a partitioned square matrix $M$ and its inverse:
+This procedure has a shortcut called the Schur complement (see, for example, \citeauthor{numerical-recipes-inversion-partition}~\cite{numerical-recipes-inversion-partition}). Consider a partitioned square matrix $M$ and its inverse:
 %
 \begin{equation}
     M = \left(
