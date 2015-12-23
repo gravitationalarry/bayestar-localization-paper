@@ -391,35 +391,33 @@ These conditions could be satisfied by realizing a multivariate Gaussian distrib
 
 A more natural way is to plug the signal model from Eq.~(\ref{eq:signal-model}) evaluated at the \ac{ML} parameter estimates into the single-detector likelihood in Eq.~(\ref{eq:gaussian-likelihood-spa}):
 %
-\begin{widetext}
-\begin{equation}
+\begin{multline}
     p\left(\hat{\bm\theta}_i \middle| \bm\theta \right)
     :=
     p\left(Y_i(\omega) = X_i(\omega; \hat{\bm\theta})
         \middle| \bm\theta \right)
-    %\\
+    \\
     \propto \exp \Bigg[
         - \frac{1}{2} \int_0^\infty \Bigg|
             \frac{\hat{\rho}_i}{\sigma_i(\hat{\bm\theta}_\mathrm{in})} e^{i (\hat\gamma_i - \omega \hat\tau_i)} \frac{H(\omega; \hat{\bm\theta}_\mathrm{in})}{S_i(\omega)}
-    %\\
+    \\
             - \frac{\rho_i}{\sigma_i(\bm\theta_\mathrm{in})} e^{i (\gamma_i - \omega \tau_i)} \frac{H(\omega; \bm\theta_\mathrm{in})}{S_i(\omega)}
         \Bigg|^2 \, d\omega
     \Bigg].
-\end{equation}
-\end{widetext}
+\end{multline}
 %
 If we further assume that the intrinsic parameters are equal to their \ac{ML} estimates, $\bm\theta_\mathrm{in} = \hat{\bm\theta}_\mathrm{in}$, then this reduces to what we call the autocorrelation likelihood,
 %
-\begin{widetext}
-\begin{equation}\label{eq:autocor-likelihood}
+\begin{multline}\label{eq:autocor-likelihood}
     p\left(\hat\rho_i, \hat\gamma_i, \hat\tau_i
-        \middle| \rho_i, \gamma_i, \tau_i \right) \propto
+        \middle| \rho_i, \gamma_i, \tau_i \right)
+    \\
+    \propto
     \exp \left[ - \frac{1}{2}{\hat\rho_i}^2 - \frac{1}{2}{\rho_i}^2
         + \hat\rho_i \rho_i \Re \left\{ e^{i \tilde{\gamma}_i} a_i^*(\tilde{\tau}_i)
         \right\}
     \right],
-\end{equation}
-\end{widetext}
+\end{multline}
 %
 with $\tilde{\gamma}_i = \hat\gamma_i - \gamma_i$, $\tilde{\tau}_i = \hat\tau_i - \tau_i$, and the template's autocorrelation function $a_i(t; \bm\theta_\mathrm{in})$ defined as
 %
